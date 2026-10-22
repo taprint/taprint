@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: Apache-2.0
+# smithery.yaml 草稿（ADR-0008）：仅留档，未提交注册任何 registry。
+# 通道=stdio（npx 拉起），零配置项（三工具均无服务器侧配置）。
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties: {}
+    additionalProperties: false
+  commandFunction: >-
+    () => ({ command: 'npx', args: ['-y', 'taprint-mcp'] })

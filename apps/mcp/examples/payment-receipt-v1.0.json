@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "1.0",
+  "id": "tpl_payment_receipt_a4_v1",
+  "code": "RECEIPT_VOUCHER",
+  "name": "收款单-A4-标准",
+  "category": "finance",
+  "description": "收款单模板（doc 呈现；财务域）",
+  "locales": ["zh-CN"],
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "billNo": "string",
+        "billDate": "date",
+        "payer": { "name": "string" },
+        "store": { "name": "string" },
+        "cashier": "string",
+        "payMethod": "string",
+        "totalAmount": "number",
+        "upperAmount": "string",
+        "remark": "string"
+      }
+    },
+    {
+      "name": "items",
+      "type": "detail",
+      "schema": {
+        "sourceBillNo": "string",
+        "billType": "string",
+        "amount": "number"
+      }
+    }
+  ],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A5",
+        "margin": { "top": "12mm", "right": "12mm", "bottom": "12mm", "left": "12mm" },
+        "orientation": "landscape"
+      },
+      "header": [
+        {
+          "type": "text",
+          "content": "{{store.name}} 收款单",
+          "style": { "fontSize": 16, "bold": true },
+          "align": "center"
+        }
+      ],
+      "body": [
+        {
+          "type": "kvtable",
+          "columns": 3,
+          "rows": [
+            [
+              ["单号", "{{billNo}}"],
+              ["日期", "{{billDate | date:'YYYY-MM-DD'}}"],
+              ["收款方式", "{{payMethod}}"]
+            ],
+            [
+              ["交款单位", "{{payer.name}}"],
+              ["收款人", "{{cashier}}"],
+              ["", ""]
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "source": "items",
+          "columns": [
+            { "header": "来源单号", "field": "sourceBillNo", "width": "45%" },
+            { "header": "单据类型", "field": "billType", "width": "25%" },
+            {
+              "header": "收款金额",
+              "field": "amount",
+              "align": "right",
+              "format": "currency:CNY",
+              "width": "30%"
+            }
+          ],
+          "summary": [
+            { "label": "合计", "value": "{{totalAmount | currency:CNY}}", "align": "right" }
+          ]
+        },
+        { "type": "text", "content": "大写金额：{{upperAmount}}", "margin": { "top": "6mm" } },
+        { "type": "text", "content": "备注：{{remark}}" }
+      ],
+      "footer": [
+        {
+          "type": "text",
+          "content": "交款人签字：____________    收款人签字：____________",
+          "margin": { "top": "14mm" }
+        }
+      ]
+    }
+  },
+  "parameters": [
+    {
+      "name": "copies",
+      "type": "integer",
+      "default": 1,
+      "min": 1,
+      "max": 99,
+      "description": "打印份数"
+    }
+  ]
+}
