@@ -28,13 +28,46 @@ jobs:
           path: scan-report.json
           if-no-files-found: ignore
 
-  # Language jobs activate as packages land (see README roadmap):
-  #
-  # ts:   packages/taprint-ts   — ubuntu / node 22 / pnpm 9 / vitest      (v0.1)
-  # cs:   packages/taprint-cs   — windows-latest / net48 + net10.0-windows (v0.1)
-  # dart: packages/taprint-dart — ubuntu / dart 3 VM / dart test          (v0.1)
-  # java: packages/taprint-java — ubuntu / JDK 17 / maven                 (v0.1)
-  #
-  # All four jobs must consume the same fixtures/ manifest pinned to the
-  # same commit and fail on any divergence (L1 frame order for every
-  # template, L2 byte digests for the frozen coverage-matrix subset).
+  ts:
+    name: TypeScript kernel
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/taprint-ts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test
+
+  cs:
+    name: C# kernel
+    runs-on: ubuntu-latest
+    env:
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test packages/taprint-cs/Taprint.PrintDsl.Tests/Taprint.PrintDsl.Tests.csproj
+
+  dart:
+    name: Dart kernel
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/taprint-dart
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - run: dart pub get
+      - run: dart analyze
+      - run: dart test
+
+  # java: packages/taprint-java — JDK 17 / maven                 (lands with the Java batch)
