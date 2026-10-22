@@ -48,7 +48,7 @@ void main() {
   test('缺少 host / 未连接即写 → StateError', () async {
     final executor = Tcp9100Executor();
     expect(
-      () => executor.connect(PrintDevice(
+      () => executor.connect(const PrintDevice(
         id: 'tcp2',
         name: '无主机',
         transport: PrinterTransport.tcp9100,

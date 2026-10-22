@@ -116,7 +116,7 @@ class BleExecutor implements PrintExecutor {
       await disconnect();
       throw StateError('未找到可写特征值（启发式匹配失败）');
     }
-    _logger?.call('ble connected to ${_deviceId}');
+    _logger?.call('ble connected to $_deviceId');
   }
 
   /// 启发式匹配可写特征值：优先设备记录中回写过的 UUID，
