@@ -1,0 +1,37 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "cpcl-barcode-human-toggle",
+  "title": "CPCL 人读位（Java 参照无 BARCODE-TEXT 行——conformance 登记）",
+  "profile": "label",
+  "protocols": [
+    "cpcl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "barcode-human-toggle",
+      "protocol": "cpcl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "barcode",
+        "text": "6901234567892",
+        "symbology": "EAN13",
+        "x": "4mm",
+        "y": "20mm",
+        "height": "10mm",
+        "humanReadable": true
+      }
+    ]
+  }
+}

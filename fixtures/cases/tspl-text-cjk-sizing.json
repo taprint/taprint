@@ -1,0 +1,39 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "tspl-text-cjk-sizing",
+  "title": "TSPL 中文倍率 3（SIMPLIFIED CHINESE 字库）",
+  "profile": "label",
+  "protocols": [
+    "tspl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "text-font-sizing",
+      "protocol": "tspl"
+    },
+    {
+      "feature": "codepage-gb",
+      "protocol": "tspl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "货架标签",
+        "x": "4mm",
+        "y": "6mm",
+        "size": 3
+      }
+    ]
+  }
+}

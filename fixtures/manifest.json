@@ -1,0 +1,1153 @@
+{
+  "schema": "taprint/golden-commands@1",
+  "generatedBy": "tools/fixture-codegen",
+  "referenceLang": "java",
+  "layers": {
+    "l1": "expected/commands/<case>/<lang>/<protocol>.frames.txt",
+    "l2": "expected/commands/<case>/<lang>/<protocol>.bytes.sha256"
+  },
+  "caseCount": 47,
+  "cases": [
+    {
+      "case": "escpos-text-sizing-basic",
+      "file": "cases/escpos-text-sizing-basic.json",
+      "profile": "receipt",
+      "protocols": [
+        "escpos"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-font-sizing",
+          "protocol": "escpos"
+        },
+        {
+          "feature": "text-alignment",
+          "protocol": "escpos"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "escpos-text-cjk",
+      "file": "cases/escpos-text-cjk.json",
+      "profile": "receipt",
+      "protocols": [
+        "escpos"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-font-sizing",
+          "protocol": "escpos"
+        },
+        {
+          "feature": "text-alignment",
+          "protocol": "escpos"
+        },
+        {
+          "feature": "codepage-gb",
+          "protocol": "escpos"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "escpos-text-unmapped",
+      "file": "cases/escpos-text-unmapped.json",
+      "profile": "receipt",
+      "protocols": [
+        "escpos"
+      ],
+      "containsIdentityFn": false,
+      "special": "unmapped-char",
+      "matrixCells": [
+        {
+          "feature": "codepage-gb",
+          "protocol": "escpos"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "escpos-barcode-code128",
+      "file": "cases/escpos-barcode-code128.json",
+      "profile": "receipt",
+      "protocols": [
+        "escpos"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "barcode-code128",
+          "protocol": "escpos"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "escpos-barcode-ean13",
+      "file": "cases/escpos-barcode-ean13.json",
+      "profile": "receipt",
+      "protocols": [
+        "escpos"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "barcode-ean13",
+          "protocol": "escpos"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "escpos-barcode-human-toggle",
+      "file": "cases/escpos-barcode-human-toggle.json",
+      "profile": "receipt",
+      "protocols": [
+        "escpos"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "barcode-human-toggle",
+          "protocol": "escpos"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "escpos-qrcode",
+      "file": "cases/escpos-qrcode.json",
+      "profile": "receipt",
+      "protocols": [
+        "escpos"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "qrcode-ecc",
+          "protocol": "escpos"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "escpos-copies-cut-feed",
+      "file": "cases/escpos-copies-cut-feed.json",
+      "profile": "receipt",
+      "protocols": [
+        "escpos"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "copies",
+          "protocol": "escpos"
+        },
+        {
+          "feature": "feed-cut-tear",
+          "protocol": "escpos"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "escpos-float-ratio-table",
+      "file": "cases/escpos-float-ratio-table.json",
+      "profile": "receipt",
+      "protocols": [
+        "escpos"
+      ],
+      "containsIdentityFn": false,
+      "special": "float-ratio",
+      "matrixCells": [],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-text-sizing-basic",
+      "file": "cases/tspl-text-sizing-basic.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-font-sizing",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-text-cjk-sizing",
+      "file": "cases/tspl-text-cjk-sizing.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-font-sizing",
+          "protocol": "tspl"
+        },
+        {
+          "feature": "codepage-gb",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-text-align-basic",
+      "file": "cases/tspl-text-align-basic.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-alignment",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-text-align-cjk",
+      "file": "cases/tspl-text-align-cjk.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-alignment",
+          "protocol": "tspl"
+        },
+        {
+          "feature": "codepage-gb",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-barcode-code128",
+      "file": "cases/tspl-barcode-code128.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "barcode-code128",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-barcode-ean13",
+      "file": "cases/tspl-barcode-ean13.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "barcode-ean13",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-barcode-human-toggle",
+      "file": "cases/tspl-barcode-human-toggle.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "barcode-human-toggle",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-qrcode",
+      "file": "cases/tspl-qrcode.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "qrcode-ecc",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-line-box",
+      "file": "cases/tspl-line-box.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "rule-line",
+          "protocol": "tspl"
+        },
+        {
+          "feature": "box-rect",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-copies",
+      "file": "cases/tspl-copies.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "copies",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-feed-tear",
+      "file": "cases/tspl-feed-tear.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "feed-cut-tear",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-gap-blackmark-basic",
+      "file": "cases/tspl-gap-blackmark-basic.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "gap-blackmark",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-gap-blackmark-alt",
+      "file": "cases/tspl-gap-blackmark-alt.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "gap-blackmark",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-dpi-203-grid",
+      "file": "cases/tspl-dpi-203-grid.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "dpi-dimensioning",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-dpi-mixed",
+      "file": "cases/tspl-dpi-mixed.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "dpi-dimensioning",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-size-frame-a",
+      "file": "cases/tspl-size-frame-a.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "label-size-frame",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-size-frame-b",
+      "file": "cases/tspl-size-frame-b.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "label-size-frame",
+          "protocol": "tspl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-rounding-midpoint",
+      "file": "cases/tspl-rounding-midpoint.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": "rounding-midpoint",
+      "matrixCells": [],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "tspl-unmapped-char",
+      "file": "cases/tspl-unmapped-char.json",
+      "profile": "label",
+      "protocols": [
+        "tspl"
+      ],
+      "containsIdentityFn": false,
+      "special": "unmapped-char",
+      "matrixCells": [],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "cpcl-text-sizing-basic",
+      "file": "cases/cpcl-text-sizing-basic.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-font-sizing",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-text-sizing-grades",
+      "file": "cases/cpcl-text-sizing-grades.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-font-sizing",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-text-align-basic",
+      "file": "cases/cpcl-text-align-basic.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-alignment",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-text-align-alt",
+      "file": "cases/cpcl-text-align-alt.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-alignment",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-codepage-latin",
+      "file": "cases/cpcl-codepage-latin.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "codepage-gb",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-codepage-latin2",
+      "file": "cases/cpcl-codepage-latin2.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "codepage-gb",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-barcode-code128",
+      "file": "cases/cpcl-barcode-code128.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "barcode-code128",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-barcode-ean13",
+      "file": "cases/cpcl-barcode-ean13.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "barcode-ean13",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-barcode-human-toggle",
+      "file": "cases/cpcl-barcode-human-toggle.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "barcode-human-toggle",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-qrcode",
+      "file": "cases/cpcl-qrcode.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "qrcode-ecc",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-line-box",
+      "file": "cases/cpcl-line-box.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "rule-line",
+          "protocol": "cpcl"
+        },
+        {
+          "feature": "box-rect",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-copies",
+      "file": "cases/cpcl-copies.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "copies",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-feed-tear",
+      "file": "cases/cpcl-feed-tear.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "feed-cut-tear",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-gap-blackmark-basic",
+      "file": "cases/cpcl-gap-blackmark-basic.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "gap-blackmark",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-gap-blackmark-alt",
+      "file": "cases/cpcl-gap-blackmark-alt.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "gap-blackmark",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-dpi-200",
+      "file": "cases/cpcl-dpi-200.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "dpi-dimensioning",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-size-frame-a",
+      "file": "cases/cpcl-size-frame-a.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "label-size-frame",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "cpcl-size-frame-b",
+      "file": "cases/cpcl-size-frame-b.json",
+      "profile": "label",
+      "protocols": [
+        "cpcl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "label-size-frame",
+          "protocol": "cpcl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "label-identity-fn",
+      "file": "cases/label-identity-fn.json",
+      "profile": "label",
+      "protocols": [
+        "tspl",
+        "cpcl"
+      ],
+      "containsIdentityFn": true,
+      "special": "identity-fn",
+      "matrixCells": [],
+      "layers": {
+        "l1": true,
+        "l2": false
+      },
+      "l2Assert": {
+        "java": false,
+        "ts": false
+      }
+    }
+  ]
+}

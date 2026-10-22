@@ -1,0 +1,34 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "cpcl-dpi-200",
+  "title": "CPCL 200dpi 网格（格式头 200 200 + 8dot/mm 坐标）",
+  "profile": "label",
+  "protocols": [
+    "cpcl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "dpi-dimensioning",
+      "protocol": "cpcl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "DPI200",
+        "x": "25mm",
+        "y": "12.5mm"
+      }
+    ]
+  }
+}

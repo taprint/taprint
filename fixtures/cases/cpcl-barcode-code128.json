@@ -1,0 +1,36 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "cpcl-barcode-code128",
+  "title": "CPCL CODE128（type 128）",
+  "profile": "label",
+  "protocols": [
+    "cpcl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "barcode-code128",
+      "protocol": "cpcl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "barcode",
+        "text": "PKG-0042",
+        "symbology": "CODE128",
+        "x": "4mm",
+        "y": "20mm",
+        "height": "10mm"
+      }
+    ]
+  }
+}

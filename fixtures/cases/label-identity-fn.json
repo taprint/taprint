@@ -1,0 +1,31 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "label-identity-fn",
+  "title": "宿主函数模板（{{upper(sku)}} 求值产物入帧；ADR-0007/0010 只跑 L1）",
+  "profile": "label",
+  "protocols": [
+    "tspl",
+    "cpcl"
+  ],
+  "containsIdentityFn": true,
+  "special": "identity-fn",
+  "matrixCells": [],
+  "input": {
+    "identityFnTemplate": "{{upper(sku)}}",
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "SKU-9F2E-0042",
+        "x": "4mm",
+        "y": "18mm"
+      }
+    ]
+  }
+}

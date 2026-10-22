@@ -1,0 +1,42 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "cpcl-text-sizing-basic",
+  "title": "CPCL 文本字号档（mul 1/2 → TEXT 4 n）",
+  "profile": "label",
+  "protocols": [
+    "cpcl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "text-font-sizing",
+      "protocol": "cpcl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "PORTABLE-1",
+        "x": "4mm",
+        "y": "4mm",
+        "size": 1
+      },
+      {
+        "type": "text",
+        "text": "PORTABLE-2",
+        "x": "4mm",
+        "y": "16mm",
+        "size": 2
+      }
+    ]
+  }
+}

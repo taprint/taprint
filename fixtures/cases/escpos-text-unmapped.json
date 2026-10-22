@@ -1,0 +1,32 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "escpos-text-unmapped",
+  "title": "ESC/POS 表外字符：U+FFFD 占位（ADR-0009）",
+  "profile": "receipt",
+  "protocols": [
+    "escpos"
+  ],
+  "containsIdentityFn": false,
+  "special": "unmapped-char",
+  "matrixCells": [
+    {
+      "feature": "codepage-gb",
+      "protocol": "escpos"
+    }
+  ],
+  "input": {
+    "receipt": {
+      "width": "58mm",
+      "widthCols": 32,
+      "encoding": "gbk",
+      "nativeQr": true
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "货位😀A1",
+        "align": "left"
+      }
+    ]
+  }
+}

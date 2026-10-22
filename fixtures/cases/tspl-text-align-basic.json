@@ -1,0 +1,42 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "tspl-text-align-basic",
+  "title": "TSPL 对齐（绝对坐标 x 表达；align 位由坐标承载）",
+  "profile": "label",
+  "protocols": [
+    "tspl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "text-alignment",
+      "protocol": "tspl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "LEFT-EDGE",
+        "x": "2mm",
+        "y": "4mm",
+        "align": "left"
+      },
+      {
+        "type": "text",
+        "text": "RIGHT-ANCHOR",
+        "x": "30mm",
+        "y": "20mm",
+        "align": "right"
+      }
+    ]
+  }
+}

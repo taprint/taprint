@@ -1,0 +1,33 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "escpos-qrcode",
+  "title": "ESC/POS QR 原生五步（GS ( k）",
+  "profile": "receipt",
+  "protocols": [
+    "escpos"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "qrcode-ecc",
+      "protocol": "escpos"
+    }
+  ],
+  "input": {
+    "receipt": {
+      "width": "58mm",
+      "widthCols": 32,
+      "encoding": "gbk",
+      "nativeQr": true
+    },
+    "body": [
+      {
+        "type": "qrcode",
+        "text": "https://example.com/r/861002",
+        "size": 6,
+        "align": "center"
+      }
+    ]
+  }
+}

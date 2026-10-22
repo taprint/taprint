@@ -1,0 +1,44 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "escpos-copies-cut-feed",
+  "title": "ESC/POS 份数/切纸/走纸（copies 无协议帧——conformance 登记）",
+  "profile": "receipt",
+  "protocols": [
+    "escpos"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "copies",
+      "protocol": "escpos"
+    },
+    {
+      "feature": "feed-cut-tear",
+      "protocol": "escpos"
+    }
+  ],
+  "input": {
+    "copies": 2,
+    "receipt": {
+      "width": "58mm",
+      "widthCols": 32,
+      "encoding": "gbk",
+      "nativeQr": true
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "PAID",
+        "align": "center"
+      },
+      {
+        "type": "spacer"
+      },
+      {
+        "type": "cut",
+        "partial": true
+      }
+    ]
+  }
+}

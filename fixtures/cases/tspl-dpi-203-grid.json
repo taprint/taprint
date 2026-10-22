@@ -1,0 +1,34 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "tspl-dpi-203-grid",
+  "title": "TSPL 203dpi 网格坐标（25.4mm=1in）",
+  "profile": "label",
+  "protocols": [
+    "tspl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "dpi-dimensioning",
+      "protocol": "tspl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "IN-GRID",
+        "x": "25.4mm",
+        "y": "12.7mm"
+      }
+    ]
+  }
+}

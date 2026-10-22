@@ -1,0 +1,29 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "tspl-rounding-midpoint",
+  "title": "TSPL 舍入中点（x=6.3125mm=50.5dot@8dot/mm，half-away-from-zero）",
+  "profile": "label",
+  "protocols": [
+    "tspl"
+  ],
+  "containsIdentityFn": false,
+  "special": "rounding-midpoint",
+  "matrixCells": [],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "MIDPOINT",
+        "x": "6.3125mm",
+        "y": "6.3125mm"
+      }
+    ]
+  }
+}

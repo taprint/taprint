@@ -1,0 +1,46 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "tspl-text-align-cjk",
+  "title": "TSPL 中文对齐/编码二联",
+  "profile": "label",
+  "protocols": [
+    "tspl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "text-alignment",
+      "protocol": "tspl"
+    },
+    {
+      "feature": "codepage-gb",
+      "protocol": "tspl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "居中品名",
+        "x": "16mm",
+        "y": "8mm",
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "text": "右锚规格",
+        "x": "36mm",
+        "y": "24mm",
+        "align": "right"
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "tspl-feed-tear",
+  "title": "TSPL 送纸/撕纸（Java 参照无 SET TEAR/FORMFEED 帧——conformance 登记）",
+  "profile": "label",
+  "protocols": [
+    "tspl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "feed-cut-tear",
+      "protocol": "tspl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "40mm",
+      "height": "30mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "TEAR-OFF",
+        "x": "2mm",
+        "y": "12mm"
+      }
+    ]
+  }
+}

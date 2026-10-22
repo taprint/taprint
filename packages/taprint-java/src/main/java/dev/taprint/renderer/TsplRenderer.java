@@ -11,8 +11,6 @@ import dev.taprint.core.PrintErrorCode;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CodingErrorAction;
 
 /**
   * TSPL2 label renderer emitting raw byte streams.
@@ -236,8 +234,7 @@ public class TsplRenderer implements Renderer {
     }
 
     private void append(ByteArrayOutputStream out, String line) {
-        requireGbkEncodable(line);
-        byte[] bytes = (line + "\r\n").getBytes(GBK);
+        byte[] bytes = GbEncoding.encodeWithReplacement(line + "\r\n", GBK);
         out.write(bytes, 0, bytes.length);
     }
 
@@ -273,22 +270,8 @@ public class TsplRenderer implements Renderer {
                         .build();
             }
         }
-        requireGbkEncodable(content);
-    }
-
-    private static void requireGbkEncodable(String content) {
-        CharsetEncoder encoder = GBK.newEncoder()
-                .onMalformedInput(CodingErrorAction.REPORT)
-                .onUnmappableCharacter(CodingErrorAction.REPORT);
-        try {
-            encoder.encode(java.nio.CharBuffer.wrap(content));
-        } catch (Exception e) {
-            throw PrintKernelException.builder()
-                    .errorCode(PrintErrorCode.RENDER_FAILED)
-                    .message("TSPL content cannot be encoded as GBK")
-                    .cause(e)
-                    .build();
-        }
+        // 表外字符不再拒绝：GBK 表外码点按 ADR-0009 §3 以 U+FFFD 占位
+        // （编码出口 {@link #append} 走 GbEncoding），控制字符拒绝保留。
     }
 
     private String fmt(double mm) {

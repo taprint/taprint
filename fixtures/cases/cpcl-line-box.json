@@ -1,0 +1,46 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "cpcl-line-box",
+  "title": "CPCL LINE/BOX 图元",
+  "profile": "label",
+  "protocols": [
+    "cpcl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "rule-line",
+      "protocol": "cpcl"
+    },
+    {
+      "feature": "box-rect",
+      "protocol": "cpcl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "line",
+        "x": "2mm",
+        "y": "34mm",
+        "width": "56mm",
+        "height": "0.5mm"
+      },
+      {
+        "type": "rect",
+        "x": "2mm",
+        "y": "2mm",
+        "width": "56mm",
+        "height": "36mm"
+      }
+    ]
+  }
+}

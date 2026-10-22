@@ -1,0 +1,36 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "tspl-barcode-code128",
+  "title": "TSPL CODE128（type=128）",
+  "profile": "label",
+  "protocols": [
+    "tspl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "barcode-code128",
+      "protocol": "tspl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "barcode",
+        "text": "SKU-100086",
+        "symbology": "CODE128",
+        "x": "4mm",
+        "y": "22mm",
+        "height": "10mm"
+      }
+    ]
+  }
+}

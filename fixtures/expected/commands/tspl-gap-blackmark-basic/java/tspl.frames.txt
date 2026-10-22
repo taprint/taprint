@@ -1,0 +1,8 @@
+001|SIZE|w_mm=60;h_mm=40
+002|GAP|gap_mm=2;blackout_mm=0
+003|DENSITY|n=8
+004|SPEED|n=4
+005|DIRECTION|n=1
+006|CLS|-
+007|TEXT|x=32;y=144;font=3;rotation=0;x_mul=1;y_mul=1;content=GAP-2MM
+008|PRINT|copies=1

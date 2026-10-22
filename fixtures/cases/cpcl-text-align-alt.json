@@ -1,0 +1,35 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "cpcl-text-align-alt",
+  "title": "CPCL 对齐二联（center 位）",
+  "profile": "label",
+  "protocols": [
+    "cpcl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "text-alignment",
+      "protocol": "cpcl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "CENTER-MARK",
+        "x": "20mm",
+        "y": "10mm",
+        "align": "center"
+      }
+    ]
+  }
+}

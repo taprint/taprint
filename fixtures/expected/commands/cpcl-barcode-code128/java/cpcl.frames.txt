@@ -1,0 +1,4 @@
+001|HEADER|offset=0;horz=200;vert=200;height=320;qty=1
+002|BARCODE|type=128;width=2;ratio=1;height=80;x=32;y=160;content=PKG-0042
+003|FORM|-
+004|PRINT|-
