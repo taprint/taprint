@@ -122,9 +122,10 @@ void main() {
       final bytes = encodeLabel(
         body: const [LabelElement(type: 'text', xMm: 0, yMm: 0, content: '货位😀07')],
       );
-      // 期望字节：^FD + 货(BB F5) 位(CE BB) + U+FFFD(EF BF BD) + "07" + ^FS
+      // 期望字节：^FD + 货(BB F5) 位(CE BB) + 表外折 ?(0x3F——与 gbk oracle 同口径，
+      // ADR-0009 的 U+FFFD 是解码侧策略) + "07" + ^FS
       expectHas(bytes, <int>[
-        ...latin1.encode('^FD'), 0xBB, 0xF5, 0xCE, 0xBB, 0xEF, 0xBF, 0xBD, 0x30, 0x37,
+        ...latin1.encode('^FD'), 0xBB, 0xF5, 0xCE, 0xBB, 0x3F, 0x30, 0x37,
         ...latin1.encode('^FS'),
       ]);
     });
