@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Reference Windows transport package: TCP / serial channels plus the
+         Win32 print-spooler RAW path, Text-Only queue activation and USB
+         printer detection. Compiled cross-platform (net8.0, no -windows TFM);
+         P/Invoke (winspool/cfgmgr32) and registry access only take effect on
+         a Windows runtime by design — CA1416 is therefore suppressed repo-
+         wide for this project rather than sprinkling pragmas. -->
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <!-- Port fidelity: sources are C# 7.3-era non-nullable style; nullable
+         annotations are intentionally disabled for this reference package. -->
+    <Nullable>disable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+
+    <!-- NuGet metadata: reference channel package, evolves independently from
+         the kernel with weaker stability guarantees (see channels/README.md). -->
+    <PackageId>Taprint.Channel.Windows</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>taprint maintainers</Authors>
+    <Description>Reference printer transports for taprint: TCP-9100 and serial raw channels, Windows spooler RAW passthrough, automatic Text-Only queue creation and USB printer detection. Win32 interop is Windows-runtime-only; the package compiles everywhere.</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/taprint/taprint.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>print;printer;escpos;tspl;spooler;windows;tcp;serial;usb</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Channel seam + typed channel exceptions live in the kernel engine
+         layer so engines and channels share one contract. -->
+    <ProjectReference Include="../../../packages/taprint-cs/Taprint.PrintDsl/Taprint.PrintDsl.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- SerialPort is not part of the .NET 8 shared framework. -->
+    <PackageReference Include="System.IO.Ports" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>
