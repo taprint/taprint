@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "2.0",
+  "id": "wms_location_label",
+  "code": "WMS_LOCATION_LABEL",
+  "name": "货位标签",
+  "category": "仓库管理",
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "code": "string",
+        "name": "string",
+        "barcode": "string",
+        "barcodeValue": "string",
+        "areaName": "string",
+        "areaCode": "string",
+        "warehouseName": "string",
+        "layer": "number",
+        "layers": "number",
+        "locationTypeName": "string"
+      }
+    }
+  ],
+  "presentations": {
+    "label": {
+      "size": {"width": "60mm", "height": "40mm"},
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4,
+      "body": [
+        {"type": "text", "content": "{{code}}", "x": "3mm", "y": "3mm", "font": "SIMPLIFIED CHINESE", "size": 2},
+        {"type": "barcode", "content": "{{barcodeValue}}", "symbology": "CODE128", "x": "3mm", "y": "12mm", "height": "12mm"},
+        {"type": "text", "content": "{{areaName}} / {{warehouseName}}", "x": "3mm", "y": "26mm", "font": "SIMPLIFIED CHINESE", "size": 1},
+        {"type": "text", "content": "{{locationTypeName}} {{layer}}/{{layers}}", "x": "3mm", "y": "33mm", "font": "SIMPLIFIED CHINESE", "size": 1}
+      ]
+    }
+  }
+}

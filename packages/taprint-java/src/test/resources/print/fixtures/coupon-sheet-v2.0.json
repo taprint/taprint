@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "2.0",
+  "id": "coupon_sheet_v2",
+  "code": "COUPON_SHEET",
+  "name": "代金券联页-一页多单范例",
+  "category": "营销域",
+  "description": "DSL 2.0 一页多单（page.nup）+ 图片水印范例锚点（专项 §22.4 步骤 2）。",
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "couponNo": "string",
+        "faceValue": "number",
+        "expireDate": "date",
+        "logoUrl": "string"
+      }
+    }
+  ],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "margin": { "top": "10mm", "bottom": "10mm", "left": "10mm", "right": "10mm" },
+        "nup": { "cols": 2, "rows": 2, "gap": "6mm" },
+        "watermark": { "type": "image", "src": "{{logoUrl}}", "opacity": 0.08, "tile": true }
+      },
+      "body": [
+        { "type": "text", "content": "代金券 {{couponNo}}", "align": "center" },
+        {
+          "type": "text",
+          "content": "面值：{{faceValue | currency:CNY}}　有效期至：{{expireDate | date:'YYYY-MM-DD'}}"
+        },
+        { "type": "barcode", "content": "{{couponNo}}", "symbology": "CODE128" },
+        { "type": "line", "lineStyle": "dashed" }
+      ]
+    }
+  }
+}

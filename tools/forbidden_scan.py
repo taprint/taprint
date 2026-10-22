@@ -80,6 +80,11 @@ def _iter_files(root: Path):
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
         for name in sorted(filenames):
+            # ".git" is a directory in normal checkouts but a pointer file in
+            # linked worktrees; the pointer holds the main gitdir's absolute
+            # path, which is never repository content.
+            if name == ".git":
+                continue
             yield Path(dirpath) / name
 
 

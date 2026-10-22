@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "2.0",
+  "id": "neg_v2_diagonal_labels",
+  "code": "NEG_V2_DIAGONAL_LABELS",
+  "name": "负例-diagonalLabels 脱离 diagonal 单独出现",
+  "dataSources": [{ "name": "items", "type": "detail", "schema": { "sku": "string" } }],
+  "presentations": {
+    "doc": {
+      "page": { "size": "A4" },
+      "body": [
+        {
+          "type": "table",
+          "source": "items",
+          "headerRows": [[{ "text": "x", "diagonalLabels": { "tl": "项目", "br": "类别" } }]],
+          "columns": [{ "header": "编码", "field": "sku" }]
+        }
+      ]
+    }
+  }
+}

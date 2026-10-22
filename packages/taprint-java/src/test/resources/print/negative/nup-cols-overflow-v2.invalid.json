@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "2.0",
+  "id": "neg_v2_nup_cols_overflow",
+  "code": "NEG_V2_NUP_COLS_OVERFLOW",
+  "name": "负例-一页多单列数超过上限 4",
+  "dataSources": [{ "name": "main", "type": "primary", "schema": { "billNo": "string" } }],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "nup": { "cols": 5, "rows": 2 }
+      },
+      "body": [{ "type": "text", "content": "{{billNo}}" }]
+    }
+  }
+}

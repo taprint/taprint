@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0",
+  "id": "tpl_invalid_tenant_injection",
+  "code": "SALES_NOTE",
+  "name": "非法用例：顶层伪造租户归属",
+  "tenantId": 1001,
+  "presentations": {
+    "doc": {
+      "page": { "size": "A4" },
+      "body": [{ "type": "text", "content": "x" }]
+    }
+  }
+}

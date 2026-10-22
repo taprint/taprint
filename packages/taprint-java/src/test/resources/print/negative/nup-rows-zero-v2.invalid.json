@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "2.0",
+  "id": "neg_v2_nup_rows_zero",
+  "code": "NEG_V2_NUP_ROWS_ZERO",
+  "name": "负例-一页多单行数为 0",
+  "dataSources": [{ "name": "main", "type": "primary", "schema": { "billNo": "string" } }],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "nup": { "cols": 2, "rows": 0 }
+      },
+      "body": [{ "type": "text", "content": "{{billNo}}" }]
+    }
+  }
+}

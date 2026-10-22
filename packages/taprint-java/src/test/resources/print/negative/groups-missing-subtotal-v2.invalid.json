@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "2.0",
+  "id": "neg_v2_groups_missing_subtotal",
+  "code": "NEG_V2_GROUPS_MISSING_SUBTOTAL",
+  "name": "负例-分组小计缺 subtotal",
+  "dataSources": [
+    { "name": "items", "type": "detail", "schema": { "category": "string", "sku": "string" } }
+  ],
+  "presentations": {
+    "doc": {
+      "page": { "size": "A4" },
+      "body": [
+        {
+          "type": "table",
+          "source": "items",
+          "headerRows": [[{ "text": "类别" }, { "text": "编码" }]],
+          "columns": [
+            { "header": "类别", "field": "category" },
+            { "header": "编码", "field": "sku" }
+          ],
+          "groups": [{ "field": "category", "header": "{{category}}" }]
+        }
+      ]
+    }
+  }
+}

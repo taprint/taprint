@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "2.0",
+  "id": "neg_v2_watermark",
+  "code": "NEG_V2_WATERMARK",
+  "name": "负例-文字水印缺 text",
+  "dataSources": [{ "name": "main", "type": "primary", "schema": { "billNo": "string" } }],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "watermark": { "type": "text", "opacity": 0.2 }
+      },
+      "body": [{ "type": "text", "content": "{{billNo}}" }]
+    }
+  }
+}
