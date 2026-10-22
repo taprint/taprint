@@ -1,0 +1,18 @@
+name: taprint
+description: >-
+  Printer-neutral print template DSL kernel (Dart): parse, validate,
+  migrate and canonicalize label/receipt/document templates. One contract
+  shared with the TypeScript, C# and Java implementations — cross-language
+  parity is pinned by the shared golden fixtures in the taprint repository.
+version: 0.1.0
+environment:
+  sdk: ^3.5.0
+dependencies:
+  # SHA-256/HMAC (FIPS 180-4 / RFC 2104); HKDF (RFC 5869) self-implemented.
+  crypto: ^3.0.3
+  # JSON Schema draft 2020-12 validation (schema injected by the host,
+  # same contract as TS ajv-2020 / C# JsonSchema.Net).
+  json_schema: ^5.0.0
+dev_dependencies:
+  lints: ^4.0.0
+  test: ^1.25.0
