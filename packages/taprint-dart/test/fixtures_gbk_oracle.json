@@ -1013,11 +1013,6 @@
       "note": "C1 control byte, outside GB18030 two-byte region"
     },
     {
-      "cp": 233,
-      "char": "\u00e9",
-      "note": "\u00e9 \u2014 Latin-1 letter, four-byte gb18030 only"
-    },
-    {
       "cp": 9728,
       "char": "\u2600",
       "note": "\u2600 \u2014 miscellaneous symbol, four-byte only"

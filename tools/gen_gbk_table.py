@@ -133,7 +133,6 @@ def build_vectors(table):
 # or beyond). Encode must fall back to the replacement byte, not throw.
 UNMAPPABLE_CPS = [
     (0x0080, "C1 control byte, outside GB18030 two-byte region"),
-    (0x00E9, "é — Latin-1 letter, four-byte gb18030 only"),
     (0x2600, "☀ — miscellaneous symbol, four-byte only"),
     (0x2E80, "CJK Radicals Supplement block start, four-byte only"),
     (0x3400, "CJK Extension A start, four-byte only"),
@@ -214,6 +213,9 @@ def write_oracle(table, payload_sha, vectors):
         "unmappable": [
             {"cp": cp, "char": chr(cp), "note": note}
             for cp, note in UNMAPPABLE_CPS
+            # membership-filtered: a hand note is a claim, the table is truth
+            # (é lives at a8a6 in the GB2312 pinyin row, for example)
+            if cp not in table
         ],
         "invalidDecode": INVALID_DECODE,
     }
@@ -233,7 +235,7 @@ def main() -> int:
     print(f"gbk_full.dart: {len(table)} entries, "
           f"sha256={payload_sha}")
     print(f"oracle vectors: {len(vectors)} mapped, "
-          f"{len(UNMAPPABLE_CPS)} unmappable, "
+          f"{sum(1 for cp, _ in UNMAPPABLE_CPS if cp not in table)} unmappable, "
           f"{len(INVALID_DECODE)} decode-policy")
     print(f"dart size: {DART_OUT.stat().st_size} bytes")
     return 0
