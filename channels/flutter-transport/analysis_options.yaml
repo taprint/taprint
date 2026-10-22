@@ -1,0 +1,6 @@
+# 参考实现包：沿用 flutter_lints 基线（与内核包 lints 同源规则集）。
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    prefer_single_quotes: true
