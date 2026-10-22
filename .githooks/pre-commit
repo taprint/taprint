@@ -1,0 +1,9 @@
+#!/bin/sh
+# Pre-commit compliance gate (ADR-0006): negative controls, forbidden-content
+# scan, license headers. Install once with:
+#   git config core.hooksPath .githooks
+set -e
+cd "$(git rev-parse --show-toplevel)"
+python3 tools/test_compliance.py
+python3 tools/forbidden_scan.py .
+python3 tools/header_check.py .

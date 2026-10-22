@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Pattern, Tuple
 
-SCAN_VERSION = "1.0.0"
+SCAN_VERSION = "1.0.2"
 
 SKIP_DIRS = {
     ".git", "node_modules", "dist", "build", "bin", "obj", ".dart_tool",
@@ -57,7 +57,9 @@ def code_patterns() -> List[Tuple[str, Pattern[str]]]:
         ("internal-doc-refs",
          re.compile(r"\bDPD\b|handoff|DESIGNER-PRODUCTION|设计器文档|播种")),
         ("email-address",
-         re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+")),
+         re.compile(
+             r"[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+"
+             r"(?![A-Za-z0-9-]*:)")),
     ]
 
 

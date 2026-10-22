@@ -55,6 +55,12 @@ def test_forbidden_scan_catches_every_category() -> None:
             "Receipt printing and label templates, compiled everywhere.\n",
             encoding="utf-8")
         expected["clean.md"] = set()
+        # SCM clone URLs look like emails (git@host:path) but are not;
+        # the email rule must not flag them, at any backtracking split
+        # (ADR-0006 pattern 1.0.2).
+        (root / "clone.txt").write_text(
+            "git remote add origin git@github.com:taprint/taprint.git\n",
+            encoding="utf-8")
 
         scanned, hits = forbidden_scan.scan_root(root)
         got: dict = {}
@@ -64,6 +70,7 @@ def test_forbidden_scan_catches_every_category() -> None:
         flagged = {k: v for k, v in expected.items() if v}
         assert got == flagged, f"expected {flagged}, got {got}"
         assert "clean.md" not in got, "clean file must produce zero hits"
+        assert "clone.txt" not in got, "clone URL must not trip the email rule"
 
 
 def test_header_checker() -> None:
