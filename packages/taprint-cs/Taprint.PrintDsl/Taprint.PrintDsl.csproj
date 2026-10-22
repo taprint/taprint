@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- TFM: netstandard2.0 single target — covers net48 consumers and
+         .NET Core/5+/8+ runtimes; HKDF and constant-time compare are
+         self-implemented (no crypto dependency). -->
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- NuGet metadata: version tracks the taprint kernel release train. -->
+    <PackageId>Taprint.PrintDsl</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>taprint maintainers</Authors>
+    <Description>Printer-neutral print template DSL kernel (C#): DSL parse/validate/migrate, expression compiler, HMAC message signer. Cross-language parity is pinned by the shared golden fixtures in the taprint repository.</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/taprint/taprint.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>print;printer;dsl;template;label;receipt;escpos;tspl;cpcl</PackageTags>
+    <!-- Publishing is performed explicitly by maintainers via the release workflow. -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- internal foundation (Crypto/EcmaNumber/Canonical) visible to tests -->
+    <InternalsVisibleTo Include="Taprint.PrintDsl.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- netstandard2.0 has no System.Text.Json BCL asset; JsonSchema.Net
+         transitively requires System.Text.Json. -->
+    <PackageReference Include="JsonSchema.Net" Version="9.4.0" />
+    <PackageReference Include="System.Text.Json" Version="10.0.5" />
+  </ItemGroup>
+
+</Project>

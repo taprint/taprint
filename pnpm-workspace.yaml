@@ -1,0 +1,5 @@
+packages:
+  - packages/taprint-ts
+  - packages/taprint-preview
+  - apps/mcp
+  - apps/designer
