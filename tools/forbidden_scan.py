@@ -35,6 +35,7 @@ MAX_BYTES = 10 * 1024 * 1024
 EXEMPT_FILES: Dict[str, str] = {
     "tools/forbidden_scan.py": "scanner pattern definitions (ADR-0006)",
     "tools/test_compliance.py": "negative-control decoys (ADR-0006)",
+    "tools/pack_check.py": "brand-pattern definition for metadata gate (ADR-0006)",
 }
 
 
