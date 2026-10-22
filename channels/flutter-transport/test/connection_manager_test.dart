@@ -73,6 +73,8 @@ void main() {
     final m = ConnectionManager(executorFactory: (_) => exec);
     final sub = m.stateStream.listen(recorded.add);
     await m.connect(_device);
+    // rxdart delivers stream events on later microtasks; flush before asserting
+    await Future<void>.delayed(Duration.zero);
     expect(m.state, PrinterConnectionState.connected);
     // BehaviorSubject：新订阅者先拿到当前态（disconnected 种子）。
     expect(recorded, [
@@ -83,6 +85,7 @@ void main() {
     expect(exec.connectCalls, 1);
 
     await m.disconnect();
+    await Future<void>.delayed(Duration.zero);
     expect(m.state, PrinterConnectionState.disconnected);
     expect(exec.disconnectCalls, 1);
     expect(m.currentDevice, isNull);
@@ -167,6 +170,8 @@ void main() {
       backoffSeconds: const [0, 0, 0, 0, 0],
     );
     await m.connect(_device);
+    // rxdart delivers stream events on later microtasks; flush before asserting
+    await Future<void>.delayed(Duration.zero);
     expect(m.state, PrinterConnectionState.connected);
 
     radio.add(RadioStatus.unavailable);
