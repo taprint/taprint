@@ -1,0 +1,17 @@
+001|INIT|-
+002|CN_ON|-
+003|ALIGN|n=1
+004|QR_MODEL|n=2
+005|QR_SIZE|n=6
+006|QR_ECC|n=49
+007|QR_DATA|len=28;content=https://example.com/r/861002
+008|QR_PRINT|-
+009|LF|-
+010|LF|-
+011|LF|-
+012|LF|-
+013|LF|-
+014|LF|-
+015|LF|-
+016|LF|-
+017|LF|-

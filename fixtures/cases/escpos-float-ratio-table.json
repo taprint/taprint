@@ -1,0 +1,49 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "escpos-float-ratio-table",
+  "title": "ESC/POS 浮点比例列宽（33.3%/66.7%——ADR-0009 定点口径）",
+  "profile": "receipt",
+  "protocols": [
+    "escpos"
+  ],
+  "containsIdentityFn": false,
+  "special": "float-ratio",
+  "matrixCells": [],
+  "input": {
+    "receipt": {
+      "width": "58mm",
+      "widthCols": 32,
+      "encoding": "gbk",
+      "nativeQr": true
+    },
+    "body": [
+      {
+        "type": "table",
+        "headers": [
+          "ITEM",
+          "AMOUNT"
+        ],
+        "columns": [
+          {
+            "width": "33.3%",
+            "align": "left"
+          },
+          {
+            "width": "66.7%",
+            "align": "right"
+          }
+        ],
+        "rows": [
+          [
+            "MILK 1L",
+            "12.50"
+          ],
+          [
+            "BREAD",
+            "6.00"
+          ]
+        ]
+      }
+    ]
+  }
+}

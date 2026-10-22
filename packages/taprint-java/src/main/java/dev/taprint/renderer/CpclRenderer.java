@@ -11,7 +11,7 @@ import dev.taprint.core.PrintErrorCode;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 
 /**
   * CPCL renderer for portable label printers.
@@ -20,6 +20,8 @@ import java.nio.charset.StandardCharsets;
 public class CpclRenderer implements Renderer {
 
     private static final int CJK_FONT_HEIGHT = 32;
+
+    private static final Charset GBK = Charset.forName("GBK");
 
     private final CjkRasterizer cjkRasterizer;
     private final PrintImageLoader imageLoader;
@@ -62,7 +64,10 @@ public class CpclRenderer implements Renderer {
                     .build());
         }
         checkInterrupted();
-        return new RenderResult(cpcl.toString().getBytes(StandardCharsets.US_ASCII),
+        // ADR-0009 §3：内容通道按 GBK 表编码，表外字符以 U+FFFD 占位
+        // （原先 US-ASCII 折 '?'，与 Dart/TS 端 GBK 内容通道不可对拍；
+        // 帧结构与 EG hex 数据均为 ASCII，GBK 编码下逐字节不变）
+        return new RenderResult(GbEncoding.encodeWithReplacement(cpcl.toString(), GBK),
                 "application/octet-stream", CommandSet.CPCL);
     }
 

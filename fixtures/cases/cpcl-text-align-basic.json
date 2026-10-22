@@ -1,0 +1,42 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "cpcl-text-align-basic",
+  "title": "CPCL 对齐（绝对坐标承载；Java 无 ALIGN 行——conformance 登记）",
+  "profile": "label",
+  "protocols": [
+    "cpcl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "text-alignment",
+      "protocol": "cpcl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "LEFT-ANCHOR",
+        "x": "2mm",
+        "y": "4mm",
+        "align": "left"
+      },
+      {
+        "type": "text",
+        "text": "RIGHT-ANCHOR",
+        "x": "32mm",
+        "y": "20mm",
+        "align": "right"
+      }
+    ]
+  }
+}

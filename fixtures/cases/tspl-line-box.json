@@ -1,0 +1,46 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "tspl-line-box",
+  "title": "TSPL LINE/BOX 图元",
+  "profile": "label",
+  "protocols": [
+    "tspl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "rule-line",
+      "protocol": "tspl"
+    },
+    {
+      "feature": "box-rect",
+      "protocol": "tspl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "line",
+        "x": "2mm",
+        "y": "34mm",
+        "width": "56mm",
+        "height": "0.5mm"
+      },
+      {
+        "type": "rect",
+        "x": "2mm",
+        "y": "2mm",
+        "width": "56mm",
+        "height": "36mm"
+      }
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "tspl-copies",
+  "title": "TSPL PRINT 份数单帧承载",
+  "profile": "label",
+  "protocols": [
+    "tspl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "copies",
+      "protocol": "tspl"
+    }
+  ],
+  "input": {
+    "copies": 3,
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "BATCH 3X",
+        "x": "4mm",
+        "y": "16mm"
+      }
+    ]
+  }
+}

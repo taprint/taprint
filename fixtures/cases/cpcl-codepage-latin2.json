@@ -1,0 +1,34 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "cpcl-codepage-latin2",
+  "title": "CPCL GBK 单字节扩展区二联（N° ñ）",
+  "profile": "label",
+  "protocols": [
+    "cpcl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "codepage-gb",
+      "protocol": "cpcl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "N°2 ñ",
+        "x": "4mm",
+        "y": "8mm"
+      }
+    ]
+  }
+}

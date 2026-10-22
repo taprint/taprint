@@ -1,0 +1,35 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "cpcl-qrcode",
+  "title": "CPCL QR 三段式（BARCODE QR / M0A / ENDQR）",
+  "profile": "label",
+  "protocols": [
+    "cpcl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "qrcode-ecc",
+      "protocol": "cpcl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "qrcode",
+        "text": "TAPRINT-GOLDEN-CPCL",
+        "x": "20mm",
+        "y": "10mm",
+        "size": 6
+      }
+    ]
+  }
+}

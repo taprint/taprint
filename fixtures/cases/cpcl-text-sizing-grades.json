@@ -1,0 +1,46 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "cpcl-text-sizing-grades",
+  "title": "CPCL 兼容档字号（double/tall）",
+  "profile": "label",
+  "protocols": [
+    "cpcl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "text-font-sizing",
+      "protocol": "cpcl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "GRADE-DOUBLE",
+        "x": "4mm",
+        "y": "6mm",
+        "style": {
+          "fontSize": "double"
+        }
+      },
+      {
+        "type": "text",
+        "text": "GRADE-TALL",
+        "x": "4mm",
+        "y": "24mm",
+        "style": {
+          "fontSize": "tall"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "escpos-text-sizing-basic",
+  "title": "ESC/POS 文本字号：normal/tall + 左/中对齐",
+  "profile": "receipt",
+  "protocols": [
+    "escpos"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "text-font-sizing",
+      "protocol": "escpos"
+    },
+    {
+      "feature": "text-alignment",
+      "protocol": "escpos"
+    }
+  ],
+  "input": {
+    "receipt": {
+      "width": "58mm",
+      "widthCols": 32,
+      "encoding": "gbk",
+      "nativeQr": true
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "SHOP RECEIPT",
+        "align": "left"
+      },
+      {
+        "type": "text",
+        "text": "TOTAL 12.50",
+        "align": "center",
+        "style": {
+          "fontSize": "tall"
+        }
+      }
+    ]
+  }
+}

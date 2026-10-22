@@ -1,0 +1,35 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "tspl-qrcode",
+  "title": "TSPL QRCODE（ECC M + M2 形态钉死）",
+  "profile": "label",
+  "protocols": [
+    "tspl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "qrcode-ecc",
+      "protocol": "tspl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "qrcode",
+        "text": "TAPRINT-GOLDEN-TSPL",
+        "x": "20mm",
+        "y": "12mm",
+        "size": 5
+      }
+    ]
+  }
+}

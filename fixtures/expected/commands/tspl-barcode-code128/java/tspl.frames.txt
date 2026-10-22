@@ -1,0 +1,8 @@
+001|SIZE|w_mm=60;h_mm=40
+002|GAP|gap_mm=2;blackout_mm=0
+003|DENSITY|n=8
+004|SPEED|n=4
+005|DIRECTION|n=1
+006|CLS|-
+007|BARCODE|x=32;y=176;type=128;height=80;human=1;rotation=0;narrow=2;wide=2;content=SKU-100086
+008|PRINT|copies=1

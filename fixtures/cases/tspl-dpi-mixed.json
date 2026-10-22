@@ -1,0 +1,34 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "tspl-dpi-mixed",
+  "title": "TSPL 203dpi vs 8dot/mm 分度坐标（44.45mm——conformance 登记）",
+  "profile": "label",
+  "protocols": [
+    "tspl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "dpi-dimensioning",
+      "protocol": "tspl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "MIXED",
+        "x": "44.45mm",
+        "y": "6.35mm"
+      }
+    ]
+  }
+}

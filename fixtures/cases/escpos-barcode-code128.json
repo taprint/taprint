@@ -1,0 +1,34 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "escpos-barcode-code128",
+  "title": "ESC/POS CODE128",
+  "profile": "receipt",
+  "protocols": [
+    "escpos"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "barcode-code128",
+      "protocol": "escpos"
+    }
+  ],
+  "input": {
+    "receipt": {
+      "width": "58mm",
+      "widthCols": 32,
+      "encoding": "gbk",
+      "nativeQr": true
+    },
+    "body": [
+      {
+        "type": "barcode",
+        "text": "ORDER-2026-001",
+        "symbology": "CODE128",
+        "height": "10mm",
+        "align": "center"
+      }
+    ]
+  }
+}

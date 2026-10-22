@@ -1,0 +1,5 @@
+001|HEADER|offset=0;horz=200;vert=200;height=320;qty=1
+002|LINE|x1=16;y1=272;x2=464;y2=272;thickness=2
+003|BOX|x1=16;y1=16;x2=464;y2=304;thickness=2
+004|FORM|-
+005|PRINT|-

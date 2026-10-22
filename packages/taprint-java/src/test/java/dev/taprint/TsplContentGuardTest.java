@@ -41,11 +41,19 @@ class TsplContentGuardTest {
     }
 
     @Test
-    void rejectsUnmappableEmojiInsteadOfReplacement() {
-        PrintKernelException exception = assertThrows(PrintKernelException.class,
-                () -> render(element("text", "货位😀", "3mm", "3mm")));
-        assertEquals(PrintErrorCode.RENDER_FAILED.getCode(), exception.getErrorCode().getCode());
-        assertTrue(exception.getMessage().contains("GBK"));
+    void replacesUnmappableEmojiWithUffdPerAdr0009() {
+        // ADR-0009 §3：表外字符以 U+FFFD（UTF-8 EF BF BD）占位，不再拒绝渲染
+        RenderResult result = render(element("text", "货位😀", "3mm", "3mm"));
+        byte[] payload = result.getPayload();
+        boolean hasReplacement = false;
+        for (int i = 0; i + 2 < payload.length; i++) {
+            if ((payload[i] & 0xFF) == 0xEF && (payload[i + 1] & 0xFF) == 0xBF && (payload[i + 2] & 0xFF) == 0xBD) {
+                hasReplacement = true;
+                break;
+            }
+        }
+        assertTrue(hasReplacement, "表外字符应输出 U+FFFD 占位字节 EF BF BD");
+        assertTrue(new String(payload, GBK).contains("货位"), "表内字符原样保留");
     }
 
     @Test

@@ -526,7 +526,8 @@ public class EscPosRenderer implements Renderer {
         if (text == null || text.isEmpty()) {
             return;
         }
-        write(out, text.getBytes(charset));
+        // ADR-0009 §3：表外字符以 U+FFFD 占位（原先平台默认折 '?'，跨语言不可对拍）
+        write(out, GbEncoding.encodeWithReplacement(text, charset));
     }
 
     private static void write(ByteArrayOutputStream out, byte[] bytes) {

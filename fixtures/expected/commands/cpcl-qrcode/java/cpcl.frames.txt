@@ -1,0 +1,6 @@
+001|HEADER|offset=0;horz=200;vert=200;height=320;qty=1
+002|QR_BEGIN|x=160;y=80;sel=M;model=2;unit=6
+003|QR_DATA|prefix=M0A;content=TAPRINT-GOLDEN-CPCL
+004|QR_END|-
+005|FORM|-
+006|PRINT|-

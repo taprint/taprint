@@ -1,0 +1,35 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "escpos-barcode-human-toggle",
+  "title": "ESC/POS 人读位开关（GS H 位置帧钉死）",
+  "profile": "receipt",
+  "protocols": [
+    "escpos"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "barcode-human-toggle",
+      "protocol": "escpos"
+    }
+  ],
+  "input": {
+    "receipt": {
+      "width": "58mm",
+      "widthCols": 32,
+      "encoding": "gbk",
+      "nativeQr": true
+    },
+    "body": [
+      {
+        "type": "barcode",
+        "text": "6901234567892",
+        "symbology": "EAN13",
+        "height": "10mm",
+        "align": "left",
+        "humanReadable": true
+      }
+    ]
+  }
+}

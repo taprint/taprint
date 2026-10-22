@@ -1,0 +1,34 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "cpcl-gap-blackmark-alt",
+  "title": "CPCL 间隙二联（30x20 高度折算）",
+  "profile": "label",
+  "protocols": [
+    "cpcl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "gap-blackmark",
+      "protocol": "cpcl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "30mm",
+      "height": "20mm",
+      "gap": "3mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "GAP-ALT",
+        "x": "2mm",
+        "y": "8mm"
+      }
+    ]
+  }
+}

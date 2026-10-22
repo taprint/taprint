@@ -1,0 +1,51 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "escpos-text-cjk",
+  "title": "ESC/POS 中文 GBK + double/wide + 右/中",
+  "profile": "receipt",
+  "protocols": [
+    "escpos"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "text-font-sizing",
+      "protocol": "escpos"
+    },
+    {
+      "feature": "text-alignment",
+      "protocol": "escpos"
+    },
+    {
+      "feature": "codepage-gb",
+      "protocol": "escpos"
+    }
+  ],
+  "input": {
+    "receipt": {
+      "width": "58mm",
+      "widthCols": 32,
+      "encoding": "gbk",
+      "nativeQr": true
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "收银小票",
+        "align": "right",
+        "style": {
+          "fontSize": "double"
+        }
+      },
+      {
+        "type": "text",
+        "text": "商品名称",
+        "align": "center",
+        "style": {
+          "fontSize": "wide"
+        }
+      }
+    ]
+  }
+}

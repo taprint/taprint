@@ -1,0 +1,4 @@
+001|HEADER|offset=0;horz=200;vert=200;height=320;qty=1
+002|TEXT|font=4;size=0;x=160;y=80;content=CENTER-MARK
+003|FORM|-
+004|PRINT|-

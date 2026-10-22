@@ -1,0 +1,9 @@
+001|SIZE|w_mm=60;h_mm=40
+002|GAP|gap_mm=2;blackout_mm=0
+003|DENSITY|n=8
+004|SPEED|n=4
+005|DIRECTION|n=1
+006|CLS|-
+007|TEXT|x=128;y=64;font=SIMPLIFIED CHINESE;rotation=0;x_mul=1;y_mul=1;content=\xBE\xD3\xD6\xD0\xC6\xB7\xC3\xFB
+008|TEXT|x=288;y=192;font=SIMPLIFIED CHINESE;rotation=0;x_mul=1;y_mul=1;content=\xD3\xD2\xC3\xAA\xB9\xE6\xB8\xF1
+009|PRINT|copies=1

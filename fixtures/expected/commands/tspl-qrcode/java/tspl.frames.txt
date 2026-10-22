@@ -1,0 +1,8 @@
+001|SIZE|w_mm=60;h_mm=40
+002|GAP|gap_mm=2;blackout_mm=0
+003|DENSITY|n=8
+004|SPEED|n=4
+005|DIRECTION|n=1
+006|CLS|-
+007|QRCODE|x=160;y=96;ecc=M;cell=5;mode=A;rotation=0;model=M2;mask=-;content=TAPRINT-GOLDEN-TSPL
+008|PRINT|copies=1

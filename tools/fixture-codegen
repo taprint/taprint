@@ -1,0 +1,874 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Golden fixture code generator (ADR-0010 / docs/coverage-matrix.md frozen v1).
+
+Pipeline:
+ 1. Parse the frozen coverage matrix (docs/coverage-matrix.md) into required
+    cells (feature x protocol -> minimum case count).
+ 2. Emit the minimal case set defined below into fixtures/cases/*.json
+    (schema taprint/golden-case@1) and assemble fixtures/manifest.json.
+ 3. Verify every non-"-" cell is covered by the stated count, the four
+    mandatory special cases exist, and identity-fn cases are L1-only.
+ 4. Drive the Java reference renderer (packages/taprint-java) to regenerate
+    fixtures/expected/commands/<case>/java/{<protocol>.frames.txt,
+    <protocol>.bytes.sha256}.
+
+Run from the repository root:
+    tools/fixture-codegen [--skip-java] [--l2-green ts=case1,case2,...]
+
+The --l2-green flag stamps manifest l2Assert.<lang>=true for the listed
+cases (languages whose byte streams currently match the Java reference);
+java is always true. CS/Dart start false until their runners are enabled.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parent.parent
+FIXTURES = REPO / "fixtures"
+CASES_DIR = FIXTURES / "cases"
+MATRIX = REPO / "docs" / "coverage-matrix.md"
+CASE_SCHEMA = "taprint/golden-case@1"
+MANIFEST_SCHEMA = "taprint/golden-commands@1"
+
+LABEL60 = {"width": "60mm", "height": "40mm", "gap": "2mm", "density": 8, "speed": 4}
+LABEL40 = {"width": "40mm", "height": "30mm", "gap": "2mm", "density": 8, "speed": 4}
+RECEIPT58 = {"width": "58mm", "widthCols": 32, "encoding": "gbk", "nativeQr": True}
+
+# 覆盖矩阵行号 → canonical feature slug（矩阵解析与用例标记共用同一张表，
+# 禁两处拼写漂移）。
+FEATURE_SLUGS = {
+    1: "text-font-sizing",
+    2: "text-alignment",
+    3: "codepage-gb",
+    4: "barcode-code128",
+    5: "barcode-ean13",
+    6: "barcode-human-toggle",
+    7: "qrcode-ecc",
+    8: "rule-line",
+    9: "box-rect",
+    10: "copies",
+    11: "feed-cut-tear",
+    12: "gap-blackmark",
+    13: "dpi-dimensioning",
+    14: "label-size-frame",
+}
+
+
+def cells(protocol: str, features: list[str]) -> list[dict]:
+    return [{"feature": f, "protocol": protocol} for f in features]
+
+
+# ---------------------------------------------------------------------------
+# Minimal case set (source of truth; every cell of the frozen matrix v1 is
+# covered at least to its stated count; four mandatory specials included).
+# ---------------------------------------------------------------------------
+
+CASES: list[dict] = [
+    # ---- ESC/POS (receipt) ----
+    {
+        "id": "escpos-text-sizing-basic",
+        "title": "ESC/POS 文本字号：normal/tall + 左/中对齐",
+        "profile": "receipt",
+        "protocols": ["escpos"],
+        "matrixCells": cells("escpos", ["text-font-sizing", "text-alignment"]),
+        "input": {
+            "receipt": RECEIPT58,
+            "body": [
+                {"type": "text", "text": "SHOP RECEIPT", "align": "left"},
+                {"type": "text", "text": "TOTAL 12.50", "align": "center", "style": {"fontSize": "tall"}},
+            ],
+        },
+    },
+    {
+        "id": "escpos-text-cjk",
+        "title": "ESC/POS 中文 GBK + double/wide + 右/中",
+        "profile": "receipt",
+        "protocols": ["escpos"],
+        "matrixCells": cells("escpos", ["text-font-sizing", "text-alignment", "codepage-gb"]),
+        "input": {
+            "receipt": RECEIPT58,
+            "body": [
+                {"type": "text", "text": "收银小票", "align": "right", "style": {"fontSize": "double"}},
+                {"type": "text", "text": "商品名称", "align": "center", "style": {"fontSize": "wide"}},
+            ],
+        },
+    },
+    {
+        "id": "escpos-text-unmapped",
+        "title": "ESC/POS 表外字符：U+FFFD 占位（ADR-0009）",
+        "profile": "receipt",
+        "protocols": ["escpos"],
+        "special": "unmapped-char",
+        "matrixCells": cells("escpos", ["codepage-gb"]),
+        "input": {
+            "receipt": RECEIPT58,
+            "body": [
+                {"type": "text", "text": "货位😀A1", "align": "left"},
+            ],
+        },
+    },
+    {
+        "id": "escpos-barcode-code128",
+        "title": "ESC/POS CODE128",
+        "profile": "receipt",
+        "protocols": ["escpos"],
+        "matrixCells": cells("escpos", ["barcode-code128"]),
+        "input": {
+            "receipt": RECEIPT58,
+            "body": [
+                {"type": "barcode", "text": "ORDER-2026-001", "symbology": "CODE128",
+                 "height": "10mm", "align": "center"},
+            ],
+        },
+    },
+    {
+        "id": "escpos-barcode-ean13",
+        "title": "ESC/POS EAN13",
+        "profile": "receipt",
+        "protocols": ["escpos"],
+        "matrixCells": cells("escpos", ["barcode-ean13"]),
+        "input": {
+            "receipt": RECEIPT58,
+            "body": [
+                {"type": "barcode", "text": "6901234567892", "symbology": "EAN13",
+                 "height": "10mm", "align": "center"},
+            ],
+        },
+    },
+    {
+        "id": "escpos-barcode-human-toggle",
+        "title": "ESC/POS 人读位开关（GS H 位置帧钉死）",
+        "profile": "receipt",
+        "protocols": ["escpos"],
+        "matrixCells": cells("escpos", ["barcode-human-toggle"]),
+        "input": {
+            "receipt": RECEIPT58,
+            "body": [
+                {"type": "barcode", "text": "6901234567892", "symbology": "EAN13",
+                 "height": "10mm", "align": "left", "humanReadable": True},
+            ],
+        },
+    },
+    {
+        "id": "escpos-qrcode",
+        "title": "ESC/POS QR 原生五步（GS ( k）",
+        "profile": "receipt",
+        "protocols": ["escpos"],
+        "matrixCells": cells("escpos", ["qrcode-ecc"]),
+        "input": {
+            "receipt": RECEIPT58,
+            "body": [
+                {"type": "qrcode", "text": "https://example.com/r/861002", "size": 6, "align": "center"},
+            ],
+        },
+    },
+    {
+        "id": "escpos-copies-cut-feed",
+        "title": "ESC/POS 份数/切纸/走纸（copies 无协议帧——conformance 登记）",
+        "profile": "receipt",
+        "protocols": ["escpos"],
+        "matrixCells": cells("escpos", ["copies", "feed-cut-tear"]),
+        "input": {
+            "copies": 2,
+            "receipt": RECEIPT58,
+            "body": [
+                {"type": "text", "text": "PAID", "align": "center"},
+                {"type": "spacer"},
+                {"type": "cut", "partial": True},
+            ],
+        },
+    },
+    {
+        "id": "escpos-float-ratio-table",
+        "title": "ESC/POS 浮点比例列宽（33.3%/66.7%——ADR-0009 定点口径）",
+        "profile": "receipt",
+        "protocols": ["escpos"],
+        "special": "float-ratio",
+        "matrixCells": [],
+        "input": {
+            "receipt": RECEIPT58,
+            "body": [
+                {
+                    "type": "table",
+                    "headers": ["ITEM", "AMOUNT"],
+                    "columns": [{"width": "33.3%", "align": "left"}, {"width": "66.7%", "align": "right"}],
+                    "rows": [["MILK 1L", "12.50"], ["BREAD", "6.00"]],
+                },
+            ],
+        },
+    },
+    # ---- TSPL (label) ----
+    {
+        "id": "tspl-text-sizing-basic",
+        "title": "TSPL 字号倍率 2/1",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["text-font-sizing"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "SHELF A-01", "x": "4mm", "y": "4mm", "size": 2},
+                {"type": "text", "text": "2026-10-22", "x": "4mm", "y": "30mm", "size": 1},
+            ],
+        },
+    },
+    {
+        "id": "tspl-text-cjk-sizing",
+        "title": "TSPL 中文倍率 3（SIMPLIFIED CHINESE 字库）",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["text-font-sizing", "codepage-gb"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "货架标签", "x": "4mm", "y": "6mm", "size": 3},
+            ],
+        },
+    },
+    {
+        "id": "tspl-text-align-basic",
+        "title": "TSPL 对齐（绝对坐标 x 表达；align 位由坐标承载）",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["text-alignment"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "LEFT-EDGE", "x": "2mm", "y": "4mm", "align": "left"},
+                {"type": "text", "text": "RIGHT-ANCHOR", "x": "30mm", "y": "20mm", "align": "right"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-text-align-cjk",
+        "title": "TSPL 中文对齐/编码二联",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["text-alignment", "codepage-gb"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "居中品名", "x": "16mm", "y": "8mm", "align": "center"},
+                {"type": "text", "text": "右锚规格", "x": "36mm", "y": "24mm", "align": "right"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-barcode-code128",
+        "title": "TSPL CODE128（type=128）",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["barcode-code128"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "barcode", "text": "SKU-100086", "symbology": "CODE128",
+                 "x": "4mm", "y": "22mm", "height": "10mm"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-barcode-ean13",
+        "title": "TSPL EAN13",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["barcode-ean13"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "barcode", "text": "6901234567892", "symbology": "EAN13",
+                 "x": "4mm", "y": "22mm", "height": "10mm"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-barcode-human-toggle",
+        "title": "TSPL 人读位（Java 参照恒 human=1——conformance 登记）",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["barcode-human-toggle"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "barcode", "text": "6901234567892", "symbology": "EAN13",
+                 "x": "4mm", "y": "22mm", "height": "10mm", "humanReadable": False},
+            ],
+        },
+    },
+    {
+        "id": "tspl-qrcode",
+        "title": "TSPL QRCODE（ECC M + M2 形态钉死）",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["qrcode-ecc"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "qrcode", "text": "TAPRINT-GOLDEN-TSPL", "x": "20mm", "y": "12mm", "size": 5},
+            ],
+        },
+    },
+    {
+        "id": "tspl-line-box",
+        "title": "TSPL LINE/BOX 图元",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["rule-line", "box-rect"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "line", "x": "2mm", "y": "34mm", "width": "56mm", "height": "0.5mm"},
+                {"type": "rect", "x": "2mm", "y": "2mm", "width": "56mm", "height": "36mm"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-copies",
+        "title": "TSPL PRINT 份数单帧承载",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["copies"]),
+        "input": {
+            "copies": 3,
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "BATCH 3X", "x": "4mm", "y": "16mm"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-feed-tear",
+        "title": "TSPL 送纸/撕纸（Java 参照无 SET TEAR/FORMFEED 帧——conformance 登记）",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["feed-cut-tear"]),
+        "input": {
+            "label": LABEL40,
+            "body": [
+                {"type": "text", "text": "TEAR-OFF", "x": "2mm", "y": "12mm"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-gap-blackmark-basic",
+        "title": "TSPL GAP 间隙定位（GAP 2mm,0mm）",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["gap-blackmark"]),
+        "input": {
+            "label": {"width": "60mm", "height": "40mm", "gap": "2mm", "density": 8, "speed": 4},
+            "body": [
+                {"type": "text", "text": "GAP-2MM", "x": "4mm", "y": "18mm"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-gap-blackmark-alt",
+        "title": "TSPL 非整间隙（GAP 3.65mm 定点格式化）",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["gap-blackmark"]),
+        "input": {
+            "label": {"width": "60mm", "height": "40mm", "gap": "3.65mm", "density": 10, "speed": 3},
+            "body": [
+                {"type": "text", "text": "GAP-ALT", "x": "4mm", "y": "18mm"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-dpi-203-grid",
+        "title": "TSPL 203dpi 网格坐标（25.4mm=1in）",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["dpi-dimensioning"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "IN-GRID", "x": "25.4mm", "y": "12.7mm"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-dpi-mixed",
+        "title": "TSPL 203dpi vs 8dot/mm 分度坐标（44.45mm——conformance 登记）",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["dpi-dimensioning"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "MIXED", "x": "44.45mm", "y": "6.35mm"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-size-frame-a",
+        "title": "TSPL 帧序钉死：SIZE→GAP→DENSITY→SPEED→DIRECTION→CLS→body→PRINT",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["label-size-frame"]),
+        "input": {
+            "label": {"width": "60mm", "height": "40mm", "gap": "2mm", "density": 8, "speed": 4},
+            "body": [
+                {"type": "text", "text": "FRAME-A", "x": "4mm", "y": "18mm"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-size-frame-b",
+        "title": "TSPL 第二纸型帧序（40x30）",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "matrixCells": cells("tspl", ["label-size-frame"]),
+        "input": {
+            "label": {"width": "40mm", "height": "30mm", "gap": "2mm", "density": 6, "speed": 2},
+            "body": [
+                {"type": "text", "text": "FRAME-B", "x": "4mm", "y": "12mm"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-rounding-midpoint",
+        "title": "TSPL 舍入中点（x=6.3125mm=50.5dot@8dot/mm，half-away-from-zero）",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "special": "rounding-midpoint",
+        "matrixCells": [],
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "MIDPOINT", "x": "6.3125mm", "y": "6.3125mm"},
+            ],
+        },
+    },
+    {
+        "id": "tspl-unmapped-char",
+        "title": "TSPL 表外字符（GBK 通道 U+FFFD 占位——ADR-0009）",
+        "profile": "label",
+        "protocols": ["tspl"],
+        "special": "unmapped-char",
+        "matrixCells": [],
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "货位😀07", "x": "4mm", "y": "18mm"},
+            ],
+        },
+    },
+    # ---- CPCL (label) ----
+    {
+        "id": "cpcl-text-sizing-basic",
+        "title": "CPCL 文本字号档（mul 1/2 → TEXT 4 n）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["text-font-sizing"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "PORTABLE-1", "x": "4mm", "y": "4mm", "size": 1},
+                {"type": "text", "text": "PORTABLE-2", "x": "4mm", "y": "16mm", "size": 2},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-text-sizing-grades",
+        "title": "CPCL 兼容档字号（double/tall）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["text-font-sizing"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "GRADE-DOUBLE", "x": "4mm", "y": "6mm", "style": {"fontSize": "double"}},
+                {"type": "text", "text": "GRADE-TALL", "x": "4mm", "y": "24mm", "style": {"fontSize": "tall"}},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-text-align-basic",
+        "title": "CPCL 对齐（绝对坐标承载；Java 无 ALIGN 行——conformance 登记）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["text-alignment"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "LEFT-ANCHOR", "x": "2mm", "y": "4mm", "align": "left"},
+                {"type": "text", "text": "RIGHT-ANCHOR", "x": "32mm", "y": "20mm", "align": "right"},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-text-align-alt",
+        "title": "CPCL 对齐二联（center 位）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["text-alignment"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "CENTER-MARK", "x": "20mm", "y": "10mm", "align": "center"},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-codepage-latin",
+        "title": "CPCL GBK 单字节扩展区（Café ±5g）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["codepage-gb"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "Café ±5g", "x": "4mm", "y": "8mm"},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-codepage-latin2",
+        "title": "CPCL GBK 单字节扩展区二联（N° ñ）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["codepage-gb"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "N°2 ñ", "x": "4mm", "y": "8mm"},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-barcode-code128",
+        "title": "CPCL CODE128（type 128）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["barcode-code128"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "barcode", "text": "PKG-0042", "symbology": "CODE128",
+                 "x": "4mm", "y": "20mm", "height": "10mm"},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-barcode-ean13",
+        "title": "CPCL EAN13",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["barcode-ean13"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "barcode", "text": "6901234567892", "symbology": "EAN13",
+                 "x": "4mm", "y": "20mm", "height": "10mm"},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-barcode-human-toggle",
+        "title": "CPCL 人读位（Java 参照无 BARCODE-TEXT 行——conformance 登记）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["barcode-human-toggle"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "barcode", "text": "6901234567892", "symbology": "EAN13",
+                 "x": "4mm", "y": "20mm", "height": "10mm", "humanReadable": True},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-qrcode",
+        "title": "CPCL QR 三段式（BARCODE QR / M0A / ENDQR）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["qrcode-ecc"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "qrcode", "text": "TAPRINT-GOLDEN-CPCL", "x": "20mm", "y": "10mm", "size": 6},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-line-box",
+        "title": "CPCL LINE/BOX 图元",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["rule-line", "box-rect"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "line", "x": "2mm", "y": "34mm", "width": "56mm", "height": "0.5mm"},
+                {"type": "rect", "x": "2mm", "y": "2mm", "width": "56mm", "height": "36mm"},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-copies",
+        "title": "CPCL 份数入格式头（qty）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["copies"]),
+        "input": {
+            "copies": 2,
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "QTY-2", "x": "4mm", "y": "18mm"},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-feed-tear",
+        "title": "CPCL 收尾帧（FORM→PRINT）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["feed-cut-tear"]),
+        "input": {
+            "label": LABEL40,
+            "body": [
+                {"type": "text", "text": "PORTABLE-END", "x": "2mm", "y": "12mm"},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-gap-blackmark-basic",
+        "title": "CPCL 间隙纸（Java 格式头无 GAP 位——conformance 登记）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["gap-blackmark"]),
+        "input": {
+            "label": {"width": "60mm", "height": "40mm", "gap": "2mm", "density": 8, "speed": 4},
+            "body": [
+                {"type": "text", "text": "GAP-BASIC", "x": "4mm", "y": "18mm"},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-gap-blackmark-alt",
+        "title": "CPCL 间隙二联（30x20 高度折算）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["gap-blackmark"]),
+        "input": {
+            "label": {"width": "30mm", "height": "20mm", "gap": "3mm", "density": 8, "speed": 4},
+            "body": [
+                {"type": "text", "text": "GAP-ALT", "x": "2mm", "y": "8mm"},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-dpi-200",
+        "title": "CPCL 200dpi 网格（格式头 200 200 + 8dot/mm 坐标）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["dpi-dimensioning"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "DPI200", "x": "25mm", "y": "12.5mm"},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-size-frame-a",
+        "title": "CPCL 帧序钉死：格式头→body→FORM→PRINT",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["label-size-frame"]),
+        "input": {
+            "label": {"width": "60mm", "height": "40mm", "gap": "2mm", "density": 8, "speed": 4},
+            "body": [
+                {"type": "text", "text": "FRAME-A", "x": "4mm", "y": "18mm"},
+            ],
+        },
+    },
+    {
+        "id": "cpcl-size-frame-b",
+        "title": "CPCL 第二纸型帧序（40x30 高度折算）",
+        "profile": "label",
+        "protocols": ["cpcl"],
+        "matrixCells": cells("cpcl", ["label-size-frame"]),
+        "input": {
+            "label": {"width": "40mm", "height": "30mm", "gap": "2mm", "density": 8, "speed": 4},
+            "body": [
+                {"type": "text", "text": "FRAME-B", "x": "4mm", "y": "12mm"},
+            ],
+        },
+    },
+    # ---- 强制特例：身份函数（L1-only）----
+    {
+        "id": "label-identity-fn",
+        "title": "宿主函数模板（{{upper(sku)}} 求值产物入帧；ADR-0007/0010 只跑 L1）",
+        "profile": "label",
+        "protocols": ["tspl", "cpcl"],
+        "containsIdentityFn": True,
+        "special": "identity-fn",
+        "matrixCells": [],
+        "input": {
+            # 表达式求值产物直供（golden 钉帧不钉求值；求值一致性归各语言表达式套件）
+            "identityFnTemplate": "{{upper(sku)}}",
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "SKU-9F2E-0042", "x": "4mm", "y": "18mm"},
+            ],
+        },
+    },
+]
+
+
+def parse_matrix() -> dict[tuple[str, str], int]:
+    """Parse docs/coverage-matrix.md frozen table -> {(protocol, feature): count}."""
+    required: dict[tuple[str, str], int] = {}
+    columns = {"ESC/POS": 3, "TSPL": 4, "CPCL": 5, "ZPL (v0.2)": 6}
+    protocols = {"ESC/POS": "escpos", "TSPL": "tspl", "CPCL": "cpcl", "ZPL (v0.2)": "zpl"}
+    for line in MATRIX.read_text(encoding="utf-8").splitlines():
+        match = re.match(r"^\|\s*(\d+)\s*\|", line)
+        if not match:
+            continue
+        row = int(match.group(1))
+        if row not in FEATURE_SLUGS:
+            continue
+        parts = [p.strip() for p in line.split("|")[1:-1]]
+        if len(parts) < 6:
+            continue
+        for name, index in columns.items():
+            protocol = protocols[name]
+            if protocol == "zpl":
+                continue
+            cell = parts[index - 1]
+            if cell in ("—", "-", ""):
+                continue
+            required[(protocol, FEATURE_SLUGS[row])] = int(cell)
+    return required
+
+
+def feature_slug(cell_feature: str) -> str:
+    return re.sub(r"[^a-z0-9-]", "", cell_feature.strip().lower().replace(" ", "-"))
+
+
+def verify_coverage(required: dict[tuple[str, str], int]) -> None:
+    covered: dict[tuple[str, str], int] = {}
+    specials = set()
+    for case in CASES:
+        for cell in case.get("matrixCells", []):
+            key = (cell["protocol"], feature_slug(cell["feature"]))
+            covered[key] = covered.get(key, 0) + 1
+        if case.get("special"):
+            specials.add(case["special"])
+    gaps = []
+    for key, want in sorted(required.items()):
+        have = covered.get(key, 0)
+        if have < max(1, want):
+            gaps.append(f"{key[0]}:{key[1]} have={have} want>={max(1, want)}")
+    if gaps:
+        raise SystemExit("coverage gaps:\n  " + "\n  ".join(gaps))
+    for mandatory in ("rounding-midpoint", "unmapped-char", "float-ratio", "identity-fn"):
+        if mandatory not in specials:
+            raise SystemExit(f"missing mandatory special: {mandatory}")
+    identity = [c for c in CASES if c.get("containsIdentityFn")]
+    if len(identity) != 1:
+        raise SystemExit("exactly one identity-fn case expected")
+
+
+def emit_cases() -> None:
+    CASES_DIR.mkdir(parents=True, exist_ok=True)
+    for old in CASES_DIR.glob("*.json"):
+        old.unlink()
+    for case in CASES:
+        doc = {
+            "schema": CASE_SCHEMA,
+            "id": case["id"],
+            "title": case["title"],
+            "profile": case["profile"],
+            "protocols": case["protocols"],
+            "containsIdentityFn": bool(case.get("containsIdentityFn")),
+            "special": case.get("special"),
+            "matrixCells": case.get("matrixCells", []),
+            "input": case["input"],
+        }
+        (CASES_DIR / f"{case['id']}.json").write_text(
+            json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def emit_manifest(l2_green: dict[str, list[str]]) -> None:
+    entries = []
+    for case in CASES:
+        l1 = True
+        l2 = not case.get("containsIdentityFn")
+        green = {"java": l2}
+        for lang, ids in l2_green.items():
+            if lang != "java":
+                green[lang] = l2 and case["id"] in ids
+        entries.append({
+            "case": case["id"],
+            "file": f"cases/{case['id']}.json",
+            "profile": case["profile"],
+            "protocols": case["protocols"],
+            "containsIdentityFn": bool(case.get("containsIdentityFn")),
+            "special": case.get("special"),
+            "matrixCells": case.get("matrixCells", []),
+            "layers": {"l1": l1, "l2": l2},
+            "l2Assert": green,
+        })
+    manifest = {
+        "schema": MANIFEST_SCHEMA,
+        "generatedBy": "tools/fixture-codegen",
+        "referenceLang": "java",
+        "layers": {
+            "l1": "expected/commands/<case>/<lang>/<protocol>.frames.txt",
+            "l2": "expected/commands/<case>/<lang>/<protocol>.bytes.sha256",
+        },
+        "caseCount": len(entries),
+        "cases": entries,
+    }
+    (FIXTURES / "manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def run_java_generator() -> None:
+    module = REPO / "packages" / "taprint-java"
+    mvn = shutil.which("mvn") or str(Path("/tmp/maven/bin/mvn"))
+    subprocess.run([mvn, "-q", "test-compile", "-DskipTests"], cwd=module, check=True)
+    cp_file = module / "target" / "golden.classpath"
+    subprocess.run([mvn, "-q", "dependency:build-classpath",
+                    f"-Dmdep.outputFile={cp_file}"], cwd=module, check=True)
+    cp = ["target/classes", "target/test-classes", cp_file.read_text().strip()]
+    subprocess.run(["java", "-cp", ":".join(str(p) for p in cp),
+                    "dev.taprint.golden.GenerateGoldenExpected",
+                    str(FIXTURES)], cwd=module, check=True)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--skip-java", action="store_true", help="只再生成用例与 manifest")
+    parser.add_argument("--l2-green", action="append", default=[],
+                        help="lang=case1,case2 —— 标记该语言当前字节全等（L2 断言）的用例")
+    args = parser.parse_args()
+
+    required = parse_matrix()
+    verify_coverage(required)
+    emit_cases()
+    green: dict[str, list[str]] = {}
+    for item in args.l2_green:
+        lang, _, ids = item.partition("=")
+        green[lang] = [i for i in ids.split(",") if i]
+    emit_manifest(green)
+    print(f"[codegen] cases={len(CASES)} matrix-cells={len(required)}")
+
+    if not args.skip_java:
+        run_java_generator()
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
