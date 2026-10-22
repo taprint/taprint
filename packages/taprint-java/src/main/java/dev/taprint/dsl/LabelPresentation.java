@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 标签呈现（绝对坐标，元素必带 x/y）。
  *
- * <p>同一 DSL 由 TsplRenderer/ZplRenderer/CpclRenderer 按设备 dialect 消费。
+ * <p>同一 DSL 由各指令族渲染器（TSPL/CPCL 等）按设备 dialect 消费。
  */
 @Data
 public class LabelPresentation implements Serializable {

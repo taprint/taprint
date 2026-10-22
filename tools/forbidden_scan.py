@@ -22,12 +22,12 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Pattern, Tuple
 
-SCAN_VERSION = "1.0.2"
+SCAN_VERSION = "1.0.3"
 
 SKIP_DIRS = {
     ".git", "node_modules", "dist", "build", "bin", "obj", ".dart_tool",
     "__pycache__", ".venv", "venv", "test-results", "playwright-report",
-    ".idea", ".vscode", ".hermes",
+    ".idea", ".vscode", ".hermes", "target",
 }
 MAX_BYTES = 10 * 1024 * 1024
 
