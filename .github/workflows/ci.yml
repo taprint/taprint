@@ -85,6 +85,33 @@ jobs:
           cache: maven
       - run: mvn -B -f packages/taprint-java/pom.xml test
 
+  render:
+    name: Render service
+    runs-on: ubuntu-latest
+    env: { TZ: UTC }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - name: install kernel into the local repo
+        run: mvn -B -q -f packages/taprint-java/pom.xml install -DskipTests
+      - run: mvn -B -f services/render/pom.xml test
+
+  designer:
+    name: Designer (Vue)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm install --no-audit --no-fund
+      - run: npm test -w apps/designer --if-present
+      - run: npm run build -w apps/designer
+        env: { NODE_OPTIONS: "--max-old-space-size=8192" }
+
   flutter-transport:
     name: Flutter transport channels
     runs-on: ubuntu-latest
