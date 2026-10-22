@@ -1,0 +1,69 @@
+{
+  "name": "taprint-designer",
+  "version": "0.3.0",
+  "description": "Taprint visual print-template designer: full SPA and embeddable double mode (postMessage host contract, protocol v2).",
+  "license": "Apache-2.0",
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taprint/taprint.git",
+    "directory": "apps/designer"
+  },
+  "keywords": [
+    "print",
+    "template",
+    "designer",
+    "label",
+    "receipt",
+    "dsl",
+    "vue"
+  ],
+  "files": [
+    "dist",
+    "schemas",
+    "samples",
+    "assets-manifest.json"
+  ],
+  "scripts": {
+    "sync:assets": "node scripts/sync-assets.mjs",
+    "predev": "tsc -p ../../packages/taprint-ts/tsconfig.build.json",
+    "dev": "vite",
+    "pretypecheck": "tsc -p ../../packages/taprint-ts/tsconfig.build.json",
+    "typecheck": "vue-tsc --noEmit",
+    "prebuild": "node scripts/sync-assets.mjs --check && tsc -p ../../packages/taprint-ts/tsconfig.build.json",
+    "build": "vue-tsc --noEmit && vite build",
+    "pretest": "tsc -p ../../packages/taprint-ts/tsconfig.build.json",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "ajv": "^8.17.0",
+    "axios": "^1.7.0",
+    "interactjs": "^1.10.0",
+    "monaco-editor": "^0.52.2",
+    "pinia": "^2.2.0",
+    "taprint": "*",
+    "vue": "^3.5.0",
+    "vue-router": "^4.4.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.45.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/test-utils": "^2.4.0",
+    "jsdom": "^25.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.5.0",
+    "vite": "^7.0.0",
+    "vitest": "^3.0.0",
+    "vue-tsc": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

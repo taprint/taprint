@@ -18,6 +18,15 @@ between minors, strict semver applies from 1.0.
   with frame summaries), and `list_examples` (6 bundled templates);
   schema/example assets ship in-package with a sync script, sha256
   manifest, and drift-asserting tests.
+- `taprint-designer` v0.3 (apps/designer, ADR-0003/0011): visual
+  print-template designer, full SPA + embeddable double mode. Host
+  contract is the neutral message protocol v2
+  (`schema/message-protocol.json`: `window.TaprintDesigner`,
+  `__TAPRINT_TOKEN__`, `taprint-token` channel, `taprint-expression`
+  language id, HKDF salt `taprint-designer-v1`); schema and sample
+  assets ship in-package with the same sync/manifest/drift-gate pattern
+  as the MCP. Ships vitest unit suites, Playwright e2e specs, and the
+  SPDX header gate across all sources.
 
 ### Fixed
 

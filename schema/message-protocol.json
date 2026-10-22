@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Taprint Designer Message Protocol",
+  "$comment": "Designer<->host postMessage contract, published with the designer's first release (v0.3, ADR-0011). Protocol version: 2 (the neutral-naming epoch) (ADR-0003): window.TaprintDesigner, __TAPRINT_TOKEN__, __TAPRINT_DESIGNER_CONFIG__, token channel messages 'taprint-token'/'taprint-token-expired', event 'taprint-token-injected', HKDF salt 'taprint-designer-v1'. No legacy aliases ship in this repository. Changes to this file must be mirrored in apps/designer/src/shared/protocol.ts (enum mirror is asserted by tests).",
+  "oneOf": [
+    {
+      "$ref": "#/definitions/DesignerMessage"
+    },
+    {
+      "$ref": "#/definitions/HostMessage"
+    }
+  ],
+  "definitions": {
+    "DesignerMessage": {
+      "type": "object",
+      "required": [
+        "type",
+        "timestamp",
+        "nonce",
+        "signature"
+      ],
+      "additionalProperties": false,
+      "$comment": "deviceClass/errorMessage accept explicit null — some host serializers emit null properties, so the schema must accept the exact wire shape; the web sender omits absent keys instead of sending null.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ready",
+            "save",
+            "preview",
+            "testPrint",
+            "dirty",
+            "close",
+            "error",
+            "token-expired",
+            "token-check"
+          ]
+        },
+        "dsl": {
+          "$ref": "#/definitions/TemplateDSL"
+        },
+        "deviceClass": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "doc",
+            "receipt",
+            "label",
+            null
+          ]
+        },
+        "dirty": {
+          "type": "boolean"
+        },
+        "errorMessage": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "timestamp": {
+          "type": "integer"
+        },
+        "nonce": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        }
+      }
+    },
+    "HostMessage": {
+      "type": "object",
+      "required": [
+        "type",
+        "timestamp",
+        "nonce",
+        "signature"
+      ],
+      "additionalProperties": false,
+      "$comment": "templateId/version/errorMessage/previewUrl accept explicit null — same serializer-alignment rationale as DesignerMessage.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "$comment": "closeRequest is delivered by the host when the embedded session must unwind (for example after a failed token refresh).",
+          "enum": [
+            "loadTemplate",
+            "saveResult",
+            "setReadOnly",
+            "previewResult",
+            "printResult",
+            "token-refreshed",
+            "closeRequest"
+          ]
+        },
+        "templateId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "version": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "readonly": {
+          "type": "boolean"
+        },
+        "previewUrl": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "errorMessage": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "timestamp": {
+          "type": "integer"
+        },
+        "nonce": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        }
+      }
+    },
+    "TemplateDSL": {
+      "$comment": "Placeholder type: deep DSL validation is not this protocol's job. Validation merges the template DSL schema matching the template's schemaVersion (see schema/v1.0.json..v2.0.json); the designer performs that validation in its own layer.",
+      "type": "object"
+    }
+  }
+}

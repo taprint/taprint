@@ -1,0 +1,40 @@
+{
+  "generatedBy": "scripts/sync-assets.mjs",
+  "assets": [
+    {
+      "file": "schemas/v1.0.json",
+      "sha256": "c5d81709eba063efb8b09872b87b98491ba42aa058f4703a49a0f3fd373dd237",
+      "bytes": 24003
+    },
+    {
+      "file": "schemas/v1.1.json",
+      "sha256": "5c6d5d35327b6701d92171b9ae3d8e1f96c1544aa57da192c4dd5265b146c8d6",
+      "bytes": 28249
+    },
+    {
+      "file": "schemas/v2.0.json",
+      "sha256": "3d8ec5bb524a8bd562d159223da81a3a1bc85220a1d31789d878faa74d4b658c",
+      "bytes": 39060
+    },
+    {
+      "file": "schemas/message-protocol.json",
+      "sha256": "68e0e922b98d93c6b3332930e93265b8a62691e49d9c73f835b411707a8b8948",
+      "bytes": 4018
+    },
+    {
+      "file": "samples/sales-note-v1.0.json",
+      "sha256": "57b1f9be93fee3ef163675a7cc6391da4a70bc6dc104f9f5d313d2a14fcaa568",
+      "bytes": 7172
+    },
+    {
+      "file": "samples/inventory-report-v2.0.json",
+      "sha256": "ad0a6eaf202596650ecb3710df3d4b5604323a662d0c9e0f1ed09146c20b04b2",
+      "bytes": 6096
+    },
+    {
+      "file": "samples/coupon-sheet-v2.0.json",
+      "sha256": "eb4b43766418110cceb2d6ef615671ee40ff0cba4b9a88f309a6aa7fb00686b5",
+      "bytes": 1226
+    }
+  ]
+}

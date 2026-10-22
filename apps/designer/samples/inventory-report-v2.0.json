@@ -1,0 +1,196 @@
+{
+  "schemaVersion": "2.0",
+  "id": "inventory_report_v2",
+  "code": "INVENTORY_REPORT",
+  "name": "盘点汇总表-中国式报表范例",
+  "category": "仓储域",
+  "description": "DSL 2.0 中国式报表范例锚点（专项 §22.4 步骤 2）：多级表头/斜线表头/单元格合并/分组小计/跨页表头/主从嵌套子表/水印/条件容器/循环容器逐项覆盖。1.0→2.0 迁移步骤为步骤 3。",
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "billNo": "string",
+        "billDate": "date",
+        "warehouse": "string",
+        "checker": "string",
+        "diffTotal": "number",
+        "remark": "string"
+      }
+    },
+    {
+      "name": "items",
+      "type": "detail",
+      "schema": {
+        "category": "string",
+        "sku": "string",
+        "name": "string",
+        "bookQty": "number",
+        "realQty": "number",
+        "diffQty": "number",
+        "amount": "number"
+      }
+    },
+    {
+      "name": "batches",
+      "type": "detail",
+      "schema": {
+        "batchNo": "string",
+        "qty": "number",
+        "expireDate": "date"
+      }
+    }
+  ],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "orientation": "landscape",
+        "margin": { "top": "15mm", "bottom": "15mm", "left": "12mm", "right": "12mm" },
+        "watermark": {
+          "type": "text",
+          "text": "内部资料 严禁外传",
+          "opacity": 0.12,
+          "angle": -30,
+          "tile": true
+        }
+      },
+      "header": [
+        { "type": "text", "content": "盘点汇总表 {{billNo}}", "align": "center" },
+        {
+          "type": "text",
+          "content": "仓库：{{warehouse}}　盘点日期：{{billDate | date:'YYYY-MM-DD'}}",
+          "align": "center"
+        }
+      ],
+      "body": [
+        {
+          "type": "kvtable",
+          "columns": 2,
+          "rows": [
+            [
+              ["盘点人", "{{checker}}"],
+              ["差异合计", "{{diffTotal | currency:CNY}}"]
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "source": "items",
+          "layout": { "repeatHeaderOnPageBreak": true },
+          "headerRows": [
+            [
+              {
+                "text": "",
+                "diagonal": "ltr",
+                "diagonalLabels": { "tl": "项目", "br": "类别" },
+                "rowspan": 2
+              },
+              { "text": "商品", "colspan": 2 },
+              { "text": "账面", "colspan": 2 },
+              { "text": "实盘数量", "rowspan": 2 },
+              { "text": "差异金额", "rowspan": 2 },
+              { "text": "批次明细", "rowspan": 2 }
+            ],
+            [{ "text": "编码" }, { "text": "名称" }, { "text": "数量" }, { "text": "金额" }]
+          ],
+          "columns": [
+            { "header": "类别", "field": "category", "width": "10%" },
+            { "header": "编码", "field": "sku", "width": "12%" },
+            { "header": "名称", "field": "name", "width": "20%" },
+            { "header": "数量", "field": "bookQty", "width": "8%", "align": "right" },
+            {
+              "header": "金额",
+              "field": "amount",
+              "width": "12%",
+              "align": "right",
+              "format": "currency:CNY"
+            },
+            { "header": "实盘数量", "field": "realQty", "width": "8%", "align": "right" },
+            { "header": "差异金额", "field": "diffQty", "width": "10%", "align": "right" },
+            {
+              "header": "批次明细",
+              "width": "20%",
+              "subtable": {
+                "source": "batches",
+                "columns": [
+                  { "header": "批号", "field": "batchNo", "width": "40%" },
+                  { "header": "数量", "field": "qty", "width": "30%", "align": "right" },
+                  { "header": "效期", "field": "expireDate", "width": "30%" }
+                ]
+              }
+            }
+          ],
+          "groups": [
+            {
+              "field": "category",
+              "header": "类别：{{category}}",
+              "subtotal": {
+                "label": "小计",
+                "values": [
+                  null,
+                  null,
+                  null,
+                  "{{items | sum:'bookQty'}}",
+                  "{{items | sum:'amount' | currency:CNY}}",
+                  "{{items | sum:'realQty'}}",
+                  "{{items | sum:'diffQty'}}",
+                  null
+                ]
+              }
+            }
+          ],
+          "staticRows": {
+            "position": "after",
+            "rows": [
+              [
+                { "value": "制单：{{checker}}", "colspan": 3 },
+                { "value": "盘点确认：", "colspan": 3 },
+                { "value": "复核：", "colspan": 2 }
+              ]
+            ]
+          },
+          "summary": [
+            {
+              "label": "合计金额",
+              "value": "{{items | sum:'amount' | currency:CNY}}",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "type": "conditional",
+          "when": "{{diffTotal}} > 0",
+          "body": [
+            {
+              "type": "text",
+              "content": "※ 本次盘点存在差异，差异合计 {{diffTotal | currency:CNY}}，请核查。"
+            }
+          ],
+          "elseBody": [{ "type": "text", "content": "本次盘点账实相符。" }]
+        },
+        {
+          "type": "loop",
+          "each": "batches",
+          "body": [
+            {
+              "type": "text",
+              "content": "批次 {{batchNo}}：数量 {{qty}}，效期 {{expireDate | date:'YYYY-MM-DD'}}"
+            }
+          ]
+        }
+      ],
+      "footer": [{ "type": "text", "content": "备注：{{remark | default:'无'}}", "align": "left" }]
+    }
+  },
+  "parameters": [
+    {
+      "name": "copies",
+      "type": "integer",
+      "default": 1,
+      "min": 1,
+      "max": 5,
+      "description": "打印份数"
+    }
+  ]
+}
