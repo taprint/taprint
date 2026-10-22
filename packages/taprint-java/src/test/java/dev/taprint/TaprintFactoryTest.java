@@ -52,6 +52,6 @@ class TaprintFactoryTest {
                 java.nio.charset.Charset.forName("GBK")).contains("SN-1"));
         assertTrue(taprint.renderers().registeredCommandSets()
                 .containsAll(java.util.List.of(CommandSet.PDF, CommandSet.ESC_POS,
-                        CommandSet.TSPL, CommandSet.CPCL)));
+                        CommandSet.TSPL, CommandSet.CPCL, CommandSet.ZPL)));
     }
 }

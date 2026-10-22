@@ -1,0 +1,36 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "zpl-barcode-code128",
+  "title": "ZPL CODE128（^BCN + ^BY2,3）",
+  "profile": "label",
+  "protocols": [
+    "zpl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "barcode-code128",
+      "protocol": "zpl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "barcode",
+        "text": "SKU-100086",
+        "symbology": "CODE128",
+        "x": "4mm",
+        "y": "22mm",
+        "height": "10mm"
+      }
+    ]
+  }
+}

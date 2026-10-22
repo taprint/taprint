@@ -423,6 +423,113 @@ public final class GoldenFrames {
     }
 
     // ------------------------------------------------------------------
+    // ZPL
+    // ------------------------------------------------------------------
+
+    /**
+     * ZPL 帧提取：按 {@code ^} 指令边界切分（ZPL 非行式协议，指令 =
+     * {@code ^} + 两字符码 + 参数段，参数段止于下一个 {@code ^}）。
+     * 内容参数（^FD）按原始字节序列化（与 TSPL/CPCL 同口径）；
+     * ^A0/^BY/^BC 系/^BQ/^GB 逐指令成帧，未知指令归 UNKNOWN（raw 原文）。
+     */
+    public static List<Frame> zpl(byte[] payload) {
+        List<Frame> frames = new ArrayList<>();
+        String text = new String(payload, StandardCharsets.ISO_8859_1);
+        int i = 0;
+        int length = text.length();
+        while (i < length) {
+            if (text.charAt(i) != '^' || i + 3 > length
+                    || !Character.isUpperCase(text.charAt(i + 1))
+                    || !Character.isLetterOrDigit(text.charAt(i + 2))) {
+                i++;
+                continue;
+            }
+            String code = text.substring(i + 1, i + 3);
+            int end = text.indexOf('^', i + 3);
+            if (end < 0) {
+                end = length;
+            }
+            String params = text.substring(i + 3, end);
+            i = end;
+            switch (code) {
+                case "XA":
+                    frames.add(new Frame("FRAME_START"));
+                    break;
+                case "LH": {
+                    String[] xy = params.split(",");
+                    frames.add(new Frame("LABEL_HOME").p("x", at(xy, 0)).p("y", at(xy, 1)));
+                    break;
+                }
+                case "PW":
+                    frames.add(new Frame("PRINT_WIDTH").p("dots", params));
+                    break;
+                case "LL":
+                    frames.add(new Frame("LABEL_LENGTH").p("dots", params));
+                    break;
+                case "FO": {
+                    String[] xy = params.split(",");
+                    frames.add(new Frame("FIELD_ORIGIN").p("x", at(xy, 0)).p("y", at(xy, 1)));
+                    break;
+                }
+                case "A0": {
+                    // A0N,h,w → rotation=N、字高/字宽 dot
+                    String[] args = params.split(",");
+                    frames.add(new Frame("FONT").p("rotation", at(args, 0))
+                            .p("h", at(args, 1)).p("w", at(args, 2)));
+                    break;
+                }
+                case "BY": {
+                    String[] args = params.split(",");
+                    frames.add(new Frame("BARCODE_DEFAULT").p("narrow", at(args, 0))
+                            .p("ratio", at(args, 1)).p("height", at(args, 2)));
+                    break;
+                }
+                case "BC":
+                case "BE":
+                case "B3":
+                case "B2":
+                case "BU":
+                    frames.add(new Frame("BARCODE_SYM").p("head", code).p("args", params));
+                    break;
+                case "BQ": {
+                    String[] args = params.split(",");
+                    frames.add(new Frame("QR_BEGIN").p("rotation", at(args, 0))
+                            .p("model", at(args, 1)).p("size", at(args, 2)));
+                    break;
+                }
+                case "FD":
+                    frames.add(new Frame("FIELD_DATA")
+                            .p("content", escapeContent(params.getBytes(StandardCharsets.ISO_8859_1))));
+                    break;
+                case "FS":
+                    frames.add(new Frame("FIELD_SEP"));
+                    break;
+                case "GB": {
+                    String[] args = params.split(",");
+                    frames.add(new Frame("GRAPHIC_BOX").p("w", at(args, 0))
+                            .p("h", at(args, 1)).p("t", at(args, 2)));
+                    break;
+                }
+                case "PQ":
+                    frames.add(new Frame("PRINT_QTY").p("n", params));
+                    break;
+                case "XZ":
+                    frames.add(new Frame("FRAME_END"));
+                    break;
+                default:
+                    frames.add(new Frame("UNKNOWN").p("raw",
+                            escapeContent(("^" + code + params).getBytes(StandardCharsets.ISO_8859_1))));
+                    break;
+            }
+        }
+        return frames;
+    }
+
+    private static String at(String[] args, int index) {
+        return index < args.length ? args[index] : "-";
+    }
+
+    // ------------------------------------------------------------------
     // 字节工具
     // ------------------------------------------------------------------
 

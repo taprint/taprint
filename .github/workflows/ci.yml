@@ -18,10 +18,6 @@ jobs:
         run: python3 tools/test_compliance.py
       - name: forbidden-content scan
         run: python3 tools/forbidden_scan.py . --report scan-report.json
-      - name: ZPL anti-backflow gate (ADR-0001)
-        run: |
-          bad=$(grep -rl "ZplRenderer\|LabelaryClient" packages/taprint-java/src --include="*.java"; find packages/taprint-java/src -iname "*zpl*" -type f)
-          if [ -n "$bad" ]; then echo "::error::ZPL sources must not enter the repository before v0.2 (ADR-0001): $bad"; exit 1; fi
       - name: license header check
         run: python3 tools/header_check.py .
       - name: upload scan report

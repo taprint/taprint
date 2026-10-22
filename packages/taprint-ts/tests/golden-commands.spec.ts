@@ -15,8 +15,10 @@ import { CpclBuilder } from '../src/protocols/cpcl.ts';
 import { EscPosBuilder } from '../src/protocols/escpos.ts';
 import type { LabelElement, LabelSpec } from '../src/protocols/label.ts';
 import { TsplBuilder } from '../src/protocols/tspl.ts';
+import { ZplBuilder } from '../src/protocols/zpl.ts';
 import {
   cpclFrames,
+  zplFrames,
   escapeContent,
   escposFrames,
   renderFrames,
@@ -76,7 +78,7 @@ const cases: GoldenCase[] = manifest.cases
   .map((entry) =>
     JSON.parse(readFileSync(resolve(fixturesDir, `cases/${entry.case}.json`), 'utf8')) as GoldenCase,
   )
-  .filter((c) => c.protocols.includes('tspl') || c.protocols.includes('cpcl') || c.protocols.includes('escpos'));
+  .filter((c) => c.protocols.includes('tspl') || c.protocols.includes('cpcl') || c.protocols.includes('escpos') || c.protocols.includes('zpl'));
 
 // ---- canonical → TS 输入映射 ----
 
@@ -131,7 +133,7 @@ function toLabelSpec(c: GoldenCase): LabelSpec {
               heightMm: mm(el.height, 6),
             };
           default:
-            return { type: 'rect', xMm: mm(el.x, 0), yMm: mm(el.y, 0) };
+            return { type: 'rect', xMm: mm(el.x, 0), yMm: mm(el.y, 0), widthMm: mm(el.width, 30), heightMm: mm(el.height, 20) };
         }
       }),
   };
@@ -187,12 +189,16 @@ function tsBytesFor(c: GoldenCase, protocol: string): { bytes: Uint8Array; skipp
   if (protocol === 'cpcl') {
     return { bytes: CpclBuilder.buildLabel(toLabelSpec(c)), skipped: false };
   }
+  if (protocol === 'zpl') {
+    return { bytes: ZplBuilder.buildLabel(toLabelSpec(c)), skipped: false };
+  }
   return buildEscPosReceipt(c);
 }
 
 function framesFor(protocol: string, bytes: Uint8Array): Frame[] {
   if (protocol === 'tspl') return tsplFrames(bytes);
   if (protocol === 'cpcl') return cpclFrames(bytes);
+  if (protocol === 'zpl') return zplFrames(bytes);
   return escposFrames(bytes);
 }
 

@@ -6,7 +6,7 @@
     "l1": "expected/commands/<case>/<lang>/<protocol>.frames.txt",
     "l2": "expected/commands/<case>/<lang>/<protocol>.bytes.sha256"
   },
-  "caseCount": 47,
+  "caseCount": 63,
   "cases": [
     {
       "case": "escpos-text-sizing-basic",
@@ -1127,6 +1127,389 @@
       "l2Assert": {
         "java": true,
         "ts": false
+      }
+    },
+    {
+      "case": "zpl-text-sizing-basic",
+      "file": "cases/zpl-text-sizing-basic.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-font-sizing",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-text-sizing-multiline",
+      "file": "cases/zpl-text-sizing-multiline.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-font-sizing",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-text-align-basic",
+      "file": "cases/zpl-text-align-basic.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-alignment",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-text-align-alt",
+      "file": "cases/zpl-text-align-alt.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "text-alignment",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-text-cjk",
+      "file": "cases/zpl-text-cjk.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "codepage-gb",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": false
+      }
+    },
+    {
+      "case": "zpl-barcode-code128",
+      "file": "cases/zpl-barcode-code128.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "barcode-code128",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-barcode-ean13",
+      "file": "cases/zpl-barcode-ean13.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "barcode-ean13",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-qrcode",
+      "file": "cases/zpl-qrcode.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "qrcode-ecc",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-line-box",
+      "file": "cases/zpl-line-box.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "rule-line",
+          "protocol": "zpl"
+        },
+        {
+          "feature": "box-rect",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-copies",
+      "file": "cases/zpl-copies.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "copies",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-feed-tear",
+      "file": "cases/zpl-feed-tear.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "feed-cut-tear",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-gap-blackmark",
+      "file": "cases/zpl-gap-blackmark.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "gap-blackmark",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-dpi-203",
+      "file": "cases/zpl-dpi-203.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "dpi-dimensioning",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-size-frame-a",
+      "file": "cases/zpl-size-frame-a.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "label-size-frame",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-size-frame-b",
+      "file": "cases/zpl-size-frame-b.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": null,
+      "matrixCells": [
+        {
+          "feature": "label-size-frame",
+          "protocol": "zpl"
+        }
+      ],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
+      }
+    },
+    {
+      "case": "zpl-unmapped-char",
+      "file": "cases/zpl-unmapped-char.json",
+      "profile": "label",
+      "protocols": [
+        "zpl"
+      ],
+      "containsIdentityFn": false,
+      "special": "unmapped-char",
+      "matrixCells": [],
+      "layers": {
+        "l1": true,
+        "l2": true
+      },
+      "l2Assert": {
+        "java": true,
+        "ts": true
       }
     },
     {

@@ -1,0 +1,29 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "zpl-unmapped-char",
+  "title": "ZPL 表外字符（GBK 通道 U+FFFD 占位——ADR-0009）",
+  "profile": "label",
+  "protocols": [
+    "zpl"
+  ],
+  "containsIdentityFn": false,
+  "special": "unmapped-char",
+  "matrixCells": [],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "货位😀07",
+        "x": "4mm",
+        "y": "18mm"
+      }
+    ]
+  }
+}
