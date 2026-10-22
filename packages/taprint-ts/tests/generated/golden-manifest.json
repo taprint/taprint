@@ -35,31 +35,31 @@
       "kind": "signer",
       "fixture": "message-signer-v1.json",
       "expectedFile": "message-signer-result.json",
-      "expectedSha256": "6b803f8568687efeb1350851aa6254013ef249d9a9c2e36454d961d47cedff84"
+      "expectedSha256": "2831970dda7e887edf92aec2e07d30f4e2d0c8aeedc8fd8c5240a77340bb7cf4"
     },
     {
       "kind": "signer",
       "fixture": "message-signer-v2.json",
       "expectedFile": "message-signer-result-v2.json",
-      "expectedSha256": "fa669f02a5799841693d7b37b3867c7ca28fffbceb528abc6e8d03fadbab912b"
+      "expectedSha256": "604ae9100768401f5a0a7c7f88d297ce2037157d907c2e1ab1b28db207f371b6"
     },
     {
       "kind": "signer",
       "fixture": "message-signer-v3.json",
       "expectedFile": "message-signer-result-v3.json",
-      "expectedSha256": "a7fe9a6bf8550d4bf108e0e7013d257a735d64eeca896a3990ca77cc5e4bd087"
+      "expectedSha256": "4fbca7729b25b8e3d2ba834d060fbc04178ff3e10cff27d3093d2593637a2a02"
     },
     {
       "kind": "signer",
       "fixture": "message-signer-v4.json",
       "expectedFile": "message-signer-result-v4.json",
-      "expectedSha256": "418fd7226d9019f30e80a909165b5465bd62a6c1745da7fd2c34f3549737dcbf"
+      "expectedSha256": "96d2a2d525cf752a71e1229f4614105f83201b086ddb61ef420f00c256a957b0"
     },
     {
       "kind": "signer",
       "fixture": "message-signer-v5.json",
       "expectedFile": "message-signer-result-v5.json",
-      "expectedSha256": "78191cd79a36b17308a76c09072df0edfa1a5e12159d624941dceb0d26691c44"
+      "expectedSha256": "d6294059033675d2928ec0d2d5679c37d0413535c702a7b588d5bd65ddf84675"
     },
     {
       "kind": "migration",
