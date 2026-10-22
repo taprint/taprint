@@ -1,0 +1,35 @@
+@import 'tailwindcss';
+
+/* Tailwind v4 CSS-first 配置（设计契约） */
+@theme {
+  --color-primary: #566fdc; /* Taprint 主色 */
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #1c8875;
+  --radius-designer-element: 4px;
+}
+
+/*
+ * readOnly 完整编辑锁——视觉灰态。
+ *
+ * 各编辑面板（PropertyPanel/FieldPanel/LayersPanel）根 `<fieldset :disabled="store.readOnly">`
+ * 利用 HTML 标准「fieldset[disabled] 内所有 form-associated element 自动 disabled」语义
+ * 实现交互拦截（input/select/textarea/button 全部 disabled，含嵌套子组件）；本规则提供
+ * 视觉灰态层（双层门禁要求：视觉 + 交互各一层）。fieldset reset 去掉浏览器默认边框/外边距，
+ * 保持与原 div 根节点像素一致。
+ */
+fieldset.embed-readonly-lock {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+fieldset.embed-readonly-lock:disabled {
+  opacity: 0.55;
+}
+/*
+ * 画布元素宿主 readOnly 灰态（CanvasElementHost）：选中圈改为虚线灰，
+ * 与 panel 灰态同步提示「不可编辑」。pointer-events 由组件层 .readOnly 锁定。
+ */
+.canvas-element-readonly {
+  cursor: not-allowed;
+}

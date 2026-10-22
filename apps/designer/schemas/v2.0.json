@@ -1,0 +1,1488 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taprint.dev/schema/v2.0.json",
+  "title": "taprint Print Template DSL v2.0",
+  "description": "打印模板 DSL v2.0（中国式报表专项步骤 2，本规范；评审定稿候选）。v1.0 超集：新增单元格模型（合并/斜线表头/多级表头/静态行）、分组小计、跨页表头、嵌套子表/主从表（列级 subtable）、水印、一页多单（page.nup）、循环/条件容器（兑现设计承诺）。receipt/label 呈现与 v1.0 一致（中国式报表能力聚焦 doc/A4，label 水印不在 2.0 范围）。字段语义依据 字段语义规范；1.0→2.0 迁移步骤为专项步骤 3（schema/changelog.md 登记）。",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "code",
+    "name",
+    "presentations"
+  ],
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "tenantId"
+        ]
+      },
+      {
+        "required": [
+          "storeId"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^2\\.[0-9]+$",
+      "description": "DSL schema 版本（2.0/2.1/...；主文档 §5.11/§5.12，2.0 为不兼容大版本、渲染器双轨 12 个月）"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,63}$"
+    },
+    "code": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{1,31}$",
+      "description": "业务单据代码；格式校验，有效性由服务端 BizTypeRegistry 校"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "category": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "locales": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]{2,3}(-[A-Z0-9]{2,8})?$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "dataSources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/dataSource"
+      }
+    },
+    "presentations": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "doc": {
+          "$ref": "#/definitions/docPresentation"
+        },
+        "receipt": {
+          "$ref": "#/definitions/receiptPresentation"
+        },
+        "label": {
+          "$ref": "#/definitions/labelPresentation"
+        }
+      }
+    },
+    "parameters": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/parameter"
+      }
+    },
+    "i18n": {
+      "type": "object",
+      "description": "多语言词条，key 为 locale",
+      "propertyNames": {
+        "pattern": "^[a-z]{2,3}(-[A-Z0-9]{2,8})?$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "description": "扩展位，不参与校验语义"
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "length": {
+      "type": "string",
+      "description": "物理长度，非负；mm 为主单位，cm/pt/px 由渲染端换算。% 无几何参照物（TSPL/ESC-POS 绝对坐标），不支持；表格列宽相对值用 columnWidth",
+      "pattern": "^\\d+(\\.\\d+)?(mm|cm|pt|px)$"
+    },
+    "columnWidth": {
+      "type": "string",
+      "description": "表格列宽：物理长度或相对表格宽度的百分比（doc 流式布局合法场景）",
+      "pattern": "^\\d+(\\.\\d+)?(mm|cm|pt|px|%)$"
+    },
+    "style": {
+      "type": "object",
+      "description": "样式，继承链 page → body → element",
+      "additionalProperties": false,
+      "properties": {
+        "fontFamily": {
+          "type": "string"
+        },
+        "fontSize": {
+          "oneOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "type": "string",
+              "enum": [
+                "normal",
+                "double",
+                "quadruple"
+              ]
+            }
+          ],
+          "description": "doc/label 用数值 pt；receipt 用 normal/double/quadruple"
+        },
+        "bold": {
+          "type": "boolean"
+        },
+        "italic": {
+          "type": "boolean"
+        },
+        "underline": {
+          "type": "boolean"
+        },
+        "color": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$"
+        },
+        "backgroundColor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$"
+        },
+        "align": {
+          "type": "string",
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        "verticalAlign": {
+          "type": "string",
+          "enum": [
+            "top",
+            "middle",
+            "bottom"
+          ]
+        },
+        "border": {
+          "$ref": "#/definitions/boxEdges"
+        },
+        "padding": {
+          "$ref": "#/definitions/boxEdges"
+        }
+      }
+    },
+    "boxEdges": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "top": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "right": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "bottom": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "left": {
+          "type": [
+            "string",
+            "number"
+          ]
+        }
+      }
+    },
+    "marginEdges": {
+      "type": "object",
+      "description": "边距盒模型：四边必须为 length（评审 S1：无单位数字的 px/mm 语义不明，禁止）",
+      "additionalProperties": false,
+      "properties": {
+        "top": {
+          "$ref": "#/definitions/length"
+        },
+        "right": {
+          "$ref": "#/definitions/length"
+        },
+        "bottom": {
+          "$ref": "#/definitions/length"
+        },
+        "left": {
+          "$ref": "#/definitions/length"
+        }
+      }
+    },
+    "dataSource": {
+      "type": "object",
+      "required": [
+        "name",
+        "type",
+        "schema"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,63}$"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "detail",
+            "reference"
+          ]
+        },
+        "schema": {
+          "$ref": "#/definitions/fieldSchema"
+        }
+      }
+    },
+    "fieldSchema": {
+      "type": "object",
+      "description": "字段字典：叶子为类型名，嵌套对象为子结构",
+      "minProperties": 1,
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "date",
+              "datetime",
+              "enum"
+            ]
+          },
+          {
+            "$ref": "#/definitions/fieldSchema"
+          }
+        ]
+      }
+    },
+    "expression": {
+      "type": "string",
+      "description": "可含 {{...}} 表达式（§5.7，v1.41 ExpressionCompiler 文法）"
+    },
+    "watermark": {
+      "type": "object",
+      "description": "页面水印（v2.0 新增； 元素库承诺）。type=text 必填 text，type=image 必填 src（if/then 耦合）",
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "text",
+            "image"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "src": {
+          "$ref": "#/definitions/expression"
+        },
+        "opacity": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "angle": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "tile": {
+          "type": "boolean",
+          "description": "true=平铺整页，false=居中单枚"
+        },
+        "style": {
+          "$ref": "#/definitions/style"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "text"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "text"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "image"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "src"
+            ]
+          }
+        }
+      ]
+    },
+    "nup": {
+      "type": "object",
+      "description": "一页多单（v2.0 新增）：单页按 cols×rows 网格排布多份单据内容",
+      "required": [
+        "cols",
+        "rows"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "cols": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "rows": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "gap": {
+          "$ref": "#/definitions/length"
+        }
+      }
+    },
+    "docPresentation": {
+      "type": "object",
+      "description": "A4 单据呈现，流式布局",
+      "required": [
+        "page",
+        "body"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "page": {
+          "type": "object",
+          "required": [
+            "size"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "size": {
+              "type": "string",
+              "enum": [
+                "A4",
+                "A5",
+                "LETTER",
+                "CUSTOM"
+              ]
+            },
+            "width": {
+              "$ref": "#/definitions/length"
+            },
+            "height": {
+              "$ref": "#/definitions/length"
+            },
+            "margin": {
+              "$ref": "#/definitions/marginEdges"
+            },
+            "orientation": {
+              "type": "string",
+              "enum": [
+                "portrait",
+                "landscape"
+              ]
+            },
+            "watermark": {
+              "$ref": "#/definitions/watermark"
+            },
+            "nup": {
+              "$ref": "#/definitions/nup"
+            }
+          }
+        },
+        "style": {
+          "$ref": "#/definitions/style"
+        },
+        "header": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/flowElement"
+          }
+        },
+        "body": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/flowElement"
+          }
+        },
+        "footer": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/flowElement"
+          }
+        }
+      }
+    },
+    "receiptPresentation": {
+      "type": "object",
+      "description": "ESC/POS 小票呈现，流式布局（与 v1.0 一致）",
+      "required": [
+        "body"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "width": {
+          "$ref": "#/definitions/length"
+        },
+        "encoding": {
+          "type": "string",
+          "enum": [
+            "gbk",
+            "utf-8"
+          ]
+        },
+        "initCommands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/receiptElement"
+          }
+        },
+        "tailCommands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "copiesValue": {
+      "description": "打印份数（D7；v2.0 保持 1.x 严格超集）：整数字面量（工具/UI 产出）或 expression 字符串（2.0 遗留/doc-receipt 专用求值）；label 消费口径=整数字面量优先",
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 999
+        },
+        {
+          "$ref": "#/definitions/expression"
+        }
+      ]
+    },
+    "labelPresentation": {
+      "type": "object",
+      "description": "TSPL 标签呈现，绝对坐标布局（元素必须带 x/y；与 v1.0 一致）",
+      "required": [
+        "size",
+        "body"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "size": {
+          "type": "object",
+          "required": [
+            "width",
+            "height"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "width": {
+              "$ref": "#/definitions/length"
+            },
+            "height": {
+              "$ref": "#/definitions/length"
+            }
+          }
+        },
+        "gap": {
+          "$ref": "#/definitions/length"
+        },
+        "density": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "speed": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "body": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/labelElement"
+          }
+        },
+        "copies": {
+          "$ref": "#/definitions/copiesValue"
+        },
+        "endCommand": {
+          "$ref": "#/definitions/expression"
+        }
+      }
+    },
+    "elementBase": {
+      "type": "object",
+      "properties": {
+        "style": {
+          "$ref": "#/definitions/style"
+        },
+        "align": {
+          "type": "string",
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        "margin": {
+          "$ref": "#/definitions/marginEdges"
+        },
+        "width": {
+          "$ref": "#/definitions/length"
+        },
+        "height": {
+          "$ref": "#/definitions/length"
+        }
+      }
+    },
+    "headerCell": {
+      "type": "object",
+      "description": "表头单元格（v2.0 单元格模型）：colspan/rowspan 合并；diagonal 斜线表头（ltr=左上→右下，rtl=左下→右上，both=十字），diagonalLabels 按四角位标注",
+      "required": [
+        "text"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "colspan": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "rowspan": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "diagonal": {
+          "type": "string",
+          "enum": [
+            "ltr",
+            "rtl",
+            "both"
+          ]
+        },
+        "diagonalLabels": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tl": {
+              "type": "string"
+            },
+            "tr": {
+              "type": "string"
+            },
+            "bl": {
+              "type": "string"
+            },
+            "br": {
+              "type": "string"
+            }
+          }
+        },
+        "align": {
+          "type": "string",
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        "style": {
+          "$ref": "#/definitions/style"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "diagonalLabels"
+            ]
+          },
+          "then": {
+            "required": [
+              "diagonal"
+            ]
+          }
+        }
+      ]
+    },
+    "tableCell": {
+      "type": "object",
+      "description": "静态行单元格（v2.0）：支持合并；value 缺省即空格占位（被上方 rowspan 覆盖场景）",
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/expression"
+        },
+        "colspan": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "rowspan": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "align": {
+          "type": "string",
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        "style": {
+          "$ref": "#/definitions/style"
+        }
+      }
+    },
+    "tableColumn": {
+      "type": "object",
+      "description": "表格列（v1.0 基础 + v2.0 嵌套子表）：subtable 存在时该列为子表容器（主从表/嵌套子表），field 指向行数据中的子数组路径",
+      "required": [
+        "header"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "header": {
+          "type": "string"
+        },
+        "field": {
+          "type": "string"
+        },
+        "width": {
+          "$ref": "#/definitions/columnWidth"
+        },
+        "align": {
+          "type": "string",
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        "format": {
+          "type": "string"
+        },
+        "subtable": {
+          "type": "object",
+          "required": [
+            "columns"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "子行集合数据源名（dataSources[].name，type=detail）；缺省取 field 指向的行内子数组"
+            },
+            "columns": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/tableColumn"
+              }
+            }
+          }
+        }
+      }
+    },
+    "tableGroup": {
+      "type": "object",
+      "description": "分组小计（v2.0）：按 field 分组渲染；subtotal.values 与 columns 对齐（null=该列留空），聚合表达式在组内行集求值（如 {{items | sum:'amount'}}）",
+      "required": [
+        "field",
+        "subtotal"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "header": {
+          "$ref": "#/definitions/expression"
+        },
+        "subtotal": {
+          "type": "object",
+          "required": [
+            "values"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "$ref": "#/definitions/expression"
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/expression"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "staticRows": {
+      "type": "object",
+      "description": "静态行区（v2.0）：中国式报表的自由合并行（签栏/合计/说明），position 相对数据行",
+      "required": [
+        "rows"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "position": {
+          "type": "string",
+          "enum": [
+            "before",
+            "after"
+          ],
+          "default": "after"
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/definitions/tableCell"
+            }
+          }
+        }
+      }
+    },
+    "flowElement": {
+      "description": "doc 流式元素（§5.4 元素类型表 + v2.0 中国式报表扩展：table 单元格模型/loop/conditional）",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "content"
+          ],
+          "properties": {
+            "type": {
+              "const": "text"
+            },
+            "content": {
+              "$ref": "#/definitions/expression"
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/elementBase"
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "src"
+          ],
+          "properties": {
+            "type": {
+              "const": "image"
+            },
+            "src": {
+              "$ref": "#/definitions/expression"
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/elementBase"
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "content",
+            "symbology"
+          ],
+          "properties": {
+            "type": {
+              "const": "barcode"
+            },
+            "content": {
+              "$ref": "#/definitions/expression"
+            },
+            "symbology": {
+              "type": "string",
+              "enum": [
+                "CODE128",
+                "EAN13",
+                "UPC",
+                "EAN8",
+                "CODE39",
+                "ITF"
+              ]
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/elementBase"
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "content"
+          ],
+          "properties": {
+            "type": {
+              "const": "qrcode"
+            },
+            "content": {
+              "$ref": "#/definitions/expression"
+            },
+            "size": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/elementBase"
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "source",
+            "columns"
+          ],
+          "properties": {
+            "type": {
+              "const": "table"
+            },
+            "source": {
+              "type": "string",
+              "description": "数据源名（dataSources[].name）"
+            },
+            "columns": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/tableColumn"
+              }
+            },
+            "headerRows": {
+              "type": "array",
+              "description": "多级表头（v2.0）：多行表头，每行为 headerCell 序列（含合并/斜线）；缺省回退 columns[].header 单行表头（v1.0 兼容）",
+              "minItems": 1,
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/definitions/headerCell"
+                }
+              }
+            },
+            "layout": {
+              "type": "object",
+              "description": "表格布局控制（v2.0）",
+              "additionalProperties": false,
+              "properties": {
+                "repeatHeaderOnPageBreak": {
+                  "type": "boolean",
+                  "description": "跨页重复表头（headerRows 或 columns 表头）"
+                }
+              }
+            },
+            "groups": {
+              "type": "array",
+              "description": "分组小计（v2.0），按声明顺序嵌套分组",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/tableGroup"
+              }
+            },
+            "staticRows": {
+              "$ref": "#/definitions/staticRows"
+            },
+            "summary": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "label",
+                  "value"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "$ref": "#/definitions/expression"
+                  },
+                  "align": {
+                    "type": "string",
+                    "enum": [
+                      "left",
+                      "center",
+                      "right"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/elementBase"
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "rows"
+          ],
+          "properties": {
+            "type": {
+              "const": "kvtable"
+            },
+            "columns": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            },
+            "compact": {
+              "type": "boolean"
+            },
+            "rows": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 2,
+                  "items": {
+                    "$ref": "#/definitions/expression"
+                  }
+                }
+              }
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/elementBase"
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "line"
+            },
+            "lineStyle": {
+              "type": "string",
+              "enum": [
+                "solid",
+                "dashed",
+                "dotted"
+              ]
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/elementBase"
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "rect"
+            },
+            "border": {
+              "$ref": "#/definitions/boxEdges"
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/elementBase"
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "height"
+          ],
+          "properties": {
+            "type": {
+              "const": "spacer"
+            },
+            "height": {
+              "$ref": "#/definitions/length"
+            }
+          },
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "pageBreak"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "description": "循环容器（v2.0，）：each 为行集数据源名，body 内表达式按行作用域解析",
+          "required": [
+            "type",
+            "each",
+            "body"
+          ],
+          "properties": {
+            "type": {
+              "const": "loop"
+            },
+            "each": {
+              "type": "string",
+              "description": "数据源名（type=detail）"
+            },
+            "body": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/flowElement"
+              }
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/elementBase"
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "description": "条件容器（v2.0，）：when 表达式真值渲染 body，否则渲染 elseBody（§5.7 三元/if 块级形态）。真值规则按 JS：0 / '' / null / undefined / false / NaN 均为假（十四轮评审 N2）——计数为 0 时仍需显示请写 when: \"{{count}} !== 0\"，不做静态布尔类型判定（返回类型运行期才可知）",
+          "required": [
+            "type",
+            "when",
+            "body"
+          ],
+          "properties": {
+            "type": {
+              "const": "conditional"
+            },
+            "when": {
+              "$ref": "#/definitions/expression"
+            },
+            "body": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/flowElement"
+              }
+            },
+            "elseBody": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/flowElement"
+              }
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/elementBase"
+            }
+          ],
+          "unevaluatedProperties": false
+        }
+      ]
+    },
+    "receiptElement": {
+      "description": "receipt 元素 = flow 元素 + ESC/POS 特有元素（§5.5：cut/cashDrawer）",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/flowElement"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "cut"
+            },
+            "partial": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "cashDrawer"
+            },
+            "pulse": {
+              "type": "integer",
+              "enum": [
+                1,
+                2
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "labelElement": {
+      "description": "label 元素：绝对坐标（x/y 必填，§5.6；v1.1 同批六元素＋fontRole/humanReadable/收窄落稿——v2.0 保持 1.x 严格超集，见 schema/changelog.md v1.1 行）",
+      "type": "object",
+      "allOf": [
+        {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "type",
+                "content"
+              ],
+              "properties": {
+                "type": {
+                  "const": "text"
+                },
+                "content": {
+                  "$ref": "#/definitions/expression"
+                },
+                "font": {
+                  "type": "string",
+                  "description": "设备字库名（早期约定遗留，指令族专属语义——v1.1 起 fontRole 优先；新模板应写 fontRole 而非 font）"
+                },
+                "fontRole": {
+                  "type": "string",
+                  "enum": [
+                    "auto",
+                    "cjk",
+                    "latin"
+                  ],
+                  "description": "字体角色抽象（v1.1 新增，P1：DSL 不含指令族专属语义）。auto=按内容自动选族，cjk=中文字库，latin=西文字库；与 font 并存时 fontRole 优先（初稿枚举三值，扩值走 schema 版本）"
+                },
+                "size": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10,
+                  "description": "字号倍率 1-10（v1.1 钉死；v1.0 的 0 由 migrator 1.0→1.1 折算为 1，消费端双读亦按 1 处理）。与 style.fontSize 的关系：v1.1 模板一律写顶层 size；style.fontSize 为 2.0 遗留并存字段，解析器兼容读，并存时顶层 size 优先"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "type",
+                "content",
+                "symbology"
+              ],
+              "properties": {
+                "type": {
+                  "const": "barcode"
+                },
+                "content": {
+                  "$ref": "#/definitions/expression"
+                },
+                "symbology": {
+                  "type": "string",
+                  "enum": [
+                    "CODE128",
+                    "EAN13"
+                  ],
+                  "description": "码制一期两种（D5：EAN8/CODE39/UPC/ITF 放开顺序由产品按需求登记裁决，放开=schema 版本＋端侧实现同批；v1.0 存量其他码制按 v1.0 双读、禁新增）"
+                },
+                "humanReadable": {
+                  "type": "boolean",
+                  "description": "条码人读号（v1.1 新增；缺省由产品裁决（D3）——裁决前各端禁私设缺省，模板显式写值）"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "type",
+                "content"
+              ],
+              "properties": {
+                "type": {
+                  "const": "qrcode"
+                },
+                "content": {
+                  "$ref": "#/definitions/expression"
+                },
+                "size": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10,
+                  "description": "二维码单元尺寸 1-10，缺省 4（D4：由 v1.0 的 1-20 收窄——PC 引擎与后端 TSPL 渲染均已降档 1-10，本条是把降档事实写进 schema；v1.0 文档 >10 由 migrator 折算为 10，≤1 缺省化走 4）"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "type",
+                "src"
+              ],
+              "properties": {
+                "type": {
+                  "const": "image"
+                },
+                "src": {
+                  "$ref": "#/definitions/expression"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "type",
+                "width",
+                "height"
+              ],
+              "properties": {
+                "type": {
+                  "const": "line"
+                },
+                "width": {
+                  "$ref": "#/definitions/length"
+                },
+                "height": {
+                  "$ref": "#/definitions/length"
+                },
+                "thickness": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 32,
+                  "description": "线宽（点阵 dot，缺省 2）；横线=height 为 0 长度（如 \"0mm\"），竖线=width 为 0 长度"
+                }
+              },
+              "description": "直线（v1.1 新增；D9 单形 x/y+width/height，与佳博转换池及 PC 帧断言同源，禁两点形态）"
+            },
+            {
+              "type": "object",
+              "required": [
+                "type",
+                "width",
+                "height"
+              ],
+              "properties": {
+                "type": {
+                  "const": "box"
+                },
+                "width": {
+                  "$ref": "#/definitions/length"
+                },
+                "height": {
+                  "$ref": "#/definitions/length"
+                },
+                "thickness": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 32,
+                  "description": "框线宽（dot，缺省 2）"
+                },
+                "radius": {
+                  "$ref": "#/definitions/length",
+                  "description": "圆角半径（可选；TSPL 无原生命令＝渲染降级直角，此字段仅为跨端形状表达保留，schema 显式标注降级事实）"
+                }
+              },
+              "description": "矩形框（v1.1 新增；D9 单形 x/y/width/height；圆角降级直角已标注）"
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "x",
+            "y"
+          ],
+          "properties": {
+            "x": {
+              "$ref": "#/definitions/length"
+            },
+            "y": {
+              "$ref": "#/definitions/length"
+            },
+            "width": {
+              "$ref": "#/definitions/length"
+            },
+            "height": {
+              "$ref": "#/definitions/length"
+            },
+            "align": {
+              "type": "string",
+              "enum": [
+                "left",
+                "center",
+                "right"
+              ]
+            },
+            "style": {
+              "$ref": "#/definitions/style"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "parameter": {
+      "type": "object",
+      "description": "运行时参数",
+      "required": [
+        "name",
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,63}$"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "integer",
+            "number",
+            "string",
+            "boolean"
+          ]
+        },
+        "default": {
+          "type": [
+            "integer",
+            "number",
+            "string",
+            "boolean",
+            "null"
+          ]
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 200
+        }
+      }
+    }
+  }
+}

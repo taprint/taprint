@@ -83,6 +83,16 @@ between minors, strict semver applies from 1.0.
   errors; tool roster now four (`validate_template`, `compile`,
   `list_examples`, `render_preview`).
 
+- `taprint-designer` v0.3 (apps/designer, ADR-0003/0011): visual
+  print-template designer, full SPA + embeddable double mode. Host
+  contract is the neutral message protocol v2
+  (`schema/message-protocol.json`: `window.TaprintDesigner`,
+  `__TAPRINT_TOKEN__`, `taprint-token` channel, `taprint-expression`
+  language id, HKDF salt `taprint-designer-v1`); schema and sample
+  assets ship in-package with the same sync/manifest/drift-gate pattern
+  as the MCP. Ships vitest unit suites, Playwright e2e specs, and the
+  SPDX header gate across all sources.
+
 ### Fixed
 
 - Scanner 1.0.2: the email rule no longer flags SCM clone URLs

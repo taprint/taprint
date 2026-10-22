@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Taprint 设计器宿主模拟（e2e）</title>
+    <style>
+      body { font-family: sans-serif; margin: 0; padding: 12px; font-size: 13px; }
+      .bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+      button { padding: 4px 10px; border: 1px solid #d1d5db; border-radius: 4px; background: #fff; cursor: pointer; }
+      button:hover { background: #f3f4f6; }
+      .chip { padding: 2px 8px; border-radius: 4px; background: #eff6ff; color: #1d4ed8; }
+      iframe { width: 100%; height: 72vh; border: 1px solid #e5e7eb; }
+    </style>
+  </head>
+  <body>
+    <!--
+      模拟宿主：iframe 嵌入设计器 web-iframe 通道，
+      复现 设计契约 宿主侧职责——配置注入（parentOrigin，严禁 '*'）、
+      token 通道 B 注入、ready→loadTemplate 握手、save→saveResult 回执、
+      setReadOnly/closeRequest 下行、签名/验签（MessageSigner WebCrypto 镜像）。
+      宿主 新增：preview→previewResult / testPrint→printResult 回执模拟按钮、
+      token-refreshed 下发、preview/printResult/testPrint/token-check 上行处理。
+      模板 DSL 由 e2e 经 window.__TEST_TEMPLATE__ 注入（fixture 单一来源不复制）。
+    -->
+    <div class="bar">
+      <span>最近收到：</span><span class="chip" data-testid="host-status">—</span>
+      <span id="host-error" data-testid="host-error" style="color: #b91c1c"></span>
+    </div>
+    <div class="bar">
+      <button type="button" data-testid="host-load">下发模板（loadTemplate）</button>
+      <button type="button" data-testid="host-readonly">下发只读（setReadOnly）</button>
+      <button type="button" data-testid="host-writable">解除只读</button>
+      <button type="button" data-testid="host-close-request">请求关窗（closeRequest）</button>
+      <button type="button" data-testid="host-token-refreshed">推送 token-refreshed</button>
+      <button type="button" data-testid="host-preview-result">回 previewResult（PNG）</button>
+      <button type="button" data-testid="host-preview-error">回 previewResult（错误）</button>
+      <button type="button" data-testid="host-print-result-ok">回 printResult（成功）</button>
+      <button type="button" data-testid="host-print-result-fail">回 printResult（失败）</button>
+      <button type="button" data-testid="host-tamper">发送篡改消息（应被拒收）</button>
+    </div>
+    <div data-testid="designer-frame-wrap"></div>
+
+    <script>
+      const TOKEN = 'designer-session-token-fixture';
+      const enc = new TextEncoder();
+      let hmacKey = null;
+      let frame = null;
+      // 最近一次上行 preview/testPrint 的 nonce——回执时回带，便于设计器侧关聯（验签口径
+      // 只校验签名 + timestamp 窗，nonce 不强制匹配；这里仅用于 e2e 调试观察）
+      let lastPreviewNonce = null;
+      let lastTestPrintNonce = null;
+
+      // ── MessageSigner WebCrypto 镜像（HKDF 参数/canonical/HMAC 逐字对齐）──
+      function b64(bytes) {
+        let s = '';
+        bytes.forEach((b) => (s += String.fromCharCode(b)));
+        return btoa(s);
+      }
+      async function deriveKey(token) {
+        const ikm = await crypto.subtle.importKey('raw', enc.encode(token), 'HKDF', false, [
+          'deriveBits',
+        ]);
+        const bits = await crypto.subtle.deriveBits(
+          {
+            name: 'HKDF',
+            hash: 'SHA-256',
+            salt: enc.encode('taprint-designer-v1'),
+            info: enc.encode('postmessage-hmac'),
+          },
+          ikm,
+          256,
+        );
+        const raw = new Uint8Array(bits);
+        return crypto.subtle.importKey('raw', raw, { name: 'HMAC', hash: 'SHA-256' }, false, [
+          'sign',
+        ]);
+      }
+      function sortKeysDeep(v) {
+        if (Array.isArray(v)) return v.map(sortKeysDeep);
+        if (v && typeof v === 'object') {
+          const out = {};
+          for (const k of Object.keys(v).sort()) out[k] = sortKeysDeep(v[k]);
+          return out;
+        }
+        return v;
+      }
+      function canonicalize(msg) {
+        const copy = { ...msg };
+        delete copy.signature;
+        return JSON.stringify(sortKeysDeep(copy));
+      }
+      async function signMessage(msg) {
+        const mac = await crypto.subtle.sign('HMAC', hmacKey, enc.encode(canonicalize(msg)));
+        return b64(new Uint8Array(mac));
+      }
+      async function verifyDesignerMessage(msg) {
+        if (!msg || typeof msg.signature !== 'string') return false;
+        if (typeof msg.timestamp !== 'number' || !Number.isInteger(msg.timestamp)) return false;
+        if (Math.abs(Date.now() - msg.timestamp) > 5 * 60 * 1000) return false;
+        return (await signMessage(msg)) === msg.signature;
+      }
+
+      async function sendToDesigner(payload) {
+        const msg = { ...payload, timestamp: Date.now(), nonce: crypto.randomUUID() };
+        msg.signature = await signMessage(msg);
+        frame.contentWindow.postMessage(msg, location.origin);
+      }
+
+      function setStatus(type) {
+        document.querySelector('[data-testid="host-status"]').textContent = type;
+      }
+
+      async function sendLoadTemplate() {
+        if (!window.__TEST_TEMPLATE__) {
+          document.querySelector('[data-testid="host-error"]').textContent =
+            '无模板：e2e 未注入 window.__TEST_TEMPLATE__';
+          return;
+        }
+        await sendToDesigner({
+          type: 'loadTemplate',
+          dsl: window.__TEST_TEMPLATE__,
+          templateId: 'sales-note',
+          version: 1,
+        });
+      }
+
+      // 1×1 红点 PNG（data:image/png;base64,...）——previewResult.previewUrl
+      // 宿主侧回执样本，e2e 验证设计器侧能渲染
+      const SAMPLE_PNG_DATAURL =
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
+      // ── 设计器上行消息（验签后分发）──
+      // preview/testPrint 上行直接回 previewResult/printResult（默认行为），
+      // 也支持手动用按钮触发不同分支；token-check 上行不计入最近收到（周期消息噪音）。
+      window.addEventListener('message', async (ev) => {
+        if (ev.origin !== location.origin) return;
+        const msg = ev.data;
+        if (!msg || typeof msg !== 'object' || typeof msg.type !== 'string') return;
+        if (!(await verifyDesignerMessage(msg))) return; // 验签失败静默丢弃
+        if (msg.type === 'token-check') {
+          // 周期心跳，不刷新「最近收到」状态（避免覆盖 save/preview 等）
+          return;
+        }
+        setStatus(msg.type);
+        if (msg.type === 'ready') {
+          if (tokenTimer) clearInterval(tokenTimer); // 握手完成，停止 token 重试推送
+          await sendLoadTemplate();
+        } else if (msg.type === 'save') {
+          await sendToDesigner({ type: 'saveResult', success: true });
+        } else if (msg.type === 'preview') {
+          lastPreviewNonce = msg.nonce;
+          await sendToDesigner({ type: 'previewResult', previewUrl: SAMPLE_PNG_DATAURL });
+        } else if (msg.type === 'testPrint') {
+          lastTestPrintNonce = msg.nonce;
+          await sendToDesigner({ type: 'printResult', success: true });
+        } else if (msg.type === 'error') {
+          document.querySelector('[data-testid="host-error"]').textContent =
+            msg.errorMessage || '';
+        }
+      });
+
+      // ── 启动：parentOrigin 经 iframe URL query 注入（URL 由宿主拼接，
+      // origin 即宿主自身 origin；浏览器导航替换 window，contentWindow 预置不可靠）──
+      // token 通道 B 竞态：iframe load 事件可能早于设计器监听器注册（动态 import 延迟
+      // bootstrap），宿主按 300ms 重试推送直至收到 ready（真实宿主同口径）。
+      let tokenTimer = null;
+      function postToken() {
+        frame.contentWindow.postMessage({ type: 'taprint-token', token: TOKEN }, location.origin);
+      }
+
+      async function boot() {
+        hmacKey = await deriveKey(TOKEN);
+        frame = document.createElement('iframe');
+        frame.dataset.testid = 'designer-frame';
+        document.querySelector('[data-testid="designer-frame-wrap"]').appendChild(frame);
+        frame.addEventListener('load', () => {
+          postToken();
+          let tries = 0;
+          tokenTimer = setInterval(() => {
+            if (++tries > 40) clearInterval(tokenTimer); // ≈12s，覆盖设计器 10s 超时
+            else postToken();
+          }, 300);
+        });
+        frame.src = `/?embedMode=web-iframe&parentOrigin=${encodeURIComponent(location.origin)}`;
+      }
+
+      document.querySelector('[data-testid="host-load"]').onclick = sendLoadTemplate;
+      document.querySelector('[data-testid="host-readonly"]').onclick = () =>
+        sendToDesigner({ type: 'setReadOnly', readonly: true });
+      document.querySelector('[data-testid="host-writable"]').onclick = () =>
+        sendToDesigner({ type: 'setReadOnly', readonly: false });
+      document.querySelector('[data-testid="host-close-request"]').onclick = () =>
+        sendToDesigner({ type: 'closeRequest' });
+      document.querySelector('[data-testid="host-token-refreshed"]').onclick = () =>
+        sendToDesigner({ type: 'token-refreshed' });
+      document.querySelector('[data-testid="host-preview-result"]').onclick = () =>
+        sendToDesigner({ type: 'previewResult', previewUrl: SAMPLE_PNG_DATAURL });
+      document.querySelector('[data-testid="host-preview-error"]').onclick = () =>
+        sendToDesigner({ type: 'previewResult', errorMessage: '宿主预览渲染失败（模拟）' });
+      document.querySelector('[data-testid="host-print-result-ok"]').onclick = () =>
+        sendToDesigner({ type: 'printResult', success: true });
+      document.querySelector('[data-testid="host-print-result-fail"]').onclick = () =>
+        sendToDesigner({
+          type: 'printResult',
+          success: false,
+          errorMessage: '缺纸（模拟）',
+        });
+      // 篡改演示：签名与内容不匹配——设计器应验签拒收、无任何副作用
+      // （若被误收将置只读并出现 readonly-chip，e2e 以 chip 缺失断言拒收）
+      document.querySelector('[data-testid="host-tamper"]').onclick = async () => {
+        const msg = {
+          type: 'setReadOnly',
+          readonly: true,
+          timestamp: Date.now(),
+          nonce: crypto.randomUUID(),
+          signature: 'dGFtcGVyZWQtc2lnbmF0dXJl',
+        };
+        frame.contentWindow.postMessage(msg, location.origin);
+      };
+
+      void boot();
+    </script>
+  </body>
+</html>
