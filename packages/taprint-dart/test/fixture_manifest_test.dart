@@ -13,8 +13,8 @@ import 'helpers/repo_paths.dart';
 
 void main() {
   final manifest =
-      readJson('packages/print-dsl-ts/tests/generated/fixture-manifest.json');
-  final golden = readJson('packages/print-dsl-ts/tests/generated/golden-manifest.json');
+      readJson('packages/taprint-ts/tests/generated/fixture-manifest.json');
+  final golden = readJson('packages/taprint-ts/tests/generated/golden-manifest.json');
 
   final bizFixtures = (manifest['bizFixtures'] as List).cast<Map>();
   final signerFixtures = (manifest['signerFixtures'] as List).cast<Map>();

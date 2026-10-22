@@ -46,7 +46,7 @@ Map<String, Object?> schemaV11() =>
 
 /// fixtures/templates 下按后缀列举业务 fixture 文件名（排序稳定）。
 List<String> listFixtureFiles(String suffix) =>
-    Directory('${repoRoot.path}/tests/fixtures')
+    Directory('${repoRoot.path}/fixtures/templates')
         .listSync()
         .whereType<File>()
         .map((f) => f.uri.pathSegments.last)
