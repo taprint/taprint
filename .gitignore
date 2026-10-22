@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+bin/
+obj/
+.dart_tool/
+__pycache__/
+.venv/
+venv/
+test-results/
+playwright-report/
+.idea/
+.vscode/
+*.log
+.DS_Store
+scan-report.json
+header-report.json

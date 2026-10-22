@@ -1,0 +1,40 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  compliance:
+    name: forbidden-content & license headers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: negative-control self-test
+        run: python3 tools/test_compliance.py
+      - name: forbidden-content scan
+        run: python3 tools/forbidden_scan.py . --report scan-report.json
+      - name: license header check
+        run: python3 tools/header_check.py .
+      - name: upload scan report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scan-report
+          path: scan-report.json
+          if-no-files-found: ignore
+
+  # Language jobs activate as packages land (see README roadmap):
+  #
+  # ts:   packages/taprint-ts   — ubuntu / node 22 / pnpm 9 / vitest      (v0.1)
+  # cs:   packages/taprint-cs   — windows-latest / net48 + net10.0-windows (v0.1)
+  # dart: packages/taprint-dart — ubuntu / dart 3 VM / dart test          (v0.1)
+  # java: packages/taprint-java — ubuntu / JDK 17 / maven                 (v0.1)
+  #
+  # All four jobs must consume the same fixtures/ manifest pinned to the
+  # same commit and fail on any divergence (L1 frame order for every
+  # template, L2 byte digests for the frozen coverage-matrix subset).
