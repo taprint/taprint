@@ -1,0 +1,1103 @@
+{
+  "generator": "tools/gen_gbk_table.py",
+  "oracle": "python3 built-in gb18030 codec; two-byte region brute force (lead 0x81-0xFE, trail 0x40-0x7E/0x80-0xFE), per-pair encode round-trip asserted",
+  "tableSize": 23940,
+  "tableSha256": "2151146ea389163062e6d51020264489fd1e07d60ffe1a186469e5d13ed952cc",
+  "canonicalForm": "one ASCII line per entry '<CP:4-hex-uppercase>:<LEAD:2-hex><TRAIL:2-hex>' LF-terminated, entries sorted by code point; sha256 over the UTF-8 (ASCII) bytes",
+  "vectors": [
+    {
+      "cp": 19970,
+      "bytes": "8140",
+      "char": "\u4e02"
+    },
+    {
+      "cp": 20106,
+      "bytes": "817E",
+      "char": "\u4e8a"
+    },
+    {
+      "cp": 20112,
+      "bytes": "8180",
+      "char": "\u4e90"
+    },
+    {
+      "cp": 58565,
+      "bytes": "FEFE",
+      "char": "\ue4c5"
+    },
+    {
+      "cp": 164,
+      "bytes": "A1E8",
+      "char": "\u00a4"
+    },
+    {
+      "cp": 65509,
+      "bytes": "A3A4",
+      "char": "\uffe5"
+    },
+    {
+      "cp": 57344,
+      "bytes": "AAA1",
+      "char": "\ue000"
+    },
+    {
+      "cp": 59492,
+      "bytes": "FEA0",
+      "char": "\ue864"
+    },
+    {
+      "cp": 19968,
+      "bytes": "D2BB",
+      "char": "\u4e00"
+    },
+    {
+      "cp": 40869,
+      "bytes": "FD9B",
+      "char": "\u9fa5"
+    },
+    {
+      "cp": 25910,
+      "bytes": "CAD5",
+      "char": "\u6536"
+    },
+    {
+      "cp": 38134,
+      "bytes": "D2F8",
+      "char": "\u94f6"
+    },
+    {
+      "cp": 23567,
+      "bytes": "D0A1",
+      "char": "\u5c0f"
+    },
+    {
+      "cp": 31080,
+      "bytes": "C6B1",
+      "char": "\u7968"
+    },
+    {
+      "cp": 38144,
+      "bytes": "CFFA",
+      "char": "\u9500"
+    },
+    {
+      "cp": 21806,
+      "bytes": "CADB",
+      "char": "\u552e"
+    },
+    {
+      "cp": 21333,
+      "bytes": "B5A5",
+      "char": "\u5355"
+    },
+    {
+      "cp": 21830,
+      "bytes": "C9CC",
+      "char": "\u5546"
+    },
+    {
+      "cp": 21697,
+      "bytes": "C6B7",
+      "char": "\u54c1"
+    },
+    {
+      "cp": 25968,
+      "bytes": "CAFD",
+      "char": "\u6570"
+    },
+    {
+      "cp": 37327,
+      "bytes": "C1BF",
+      "char": "\u91cf"
+    },
+    {
+      "cp": 37329,
+      "bytes": "BDF0",
+      "char": "\u91d1"
+    },
+    {
+      "cp": 39069,
+      "bytes": "B6EE",
+      "char": "\u989d"
+    },
+    {
+      "cp": 26085,
+      "bytes": "C8D5",
+      "char": "\u65e5"
+    },
+    {
+      "cp": 26399,
+      "bytes": "C6DA",
+      "char": "\u671f"
+    },
+    {
+      "cp": 23458,
+      "bytes": "BFCD",
+      "char": "\u5ba2"
+    },
+    {
+      "cp": 25143,
+      "bytes": "BBA7",
+      "char": "\u6237"
+    },
+    {
+      "cp": 19994,
+      "bytes": "D2B5",
+      "char": "\u4e1a"
+    },
+    {
+      "cp": 21153,
+      "bytes": "CEF1",
+      "char": "\u52a1"
+    },
+    {
+      "cp": 21592,
+      "bytes": "D4B1",
+      "char": "\u5458"
+    },
+    {
+      "cp": 21512,
+      "bytes": "BACF",
+      "char": "\u5408"
+    },
+    {
+      "cp": 35745,
+      "bytes": "BCC6",
+      "char": "\u8ba1"
+    },
+    {
+      "cp": 23454,
+      "bytes": "CAB5",
+      "char": "\u5b9e"
+    },
+    {
+      "cp": 20248,
+      "bytes": "D3C5",
+      "char": "\u4f18"
+    },
+    {
+      "cp": 24800,
+      "bytes": "BBDD",
+      "char": "\u60e0"
+    },
+    {
+      "cp": 25214,
+      "bytes": "D5D2",
+      "char": "\u627e"
+    },
+    {
+      "cp": 38646,
+      "bytes": "C1E3",
+      "char": "\u96f6"
+    },
+    {
+      "cp": 25903,
+      "bytes": "D6A7",
+      "char": "\u652f"
+    },
+    {
+      "cp": 20184,
+      "bytes": "B8B6",
+      "char": "\u4ed8"
+    },
+    {
+      "cp": 26041,
+      "bytes": "B7BD",
+      "char": "\u65b9"
+    },
+    {
+      "cp": 24335,
+      "bytes": "CABD",
+      "char": "\u5f0f"
+    },
+    {
+      "cp": 35874,
+      "bytes": "D0BB",
+      "char": "\u8c22"
+    },
+    {
+      "cp": 39038,
+      "bytes": "B9CB",
+      "char": "\u987e"
+    },
+    {
+      "cp": 65292,
+      "bytes": "A3AC",
+      "char": "\uff0c"
+    },
+    {
+      "cp": 27426,
+      "bytes": "BBB6",
+      "char": "\u6b22"
+    },
+    {
+      "cp": 36814,
+      "bytes": "D3AD",
+      "char": "\u8fce"
+    },
+    {
+      "cp": 20877,
+      "bytes": "D4D9",
+      "char": "\u518d"
+    },
+    {
+      "cp": 27425,
+      "bytes": "B4CE",
+      "char": "\u6b21"
+    },
+    {
+      "cp": 20809,
+      "bytes": "B9E2",
+      "char": "\u5149"
+    },
+    {
+      "cp": 20020,
+      "bytes": "C1D9",
+      "char": "\u4e34"
+    },
+    {
+      "cp": 65281,
+      "bytes": "A3A1",
+      "char": "\uff01"
+    },
+    {
+      "cp": 20135,
+      "bytes": "B2FA",
+      "char": "\u4ea7"
+    },
+    {
+      "cp": 22320,
+      "bytes": "B5D8",
+      "char": "\u5730"
+    },
+    {
+      "cp": 36135,
+      "bytes": "BBF5",
+      "char": "\u8d27"
+    },
+    {
+      "cp": 20301,
+      "bytes": "CEBB",
+      "char": "\u4f4d"
+    },
+    {
+      "cp": 26550,
+      "bytes": "BCDC",
+      "char": "\u67b6"
+    },
+    {
+      "cp": 26631,
+      "bytes": "B1EA",
+      "char": "\u6807"
+    },
+    {
+      "cp": 31614,
+      "bytes": "C7A9",
+      "char": "\u7b7e"
+    },
+    {
+      "cp": 35268,
+      "bytes": "B9E6",
+      "char": "\u89c4"
+    },
+    {
+      "cp": 26684,
+      "bytes": "B8F1",
+      "char": "\u683c"
+    },
+    {
+      "cp": 21517,
+      "bytes": "C3FB",
+      "char": "\u540d"
+    },
+    {
+      "cp": 31216,
+      "bytes": "B3C6",
+      "char": "\u79f0"
+    },
+    {
+      "cp": 20215,
+      "bytes": "BCDB",
+      "char": "\u4ef7"
+    },
+    {
+      "cp": 38065,
+      "bytes": "C7AE",
+      "char": "\u94b1"
+    },
+    {
+      "cp": 19975,
+      "bytes": "CDF2",
+      "char": "\u4e07"
+    },
+    {
+      "cp": 21315,
+      "bytes": "C7A7",
+      "char": "\u5343"
+    },
+    {
+      "cp": 30334,
+      "bytes": "B0D9",
+      "char": "\u767e"
+    },
+    {
+      "cp": 21313,
+      "bytes": "CAAE",
+      "char": "\u5341"
+    },
+    {
+      "cp": 20803,
+      "bytes": "D4AA",
+      "char": "\u5143"
+    },
+    {
+      "cp": 35282,
+      "bytes": "BDC7",
+      "char": "\u89d2"
+    },
+    {
+      "cp": 22359,
+      "bytes": "BFE9",
+      "char": "\u5757"
+    },
+    {
+      "cp": 25151,
+      "bytes": "B7BF",
+      "char": "\u623f"
+    },
+    {
+      "cp": 33529,
+      "bytes": "C6BB",
+      "char": "\u82f9"
+    },
+    {
+      "cp": 26524,
+      "bytes": "B9FB",
+      "char": "\u679c"
+    },
+    {
+      "cp": 39321,
+      "bytes": "CFE3",
+      "char": "\u9999"
+    },
+    {
+      "cp": 34121,
+      "bytes": "BDB6",
+      "char": "\u8549"
+    },
+    {
+      "cp": 40092,
+      "bytes": "CFCA",
+      "char": "\u9c9c"
+    },
+    {
+      "cp": 29275,
+      "bytes": "C5A3",
+      "char": "\u725b"
+    },
+    {
+      "cp": 22902,
+      "bytes": "C4CC",
+      "char": "\u5976"
+    },
+    {
+      "cp": 30418,
+      "bytes": "BAD0",
+      "char": "\u76d2"
+    },
+    {
+      "cp": 20837,
+      "bytes": "C8EB",
+      "char": "\u5165"
+    },
+    {
+      "cp": 24211,
+      "bytes": "BFE2",
+      "char": "\u5e93"
+    },
+    {
+      "cp": 20986,
+      "bytes": "B3F6",
+      "char": "\u51fa"
+    },
+    {
+      "cp": 35843,
+      "bytes": "B5F7",
+      "char": "\u8c03"
+    },
+    {
+      "cp": 25320,
+      "bytes": "B2A6",
+      "char": "\u62e8"
+    },
+    {
+      "cp": 37319,
+      "bytes": "B2C9",
+      "char": "\u91c7"
+    },
+    {
+      "cp": 36141,
+      "bytes": "B9BA",
+      "char": "\u8d2d"
+    },
+    {
+      "cp": 36864,
+      "bytes": "CDCB",
+      "char": "\u9000"
+    },
+    {
+      "cp": 25442,
+      "bytes": "BBBB",
+      "char": "\u6362"
+    },
+    {
+      "cp": 27454,
+      "bytes": "BFEE",
+      "char": "\u6b3e"
+    },
+    {
+      "cp": 20132,
+      "bytes": "BDBB",
+      "char": "\u4ea4"
+    },
+    {
+      "cp": 22791,
+      "bytes": "B1B8",
+      "char": "\u5907"
+    },
+    {
+      "cp": 27880,
+      "bytes": "D7A2",
+      "char": "\u6ce8"
+    },
+    {
+      "cp": 32418,
+      "bytes": "BAEC",
+      "char": "\u7ea2"
+    },
+    {
+      "cp": 21253,
+      "bytes": "B0FC",
+      "char": "\u5305"
+    },
+    {
+      "cp": 24635,
+      "bytes": "D7DC",
+      "char": "\u603b"
+    },
+    {
+      "cp": 24066,
+      "bytes": "CAD0",
+      "char": "\u5e02"
+    },
+    {
+      "cp": 22330,
+      "bytes": "B3A1",
+      "char": "\u573a"
+    },
+    {
+      "cp": 32463,
+      "bytes": "BEAD",
+      "char": "\u7ecf"
+    },
+    {
+      "cp": 33829,
+      "bytes": "D3AA",
+      "char": "\u8425"
+    },
+    {
+      "cp": 32593,
+      "bytes": "CDF8",
+      "char": "\u7f51"
+    },
+    {
+      "cp": 24215,
+      "bytes": "B5EA",
+      "char": "\u5e97"
+    },
+    {
+      "cp": 20179,
+      "bytes": "B2D6",
+      "char": "\u4ed3"
+    },
+    {
+      "cp": 28857,
+      "bytes": "B5E3",
+      "char": "\u70b9"
+    },
+    {
+      "cp": 35013,
+      "bytes": "D7B0",
+      "char": "\u88c5"
+    },
+    {
+      "cp": 31665,
+      "bytes": "CFE4",
+      "char": "\u7bb1"
+    },
+    {
+      "cp": 37325,
+      "bytes": "D6D8",
+      "char": "\u91cd"
+    },
+    {
+      "cp": 39033,
+      "bytes": "CFEE",
+      "char": "\u9879"
+    },
+    {
+      "cp": 30446,
+      "bytes": "C4BF",
+      "char": "\u76ee"
+    },
+    {
+      "cp": 36164,
+      "bytes": "D7CA",
+      "char": "\u8d44"
+    },
+    {
+      "cp": 28304,
+      "bytes": "D4B4",
+      "char": "\u6e90"
+    },
+    {
+      "cp": 25171,
+      "bytes": "B4F2",
+      "char": "\u6253"
+    },
+    {
+      "cp": 21360,
+      "bytes": "D3A1",
+      "char": "\u5370"
+    },
+    {
+      "cp": 26426,
+      "bytes": "BBFA",
+      "char": "\u673a"
+    },
+    {
+      "cp": 20415,
+      "bytes": "B1E3",
+      "char": "\u4fbf"
+    },
+    {
+      "cp": 25658,
+      "bytes": "D0AF",
+      "char": "\u643a"
+    },
+    {
+      "cp": 28909,
+      "bytes": "C8C8",
+      "char": "\u70ed"
+    },
+    {
+      "cp": 25935,
+      "bytes": "C3F4",
+      "char": "\u654f"
+    },
+    {
+      "cp": 32440,
+      "bytes": "D6BD",
+      "char": "\u7eb8"
+    },
+    {
+      "cp": 20363,
+      "bytes": "C0FD",
+      "char": "\u4f8b"
+    },
+    {
+      "cp": 22914,
+      "bytes": "C8E7",
+      "char": "\u5982"
+    },
+    {
+      "cp": 19979,
+      "bytes": "CFC2",
+      "char": "\u4e0b"
+    },
+    {
+      "cp": 20013,
+      "bytes": "D6D0",
+      "char": "\u4e2d"
+    },
+    {
+      "cp": 23485,
+      "bytes": "BFED",
+      "char": "\u5bbd"
+    },
+    {
+      "cp": 39640,
+      "bytes": "B8DF",
+      "char": "\u9ad8"
+    },
+    {
+      "cp": 29616,
+      "bytes": "CFD6",
+      "char": "\u73b0"
+    },
+    {
+      "cp": 24050,
+      "bytes": "D2D1",
+      "char": "\u5df2"
+    },
+    {
+      "cp": 33258,
+      "bytes": "D7D4",
+      "char": "\u81ea"
+    },
+    {
+      "cp": 21160,
+      "bytes": "B6AF",
+      "char": "\u52a8"
+    },
+    {
+      "cp": 19981,
+      "bytes": "B2BB",
+      "char": "\u4e0d"
+    },
+    {
+      "cp": 33021,
+      "bytes": "C4DC",
+      "char": "\u80fd"
+    },
+    {
+      "cp": 35831,
+      "bytes": "C7EB",
+      "char": "\u8bf7"
+    },
+    {
+      "cp": 30830,
+      "bytes": "C8B7",
+      "char": "\u786e"
+    },
+    {
+      "cp": 35748,
+      "bytes": "C8CF",
+      "char": "\u8ba4"
+    },
+    {
+      "cp": 22833,
+      "bytes": "CAA7",
+      "char": "\u5931"
+    },
+    {
+      "cp": 36133,
+      "bytes": "B0DC",
+      "char": "\u8d25"
+    },
+    {
+      "cp": 25104,
+      "bytes": "B3C9",
+      "char": "\u6210"
+    },
+    {
+      "cp": 21151,
+      "bytes": "B9A6",
+      "char": "\u529f"
+    },
+    {
+      "cp": 32487,
+      "bytes": "BCCC",
+      "char": "\u7ee7"
+    },
+    {
+      "cp": 32493,
+      "bytes": "D0F8",
+      "char": "\u7eed"
+    },
+    {
+      "cp": 23436,
+      "bytes": "CDEA",
+      "char": "\u5b8c"
+    },
+    {
+      "cp": 38388,
+      "bytes": "BCE4",
+      "char": "\u95f4"
+    },
+    {
+      "cp": 22336,
+      "bytes": "D6B7",
+      "char": "\u5740"
+    },
+    {
+      "cp": 30005,
+      "bytes": "B5E7",
+      "char": "\u7535"
+    },
+    {
+      "cp": 35805,
+      "bytes": "BBB0",
+      "char": "\u8bdd"
+    },
+    {
+      "cp": 20225,
+      "bytes": "C6F3",
+      "char": "\u4f01"
+    },
+    {
+      "cp": 22777,
+      "bytes": "D2BC",
+      "char": "\u58f9"
+    },
+    {
+      "cp": 36144,
+      "bytes": "B7A1",
+      "char": "\u8d30"
+    },
+    {
+      "cp": 21441,
+      "bytes": "C8FE",
+      "char": "\u53c1"
+    },
+    {
+      "cp": 32902,
+      "bytes": "CBC1",
+      "char": "\u8086"
+    },
+    {
+      "cp": 20237,
+      "bytes": "CEE9",
+      "char": "\u4f0d"
+    },
+    {
+      "cp": 38470,
+      "bytes": "C2BD",
+      "char": "\u9646"
+    },
+    {
+      "cp": 26578,
+      "bytes": "C6E2",
+      "char": "\u67d2"
+    },
+    {
+      "cp": 25420,
+      "bytes": "B0C6",
+      "char": "\u634c"
+    },
+    {
+      "cp": 29590,
+      "bytes": "BEC1",
+      "char": "\u7396"
+    },
+    {
+      "cp": 12290,
+      "bytes": "A1A3",
+      "char": "\u3002"
+    },
+    {
+      "cp": 12289,
+      "bytes": "A1A2",
+      "char": "\u3001"
+    },
+    {
+      "cp": 65306,
+      "bytes": "A3BA",
+      "char": "\uff1a"
+    },
+    {
+      "cp": 65307,
+      "bytes": "A3BB",
+      "char": "\uff1b"
+    },
+    {
+      "cp": 65311,
+      "bytes": "A3BF",
+      "char": "\uff1f"
+    },
+    {
+      "cp": 65288,
+      "bytes": "A3A8",
+      "char": "\uff08"
+    },
+    {
+      "cp": 65289,
+      "bytes": "A3A9",
+      "char": "\uff09"
+    },
+    {
+      "cp": 12298,
+      "bytes": "A1B6",
+      "char": "\u300a"
+    },
+    {
+      "cp": 12299,
+      "bytes": "A1B7",
+      "char": "\u300b"
+    },
+    {
+      "cp": 12304,
+      "bytes": "A1BE",
+      "char": "\u3010"
+    },
+    {
+      "cp": 12305,
+      "bytes": "A1BF",
+      "char": "\u3011"
+    },
+    {
+      "cp": 8212,
+      "bytes": "A1AA",
+      "char": "\u2014"
+    },
+    {
+      "cp": 8230,
+      "bytes": "A1AD",
+      "char": "\u2026"
+    },
+    {
+      "cp": 183,
+      "bytes": "A1A4",
+      "char": "\u00b7"
+    },
+    {
+      "cp": 12300,
+      "bytes": "A1B8",
+      "char": "\u300c"
+    },
+    {
+      "cp": 12301,
+      "bytes": "A1B9",
+      "char": "\u300d"
+    },
+    {
+      "cp": 12302,
+      "bytes": "A1BA",
+      "char": "\u300e"
+    },
+    {
+      "cp": 12303,
+      "bytes": "A1BB",
+      "char": "\u300f"
+    },
+    {
+      "cp": 12354,
+      "bytes": "A4A2",
+      "char": "\u3042"
+    },
+    {
+      "cp": 12356,
+      "bytes": "A4A4",
+      "char": "\u3044"
+    },
+    {
+      "cp": 12358,
+      "bytes": "A4A6",
+      "char": "\u3046"
+    },
+    {
+      "cp": 12450,
+      "bytes": "A5A2",
+      "char": "\u30a2"
+    },
+    {
+      "cp": 12452,
+      "bytes": "A5A4",
+      "char": "\u30a4"
+    },
+    {
+      "cp": 12454,
+      "bytes": "A5A6",
+      "char": "\u30a6"
+    },
+    {
+      "cp": 27431,
+      "bytes": "C5B7",
+      "char": "\u6b27"
+    },
+    {
+      "cp": 32645,
+      "bytes": "C15F",
+      "char": "\u7f85"
+    },
+    {
+      "cp": 176,
+      "bytes": "A1E3",
+      "char": "\u00b0"
+    },
+    {
+      "cp": 177,
+      "bytes": "A1C0",
+      "char": "\u00b1"
+    },
+    {
+      "cp": 215,
+      "bytes": "A1C1",
+      "char": "\u00d7"
+    },
+    {
+      "cp": 247,
+      "bytes": "A1C2",
+      "char": "\u00f7"
+    },
+    {
+      "cp": 65313,
+      "bytes": "A3C1",
+      "char": "\uff21"
+    },
+    {
+      "cp": 65314,
+      "bytes": "A3C2",
+      "char": "\uff22"
+    },
+    {
+      "cp": 65319,
+      "bytes": "A3C7",
+      "char": "\uff27"
+    },
+    {
+      "cp": 65325,
+      "bytes": "A3CD",
+      "char": "\uff2d"
+    },
+    {
+      "cp": 65326,
+      "bytes": "A3CE",
+      "char": "\uff2e"
+    },
+    {
+      "cp": 65345,
+      "bytes": "A3E1",
+      "char": "\uff41"
+    },
+    {
+      "cp": 65346,
+      "bytes": "A3E2",
+      "char": "\uff42"
+    },
+    {
+      "cp": 65351,
+      "bytes": "A3E7",
+      "char": "\uff47"
+    },
+    {
+      "cp": 65357,
+      "bytes": "A3ED",
+      "char": "\uff4d"
+    },
+    {
+      "cp": 65358,
+      "bytes": "A3EE",
+      "char": "\uff4e"
+    },
+    {
+      "cp": 65296,
+      "bytes": "A3B0",
+      "char": "\uff10"
+    },
+    {
+      "cp": 65297,
+      "bytes": "A3B1",
+      "char": "\uff11"
+    },
+    {
+      "cp": 65298,
+      "bytes": "A3B2",
+      "char": "\uff12"
+    },
+    {
+      "cp": 65305,
+      "bytes": "A3B9",
+      "char": "\uff19"
+    },
+    {
+      "cp": 8364,
+      "bytes": "A2E3",
+      "char": "\u20ac"
+    }
+  ],
+  "unmappable": [
+    {
+      "cp": 128,
+      "char": "\u0080",
+      "note": "C1 control byte, outside GB18030 two-byte region"
+    },
+    {
+      "cp": 233,
+      "char": "\u00e9",
+      "note": "\u00e9 \u2014 Latin-1 letter, four-byte gb18030 only"
+    },
+    {
+      "cp": 9728,
+      "char": "\u2600",
+      "note": "\u2600 \u2014 miscellaneous symbol, four-byte only"
+    },
+    {
+      "cp": 11904,
+      "char": "\u2e80",
+      "note": "CJK Radicals Supplement block start, four-byte only"
+    },
+    {
+      "cp": 13312,
+      "char": "\u3400",
+      "note": "CJK Extension A start, four-byte only"
+    },
+    {
+      "cp": 44032,
+      "char": "\uac00",
+      "note": "\uac00 \u2014 Hangul syllable, four-byte only"
+    },
+    {
+      "cp": 55216,
+      "char": "\ud7b0",
+      "note": "Hangul Jungseong block, four-byte only"
+    },
+    {
+      "cp": 65533,
+      "char": "\ufffd",
+      "note": "U+FFFD itself encodes as 8431A437 (four bytes)"
+    },
+    {
+      "cp": 127462,
+      "char": "\ud83c\udde6",
+      "note": "regional indicator, outside gb18030 two-byte region"
+    },
+    {
+      "cp": 128512,
+      "char": "\ud83d\ude00",
+      "note": "emoji, astral plane"
+    },
+    {
+      "cp": 131072,
+      "char": "\ud840\udc00",
+      "note": "CJK Extension B, astral plane"
+    }
+  ],
+  "invalidDecode": [
+    {
+      "bytes": "81",
+      "expected": "\ufffd",
+      "note": "truncated trailing lead byte"
+    },
+    {
+      "bytes": "8130",
+      "expected": "\ufffd",
+      "note": "trail byte below 0x40"
+    },
+    {
+      "bytes": "817F",
+      "expected": "\ufffd",
+      "note": "trail byte 0x7F is not in the two-byte region"
+    },
+    {
+      "bytes": "8040",
+      "expected": "\ufffd",
+      "note": "lead byte 0x80 is not in the two-byte region"
+    },
+    {
+      "bytes": "FF41",
+      "expected": "\ufffd",
+      "note": "lead byte 0xFF is not in the two-byte region"
+    },
+    {
+      "bytes": "41817F42",
+      "expected": "A\ufffdB",
+      "note": "ASCII passthrough around an invalid pair"
+    },
+    {
+      "bytes": "411B4042",
+      "expected": "A\u001b@B",
+      "note": "pure ASCII control bytes pass through unchanged"
+    }
+  ]
+}
