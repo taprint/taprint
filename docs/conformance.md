@@ -80,3 +80,23 @@ CPCL CRLF (C# builder emits CRLF like Java), TSPL barcode symbology
 token, Dart line-endings LF, Dart unmapped `'question'` compatibility
 tier, and the Dart GB18030 full-table channel (four-byte area vs Java
 GBK two-byte area for characters beyond GBK).
+
+## Preview (M3a) — `taprint-preview` (TS)
+
+The bitmap preview engine renders label (absolute layout) and receipt
+(24-dot flow grid) presentations to monochrome PNG at true dpi
+(`dot = half-up(mm × dpi / 25.4)`, ADR-0009; 203/300). Preview conformance
+cases P1–P10 are pinned in
+`packages/taprint-preview/tests/conformance.spec.ts` (paper-size mapping at
+both dpi, absolute x/y placement, align three-state, line/box/barcode/QR
+bbox shapes, overflow truncation).
+
+**Alignment status (honest registration):** the per-case geometry mapping
+against the C# `IrWpfPreviewRenderer` (BaseLineDots=24, BaseCharDots=12,
+align/truncate/rule semantics, column-weight tables with last-column
+right-align) is a **follow-up task** — the TS side mirrors those semantics
+by construction, but no C#↔TS rendered-pixel sweep has been run yet. Known
+deliberate deltas to reconcile then: preview uses true-dpi dot conversion
+(203/25.4, not the encoder's 8 dot/mm — conformance T7), and previews
+rasterize real glyph outlines while the C# preview draws character-cell
+blocks. Registration of the P-cases here does not assert C# parity.

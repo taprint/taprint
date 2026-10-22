@@ -19,7 +19,8 @@ trust.
 | Kernel: parse / validate / migrate / canonicalize | `packages/taprint-{ts,cs,dart,java}` | four languages, 600+ tests green |
 | Protocol encoders: ESC/POS + TSPL + CPCL | same packages | four languages (ZPL gated to v0.2 — ADR-0001) |
 | PDF rendering (A4 documents) | `packages/taprint-java` | Java only in v0.1 (OpenPDF, MPL-2.0 route) |
-| MCP server: `validate_template` / `compile` / `list_examples` | `apps/mcp` | zero hardware, zero native deps (ADR-0008) |
+| MCP server: `validate_template` / `compile` / `list_examples` / `render_preview` | `apps/mcp` | zero hardware, zero native deps (ADR-0008) |
+| Bitmap preview engine (label/receipt → monochrome PNG, 203/300 dpi) | `packages/taprint-preview` | pure JS (opentype.js / bwip-js / pngjs), M3a |
 | Windows print channels (spooler RAW / TCP / serial, queue setup, USB probe) | `channels/windows-spooler` | reference implementation |
 | Flutter transports (BLE / SPP / TCP-9100) | `channels/flutter-transport` | reference implementation |
 | GB18030 full mapping table + oracle | `packages/taprint-dart` | 23,940 code points, generator in `tools/` |

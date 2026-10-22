@@ -31,10 +31,10 @@ const payload = (result: unknown): unknown => {
 };
 
 describe('MCP 协议端到端（InMemoryTransport）', () => {
-  it('listTools 返回三工具且 schema 可序列化', async () => {
+  it('listTools 返回四工具且 schema 可序列化', async () => {
     const client = await connectClient();
     const { tools } = await client.listTools();
-    expect(tools.map((t) => t.name).sort()).toEqual(['compile', 'list_examples', 'validate_template']);
+    expect(tools.map((t) => t.name).sort()).toEqual(['compile', 'list_examples', 'render_preview', 'validate_template']);
     for (const t of tools) expect(t.description!.length).toBeGreaterThan(0);
   });
 
