@@ -22,6 +22,29 @@ is free".
 4. `publishConfig.access` = public where the format requires it (npm).
 5. No legacy registry URLs anywhere in package metadata.
 
+## Execution order (maintainer runbook)
+
+1. **GitHub org + repo first** (this ends the squatting window for the
+   repo name): create the org on the web, create an empty repo
+   `taprint/taprint` (no README/license auto-init — the local repo is the
+   source), then:
+
+   ```bash
+   git remote add origin git@github.com:taprint/taprint.git
+   git push -u origin main
+   ```
+
+2. **npm org** with 2FA enabled on the publishing account before v0.1.0.
+3. **Maven Central Portal** namespace `io.github.taprint`, verified
+   through the GitHub org (create the public verification repo the portal
+   shows, click Verify, delete the verification repo afterwards). A GPG
+   signing key is only needed at first publish.
+4. **NuGet**: create the API key early (glob pattern `Taprint*`, push
+   scope) so v0.1.0 publishing is one command.
+5. **pub.dev**: sign in once to confirm the Google account; the package
+   name is claimed by first publish at v0.1.0 (verified publisher is
+   deferred until a domain exists).
+
 ## Commit identity
 
 Public commits use the maintainer's GitHub noreply email so commits map
