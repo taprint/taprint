@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Pattern, Tuple
 
-SCAN_VERSION = "1.0.2"
+SCAN_VERSION = "1.0.3"
 
 SKIP_DIRS = {
     ".git", "node_modules", "dist", "build", "bin", "obj", ".dart_tool",
@@ -80,6 +80,11 @@ def _iter_files(root: Path):
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
         for name in sorted(filenames):
+            # `.git` is repository metadata: a directory in plain clones
+            # (already dropped via SKIP_DIRS) and a gitdir-pointer FILE in
+            # linked worktrees. It is never tracked content — skip both.
+            if name == '.git':
+                continue
             yield Path(dirpath) / name
 
 
