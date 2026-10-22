@@ -37,6 +37,9 @@
          transitively requires System.Text.Json. -->
     <PackageReference Include="JsonSchema.Net" Version="9.4.0" />
     <PackageReference Include="System.Text.Json" Version="10.0.5" />
+    <!-- Engine GB18030 text encoding (CodePagesEncodingProvider);
+         registered idempotently by the engine constructors. -->
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
   </ItemGroup>
 
 </Project>
