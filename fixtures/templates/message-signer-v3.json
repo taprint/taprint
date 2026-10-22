@@ -1,0 +1,14 @@
+{
+  "sessionToken": "designer-session-token-fixture",
+  "message": {
+    "type": "saveResult",
+    "success": true,
+    "version": 3,
+    "templateId": null,
+    "readonly": false,
+    "previewUrl": null,
+    "errorMessage": null,
+    "timestamp": 1710000000000,
+    "nonce": "0123456789abcdef0123456789abcdef"
+  }
+}

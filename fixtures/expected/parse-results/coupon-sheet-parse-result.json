@@ -1,0 +1,6 @@
+{
+  "hash": "sha256:bfa3dd578ec67c3b89792a410b835c7f06b729b37622f240cff79449228ac89e",
+  "fieldPaths": ["couponNo", "expireDate", "faceValue", "logoUrl"],
+  "expressionCount": 5,
+  "valid": true
+}

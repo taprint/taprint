@@ -1,0 +1,9 @@
+{
+  "sessionToken": "another-token-✓",
+  "message": {
+    "type": "preview",
+    "deviceClass": "receipt",
+    "timestamp": 1710000000000,
+    "nonce": "fedcba9876543210fedcba9876543210"
+  }
+}

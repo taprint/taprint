@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0",
+  "id": "tpl_negative_v1",
+  "code": "NEGATIVE_CASE",
+  "name": "负例",
+  "presentations": {
+    "label": {
+      "size": {
+        "width": "40mm",
+        "height": "30mm"
+      },
+      "body": [
+        {
+          "type": "text",
+          "content": "x"
+        }
+      ]
+    }
+  }
+}

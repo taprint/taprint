@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "1.0",
+  "id": "tpl_stock_out_a4_v1",
+  "code": "STOCK_OUT",
+  "name": "出库单-A4-标准",
+  "category": "inventory",
+  "description": "出库单模板（doc 呈现；库存域）",
+  "locales": ["zh-CN"],
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "billNo": "string",
+        "billDate": "date",
+        "targetBillNo": "string",
+        "warehouse": { "name": "string" },
+        "store": { "name": "string" },
+        "operator": "string",
+        "receiver": "string"
+      }
+    },
+    {
+      "name": "items",
+      "type": "detail",
+      "schema": {
+        "sku": "string",
+        "name": "string",
+        "spec": "string",
+        "batchNo": "string",
+        "qty": "number",
+        "unit": "string"
+      }
+    }
+  ],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "margin": { "top": "15mm", "right": "15mm", "bottom": "15mm", "left": "15mm" },
+        "orientation": "portrait"
+      },
+      "header": [
+        {
+          "type": "text",
+          "content": "{{store.name}} 出库单",
+          "style": { "fontSize": 18, "bold": true },
+          "align": "center"
+        }
+      ],
+      "body": [
+        {
+          "type": "kvtable",
+          "columns": 3,
+          "rows": [
+            [
+              ["出库单号", "{{billNo}}"],
+              ["去向单号", "{{targetBillNo}}"],
+              ["日期", "{{billDate | date:'YYYY-MM-DD'}}"]
+            ],
+            [
+              ["仓库", "{{warehouse.name}}"],
+              ["领用人", "{{receiver}}"],
+              ["经办人", "{{operator}}"]
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "source": "items",
+          "columns": [
+            { "header": "SKU", "field": "sku", "width": "20%" },
+            { "header": "商品名称", "field": "name", "width": "30%" },
+            { "header": "规格", "field": "spec", "width": "16%" },
+            { "header": "批次", "field": "batchNo", "width": "12%" },
+            { "header": "数量", "field": "qty", "align": "right", "width": "12%" },
+            { "header": "单位", "field": "unit", "align": "center", "width": "10%" }
+          ]
+        }
+      ],
+      "footer": [
+        {
+          "type": "text",
+          "content": "制单人：____________    领用人签字：____________",
+          "margin": { "top": "18mm" }
+        }
+      ]
+    }
+  },
+  "parameters": [
+    {
+      "name": "copies",
+      "type": "integer",
+      "default": 1,
+      "min": 1,
+      "max": 99,
+      "description": "打印份数"
+    }
+  ]
+}

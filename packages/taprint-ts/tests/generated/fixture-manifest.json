@@ -1,0 +1,258 @@
+{
+  "schema": "taprint/fixture-manifest@1",
+  "dslSchemaVersions": ["1.0", "1.1", "2.0"],
+  "bizFixtures": [
+    {
+      "file": "coupon-sheet-v2.0.json",
+      "relPath": "tests/fixtures/coupon-sheet-v2.0.json",
+      "id": "coupon_sheet_v2",
+      "code": "COUPON_SHEET",
+      "name": "代金券联页-一页多单范例",
+      "schemaVersion": "2.0",
+      "presentations": ["doc"],
+      "sha256": "bfa3dd578ec67c3b89792a410b835c7f06b729b37622f240cff79449228ac89e"
+    },
+    {
+      "file": "delivery-note-v1.0.json",
+      "relPath": "tests/fixtures/delivery-note-v1.0.json",
+      "id": "tpl_delivery_note_a4_v1",
+      "code": "DELIVERY_NOTE",
+      "name": "送货单-A4-标准",
+      "schemaVersion": "1.0",
+      "presentations": ["doc"],
+      "sha256": "7962a6e9085d3972f3c4ff56361e14a3f6fece09b082e4aa8c5e71f63119a4cf"
+    },
+    {
+      "file": "esc-pos-receipt-v1.0.json",
+      "relPath": "tests/fixtures/esc-pos-receipt-v1.0.json",
+      "id": "tpl_esc_pos_receipt_80_v1",
+      "code": "SALES_RECEIPT",
+      "name": "POS 销售小票-80mm",
+      "schemaVersion": "1.0",
+      "presentations": ["receipt"],
+      "sha256": "308f5382df5996166aa3ab9ba5d4867b58569d3369b1094aef3ee98cf09ec4b1"
+    },
+    {
+      "file": "goods-barcode-label-v1.0.json",
+      "relPath": "tests/fixtures/goods-barcode-label-v1.0.json",
+      "id": "tpl_goods_barcode_label_v1",
+      "code": "GOODS_BARCODE_LABEL",
+      "name": "商品条码标签-60x40",
+      "schemaVersion": "1.0",
+      "presentations": ["label", "receipt"],
+      "sha256": "b00f0fb81215497f804da6b182da6f9673e0da10b68aea39cf64af0c32291ca5"
+    },
+    {
+      "file": "goods-label-v1.1.json",
+      "relPath": "tests/fixtures/goods-label-v1.1.json",
+      "id": "tpl_goods_label_4030",
+      "code": "GOODS_LABEL_4030",
+      "name": "商品价签 40x30（GOODS_LABEL 七键）",
+      "schemaVersion": "1.1",
+      "presentations": ["label"],
+      "sha256": "4cc9d641c3f00b0f0f0169dd58d2537898a5da5c23cdd9d450ccca45753ae7b0"
+    },
+    {
+      "file": "inventory-report-v2.0.json",
+      "relPath": "tests/fixtures/inventory-report-v2.0.json",
+      "id": "inventory_report_v2",
+      "code": "INVENTORY_REPORT",
+      "name": "盘点汇总表-中国式报表范例",
+      "schemaVersion": "2.0",
+      "presentations": ["doc"],
+      "sha256": "129dfb6902f988f7e44918e18e10e651a2d730e1ce820f6848ef76154b31f445"
+    },
+    {
+      "file": "nup-extremes-v2.0.json",
+      "relPath": "tests/fixtures/nup-extremes-v2.0.json",
+      "id": "nup_extremes_v2",
+      "code": "NUP_EXTREMES",
+      "name": "一页多单极值-中国式报表范例",
+      "schemaVersion": "2.0",
+      "presentations": ["doc"],
+      "sha256": "65b7af7a736c4427490f0bf9f2c8fc2b9425fd52e5d83a5d4e80f385e0da21f1"
+    },
+    {
+      "file": "payment-receipt-v1.0.json",
+      "relPath": "tests/fixtures/payment-receipt-v1.0.json",
+      "id": "tpl_payment_receipt_a4_v1",
+      "code": "RECEIPT_VOUCHER",
+      "name": "收款单-A4-标准",
+      "schemaVersion": "1.0",
+      "presentations": ["doc"],
+      "sha256": "1daad24e356e53df01bdbf5407409825d8e70e082a493acbb80a7d2e60a4ca9b"
+    },
+    {
+      "file": "payslip-v1.0.json",
+      "relPath": "tests/fixtures/payslip-v1.0.json",
+      "id": "tpl_payslip_a5_v1",
+      "code": "PAYSLIP",
+      "name": "工资条-A5-密薪",
+      "schemaVersion": "1.0",
+      "presentations": ["doc"],
+      "sha256": "9985c47854f16fb4cb079be247a9e9beee948a44e5b35acb80dc20d329a2cfd5"
+    },
+    {
+      "file": "purchase-order-v1.0.json",
+      "relPath": "tests/fixtures/purchase-order-v1.0.json",
+      "id": "tpl_purchase_order_a4_v1",
+      "code": "PURCHASE_ORDER",
+      "name": "采购订单-A4-标准",
+      "schemaVersion": "1.0",
+      "presentations": ["doc"],
+      "sha256": "b785b0a3e631fe4bbd8cc1304de4cc9c29ff5e7416912ea924e3af819db4d46a"
+    },
+    {
+      "file": "sales-note-v1.0.json",
+      "relPath": "tests/fixtures/sales-note-v1.0.json",
+      "id": "tpl_sales_note_a4_v1",
+      "code": "SALES_NOTE",
+      "name": "销售单-A4-标准",
+      "schemaVersion": "1.0",
+      "presentations": ["doc", "receipt"],
+      "sha256": "e07b2ddac7af5c1faed9eaa5e1fbb87c305b2d4a54a446a2246bb203f7c95822"
+    },
+    {
+      "file": "sales-return-note-v1.0.json",
+      "relPath": "tests/fixtures/sales-return-note-v1.0.json",
+      "id": "tpl_sales_return_a4_v1",
+      "code": "SALES_RETURN",
+      "name": "销售退货单-A4-标准",
+      "schemaVersion": "1.0",
+      "presentations": ["doc"],
+      "sha256": "dddc5ae578ccefbff67fae554a217d5a9fc42e996a4fa1a85064b0f8a392a55d"
+    },
+    {
+      "file": "shelf-label-v1.0.json",
+      "relPath": "tests/fixtures/shelf-label-v1.0.json",
+      "id": "tpl_shelf_label_v1",
+      "code": "SHELF_LABEL",
+      "name": "货架标签-70x30",
+      "schemaVersion": "1.0",
+      "presentations": ["label"],
+      "sha256": "494d90faf7e712d07c4350e1e753eefc5ee12257c093f585039a33b43044d466"
+    },
+    {
+      "file": "static-rows-boundary-v2.0.json",
+      "relPath": "tests/fixtures/static-rows-boundary-v2.0.json",
+      "id": "static_rows_boundary_v2",
+      "code": "STATIC_ROWS_BOUNDARY",
+      "name": "静态行边界-中国式报表范例",
+      "schemaVersion": "2.0",
+      "presentations": ["doc"],
+      "sha256": "f12eb2f838b103cd5e49f2580ddfe9665ef615aeeda9b585c2c32d18e8ae938c"
+    },
+    {
+      "file": "stock-in-note-v1.0.json",
+      "relPath": "tests/fixtures/stock-in-note-v1.0.json",
+      "id": "tpl_stock_in_a4_v1",
+      "code": "STOCK_IN",
+      "name": "入库单-A4-标准",
+      "schemaVersion": "1.0",
+      "presentations": ["doc"],
+      "sha256": "137b36f8cf30c577e44309713ac0bc32227e6e003cd56b293b8dc3678e56b947"
+    },
+    {
+      "file": "stock-out-note-v1.0.json",
+      "relPath": "tests/fixtures/stock-out-note-v1.0.json",
+      "id": "tpl_stock_out_a4_v1",
+      "code": "STOCK_OUT",
+      "name": "出库单-A4-标准",
+      "schemaVersion": "1.0",
+      "presentations": ["doc"],
+      "sha256": "1c94f935ad024453807fb7e6c076f94de49489c6e89322896c3c824249f47cf5"
+    },
+    {
+      "file": "transfer-note-v1.0.json",
+      "relPath": "tests/fixtures/transfer-note-v1.0.json",
+      "id": "tpl_transfer_note_a4_v1",
+      "code": "TRANSFER_NOTE",
+      "name": "调拨单-A4-标准",
+      "schemaVersion": "1.0",
+      "presentations": ["doc"],
+      "sha256": "1e1491ae90e349349d99914669799d0e2e732cd0a712105f22ff6f6b454d2181"
+    }
+  ],
+  "signerFixtures": [
+    {
+      "file": "message-signer-v1.json",
+      "relPath": "tests/fixtures/message-signer-v1.json",
+      "expectedFile": "message-signer-result.json",
+      "expectedRelPath": "tests/expected-output/message-signer-result.json"
+    },
+    {
+      "file": "message-signer-v2.json",
+      "relPath": "tests/fixtures/message-signer-v2.json",
+      "expectedFile": "message-signer-result-v2.json",
+      "expectedRelPath": "tests/expected-output/message-signer-result-v2.json"
+    },
+    {
+      "file": "message-signer-v3.json",
+      "relPath": "tests/fixtures/message-signer-v3.json",
+      "expectedFile": "message-signer-result-v3.json",
+      "expectedRelPath": "tests/expected-output/message-signer-result-v3.json"
+    },
+    {
+      "file": "message-signer-v4.json",
+      "relPath": "tests/fixtures/message-signer-v4.json",
+      "expectedFile": "message-signer-result-v4.json",
+      "expectedRelPath": "tests/expected-output/message-signer-result-v4.json"
+    },
+    {
+      "file": "message-signer-v5.json",
+      "relPath": "tests/fixtures/message-signer-v5.json",
+      "expectedFile": "message-signer-result-v5.json",
+      "expectedRelPath": "tests/expected-output/message-signer-result-v5.json"
+    }
+  ],
+  "parserFixtures": [
+    {
+      "file": "sales-note-v1.0.json",
+      "relPath": "tests/fixtures/sales-note-v1.0.json",
+      "expectedFile": "sales-note-parse-result.json",
+      "expectedRelPath": "tests/expected-output/sales-note-parse-result.json"
+    },
+    {
+      "file": "inventory-report-v2.0.json",
+      "relPath": "tests/fixtures/inventory-report-v2.0.json",
+      "expectedFile": "inventory-report-parse-result.json",
+      "expectedRelPath": "tests/expected-output/inventory-report-parse-result.json"
+    },
+    {
+      "file": "coupon-sheet-v2.0.json",
+      "relPath": "tests/fixtures/coupon-sheet-v2.0.json",
+      "expectedFile": "coupon-sheet-parse-result.json",
+      "expectedRelPath": "tests/expected-output/coupon-sheet-parse-result.json"
+    },
+    {
+      "file": "static-rows-boundary-v2.0.json",
+      "relPath": "tests/fixtures/static-rows-boundary-v2.0.json",
+      "expectedFile": "static-rows-boundary-parse-result.json",
+      "expectedRelPath": "tests/expected-output/static-rows-boundary-parse-result.json"
+    },
+    {
+      "file": "nup-extremes-v2.0.json",
+      "relPath": "tests/fixtures/nup-extremes-v2.0.json",
+      "expectedFile": "nup-extremes-parse-result.json",
+      "expectedRelPath": "tests/expected-output/nup-extremes-parse-result.json"
+    }
+  ],
+  "migrationFixtures": [
+    {
+      "file": "migration-legacy-v09.json",
+      "relPath": "tests/fixtures/migration-legacy-v09.json",
+      "expectedFile": "migration-legacy-v09-result.json",
+      "expectedRelPath": "tests/expected-output/migration-legacy-v09-result.json",
+      "fromVersion": "0.9",
+      "toVersion": "1.0"
+    },
+    {
+      "file": "migration-v10.json",
+      "relPath": "tests/fixtures/migration-v10.json",
+      "expectedFile": "migration-v10-result.json",
+      "expectedRelPath": "tests/expected-output/migration-v10-result.json",
+      "fromVersion": "1.0",
+      "toVersion": "2.0"
+    }
+  ]
+}

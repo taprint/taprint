@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "2.0",
+  "id": "nup_extremes_v2",
+  "code": "NUP_EXTREMES",
+  "name": "一页多单极值-中国式报表范例",
+  "category": "门店域",
+  "description": "DSL 2.0 边界 fixture（AI-3 质量门禁扩展）：page.nup 4×4 极值（schema 上限）、图片水印（src 表达式）、loop/conditional 容器并存。",
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "storeName": "string",
+        "storeLogo": "string",
+        "checker": "string"
+      }
+    },
+    {
+      "name": "items",
+      "type": "detail",
+      "schema": {
+        "sku": "string",
+        "name": "string",
+        "qty": "number"
+      }
+    }
+  ],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "nup": {
+          "cols": 4,
+          "rows": 4,
+          "gap": "2mm"
+        },
+        "watermark": {
+          "type": "image",
+          "src": "{{storeLogo}}",
+          "opacity": 0.5
+        }
+      },
+      "header": [
+        {
+          "type": "text",
+          "content": "{{storeName}} 一页多单极值样例",
+          "align": "center"
+        }
+      ],
+      "body": [
+        {
+          "type": "loop",
+          "each": "items",
+          "body": [
+            {
+              "type": "text",
+              "content": "{{sku}} {{name}} x{{qty}}"
+            }
+          ]
+        },
+        {
+          "type": "conditional",
+          "when": "{{items | count}} > 0",
+          "body": [
+            {
+              "type": "text",
+              "content": "共 {{items | count}} 项"
+            }
+          ],
+          "elseBody": [
+            {
+              "type": "text",
+              "content": "无数据"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "source": "items",
+          "headerRows": [[{ "text": "编码" }, { "text": "名称" }, { "text": "数量" }]],
+          "columns": [
+            { "header": "编码", "field": "sku", "width": "30%" },
+            { "header": "名称", "field": "name", "width": "40%" },
+            { "header": "数量", "field": "qty", "width": "30%", "align": "right" }
+          ]
+        }
+      ],
+      "footer": [
+        {
+          "type": "text",
+          "content": "审核：{{checker}}"
+        }
+      ]
+    }
+  }
+}

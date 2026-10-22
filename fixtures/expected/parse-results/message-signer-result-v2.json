@@ -1,0 +1,5 @@
+{
+  "canonical": "{\"dsl\":{\"name\":\"销售单-A4\",\"note\":\"a<b&c>\"},\"nonce\":\"0123456789abcdef0123456789abcdef\",\"timestamp\":1710000000000,\"type\":\"save\"}",
+  "keyBase64": "vWlxxqfb5kbC7gNcKGMH0OuVrAgk5zAvY4VEWz7mQIU=",
+  "signature": "jeuFvd60CXnU17OOT16y8YUnIj4RfjgdhFRtP+isjuk="
+}

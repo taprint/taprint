@@ -1,0 +1,5 @@
+{
+  "canonical": "{\"errorMessage\":null,\"nonce\":\"0123456789abcdef0123456789abcdef\",\"previewUrl\":null,\"readonly\":false,\"success\":true,\"templateId\":null,\"timestamp\":1710000000000,\"type\":\"saveResult\",\"version\":3}",
+  "keyBase64": "vWlxxqfb5kbC7gNcKGMH0OuVrAgk5zAvY4VEWz7mQIU=",
+  "signature": "LhAilTkPYUkDGwEgFQ+twepcxjHRheerWOFQBfegNJQ="
+}

@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "1.0",
+  "id": "tpl_delivery_note_a4_v1",
+  "code": "DELIVERY_NOTE",
+  "name": "送货单-A4-标准",
+  "category": "sales",
+  "description": "送货单模板（doc 呈现；送货联，不含金额可选）",
+  "locales": ["zh-CN"],
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "billNo": "string",
+        "billDate": "date",
+        "originBillNo": "string",
+        "customer": {
+          "name": "string",
+          "phone": "string",
+          "address": "string"
+        },
+        "store": {
+          "name": "string"
+        },
+        "driver": "string",
+        "vehicleNo": "string"
+      }
+    },
+    {
+      "name": "items",
+      "type": "detail",
+      "schema": {
+        "sku": "string",
+        "name": "string",
+        "spec": "string",
+        "qty": "number",
+        "unit": "string"
+      }
+    }
+  ],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "margin": {
+          "top": "15mm",
+          "right": "15mm",
+          "bottom": "15mm",
+          "left": "15mm"
+        },
+        "orientation": "portrait"
+      },
+      "header": [
+        {
+          "type": "text",
+          "content": "{{store.name}} 送货单",
+          "style": {
+            "fontSize": 18,
+            "bold": true
+          },
+          "align": "center"
+        }
+      ],
+      "body": [
+        {
+          "type": "kvtable",
+          "columns": 3,
+          "rows": [
+            [
+              ["送货单号", "{{billNo}}"],
+              ["关联销售单", "{{originBillNo}}"],
+              ["日期", "{{billDate | date:'YYYY-MM-DD'}}"]
+            ],
+            [
+              ["收货客户", "{{customer.name}}"],
+              ["电话", "{{customer.phone}}"],
+              ["司机", "{{driver}}"]
+            ],
+            [
+              ["地址", "{{customer.address}}"],
+              ["车牌号", "{{vehicleNo}}"],
+              ["", ""]
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "source": "items",
+          "columns": [
+            {
+              "header": "SKU",
+              "field": "sku",
+              "width": "22%"
+            },
+            {
+              "header": "商品名称",
+              "field": "name",
+              "width": "38%"
+            },
+            {
+              "header": "规格",
+              "field": "spec",
+              "width": "18%"
+            },
+            {
+              "header": "数量",
+              "field": "qty",
+              "align": "right",
+              "width": "12%"
+            },
+            {
+              "header": "单位",
+              "field": "unit",
+              "align": "center",
+              "width": "10%"
+            }
+          ]
+        },
+        {
+          "type": "spacer",
+          "height": "10mm"
+        },
+        {
+          "type": "text",
+          "content": "收货人验收签字：____________（货物签收后如有异议请于 3 日内提出）"
+        },
+        {
+          "type": "line",
+          "lineStyle": "dashed"
+        },
+        {
+          "type": "pageBreak"
+        },
+        {
+          "type": "text",
+          "content": "第二页：签收联",
+          "style": {
+            "fontSize": 14,
+            "bold": true
+          }
+        },
+        {
+          "type": "rect",
+          "border": {
+            "top": "1px",
+            "right": "1px",
+            "bottom": "1px",
+            "left": "1px"
+          },
+          "width": "180mm",
+          "height": "40mm"
+        },
+        {
+          "type": "text",
+          "content": "收货人签字：____________　日期：____________"
+        }
+      ],
+      "footer": [
+        {
+          "type": "text",
+          "content": "送货人：____________    收货人：____________",
+          "margin": {
+            "top": "16mm"
+          }
+        }
+      ]
+    }
+  },
+  "parameters": [
+    {
+      "name": "copies",
+      "type": "integer",
+      "default": 2,
+      "min": 1,
+      "max": 99,
+      "description": "打印份数（客户联/存根联）"
+    }
+  ]
+}

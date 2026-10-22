@@ -1,5 +1,10 @@
-# taprint-ts
+# taprint (TypeScript)
 
-TypeScript implementation of the taprint DSL kernel (parser, validator,
-migrator, expression compiler) and the ESC/POS / TSPL / CPCL encoders.
-npm package `taprint`. Lands in v0.1.
+TypeScript kernel of the taprint template DSL: parse, validate, migrate
+and canonicalize print templates for labels, receipts and A4 documents.
+One contract shared with the C#, Dart and Java implementations — the
+shared fixtures in the repository root pin parser outputs, migration
+results and message signatures across all languages.
+
+Part of the [taprint](https://github.com/taprint/taprint) monorepo.
+Apache-2.0.

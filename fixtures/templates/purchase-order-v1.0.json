@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "1.0",
+  "id": "tpl_purchase_order_a4_v1",
+  "code": "PURCHASE_ORDER",
+  "name": "采购订单-A4-标准",
+  "category": "purchase",
+  "description": "采购订单模板（doc 呈现；§19.2 fixture 清单）",
+  "locales": ["zh-CN"],
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "billNo": "string",
+        "billDate": "date",
+        "supplier": {
+          "name": "string",
+          "contact": "string",
+          "phone": "string",
+          "address": "string"
+        },
+        "store": { "name": "string" },
+        "buyer": "string",
+        "expectDate": "date",
+        "totalAmount": "number",
+        "deposit": "number",
+        "remark": "string"
+      }
+    },
+    {
+      "name": "items",
+      "type": "detail",
+      "schema": {
+        "sku": "string",
+        "name": "string",
+        "spec": "string",
+        "qty": "number",
+        "unit": "string",
+        "price": "number",
+        "amount": "number"
+      }
+    }
+  ],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "margin": { "top": "15mm", "right": "12mm", "bottom": "15mm", "left": "12mm" },
+        "orientation": "portrait"
+      },
+      "header": [
+        {
+          "type": "text",
+          "content": "{{store.name}} 采购订单",
+          "style": { "fontSize": 18, "bold": true },
+          "align": "center"
+        }
+      ],
+      "body": [
+        {
+          "type": "kvtable",
+          "columns": 3,
+          "rows": [
+            [
+              ["供应商", "{{supplier.name}}"],
+              ["联系人", "{{supplier.contact}}"],
+              ["电话", "{{supplier.phone}}"]
+            ],
+            [
+              ["单号", "{{billNo}}"],
+              ["日期", "{{billDate | date:'YYYY-MM-DD'}}"],
+              ["预计到货", "{{expectDate | date:'YYYY-MM-DD'}}"]
+            ],
+            [
+              ["采购员", "{{buyer}}"],
+              ["地址", "{{supplier.address}}"],
+              ["定金", "{{deposit | currency:CNY}}"]
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "source": "items",
+          "columns": [
+            { "header": "SKU", "field": "sku", "width": "18%" },
+            { "header": "商品名称", "field": "name", "width": "30%" },
+            { "header": "规格", "field": "spec", "width": "14%" },
+            { "header": "数量", "field": "qty", "align": "right", "width": "10%" },
+            { "header": "单位", "field": "unit", "align": "center", "width": "8%" },
+            {
+              "header": "单价",
+              "field": "price",
+              "align": "right",
+              "format": "currency:CNY",
+              "width": "10%"
+            },
+            {
+              "header": "金额",
+              "field": "amount",
+              "align": "right",
+              "format": "currency:CNY",
+              "width": "10%"
+            }
+          ],
+          "summary": [
+            {
+              "label": "合计",
+              "value": "{{items | sum:'amount' | currency:CNY}}",
+              "align": "right"
+            }
+          ]
+        },
+        { "type": "text", "content": "备注：{{remark}}", "margin": { "top": "6mm" } }
+      ],
+      "footer": [
+        {
+          "type": "text",
+          "content": "供货方签字：____________    采购方签字：____________",
+          "margin": { "top": "18mm" }
+        }
+      ]
+    }
+  },
+  "parameters": [
+    {
+      "name": "copies",
+      "type": "integer",
+      "default": 2,
+      "min": 1,
+      "max": 99,
+      "description": "打印份数（默认双方各一联）"
+    }
+  ]
+}

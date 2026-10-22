@@ -1,0 +1,16 @@
+{
+  "hash": "sha256:f12eb2f838b103cd5e49f2580ddfe9665ef615aeeda9b585c2c32d18e8ae938c",
+  "fieldPaths": [
+    "billNo",
+    "checker",
+    "date",
+    "items[*].bookQty",
+    "items[*].category",
+    "items[*].diffQty",
+    "items[*].name",
+    "items[*].sku",
+    "remark"
+  ],
+  "expressionCount": 8,
+  "valid": true
+}

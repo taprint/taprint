@@ -1,0 +1,9 @@
+{
+  "sessionToken": "designer-session-token-fixture",
+  "message": {
+    "type": "priceSync",
+    "timestamp": 1710000000000,
+    "nonce": "float-normalization-lock-v4",
+    "payload": { "price": 0.1, "qty": 1.0, "batch": 1e2, "ratio": 2.5 }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "2.0",
+  "id": "neg_v2_watermark_opacity",
+  "code": "NEG_V2_WATERMARK_OPACITY",
+  "name": "负例-水印不透明度超过上限 1",
+  "dataSources": [{ "name": "main", "type": "primary", "schema": { "billNo": "string" } }],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "watermark": { "type": "text", "text": "内部资料", "opacity": 1.5 }
+      },
+      "body": [{ "type": "text", "content": "{{billNo}}" }]
+    }
+  }
+}

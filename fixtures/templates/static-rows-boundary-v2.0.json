@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "2.0",
+  "id": "static_rows_boundary_v2",
+  "code": "STATIC_ROWS_BOUNDARY",
+  "name": "静态行边界-中国式报表范例",
+  "category": "仓储域",
+  "description": "DSL 2.0 边界 fixture（AI-3 质量门禁扩展）：staticRows rowspan 恰好覆盖 staticRows 全行数（边界不越界）、分组小计 values 与列数精确对齐（含 null 占位）、跨页重复表头、文字水印。",
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "billNo": "string",
+        "date": "date",
+        "checker": "string",
+        "remark": "string"
+      }
+    },
+    {
+      "name": "items",
+      "type": "detail",
+      "schema": {
+        "category": "string",
+        "sku": "string",
+        "name": "string",
+        "bookQty": "number",
+        "diffQty": "number"
+      }
+    }
+  ],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "watermark": {
+          "type": "text",
+          "text": "边界样例",
+          "opacity": 0.12,
+          "angle": -30,
+          "tile": true
+        }
+      },
+      "header": [
+        {
+          "type": "text",
+          "content": "静态行边界样例 {{billNo}}",
+          "align": "center"
+        }
+      ],
+      "body": [
+        {
+          "type": "table",
+          "source": "items",
+          "layout": {
+            "repeatHeaderOnPageBreak": true
+          },
+          "headerRows": [
+            [
+              { "text": "类别", "rowspan": 2 },
+              { "text": "商品", "colspan": 2 },
+              { "text": "差异", "rowspan": 2 }
+            ],
+            [{ "text": "编码" }, { "text": "名称" }]
+          ],
+          "columns": [
+            { "header": "类别", "field": "category", "width": "15%" },
+            { "header": "编码", "field": "sku", "width": "25%" },
+            { "header": "名称", "field": "name", "width": "40%" },
+            { "header": "差异数量", "field": "diffQty", "width": "20%", "align": "right" }
+          ],
+          "groups": [
+            {
+              "field": "category",
+              "header": "{{category}}",
+              "subtotal": {
+                "label": "小计：{{category}}",
+                "values": [null, null, null, "{{items | sum:'diffQty'}}"]
+              }
+            }
+          ],
+          "staticRows": {
+            "position": "after",
+            "rows": [
+              [
+                { "value": "总计", "colspan": 2, "rowspan": 2 },
+                { "value": "{{items | sum:'diffQty'}}", "colspan": 2 }
+              ],
+              [
+                { "value": "审核：{{checker}}", "colspan": 2 },
+                { "value": "日期：{{date}}", "colspan": 2 }
+              ]
+            ]
+          }
+        }
+      ],
+      "footer": [
+        {
+          "type": "text",
+          "content": "备注：{{remark}}"
+        }
+      ]
+    }
+  }
+}

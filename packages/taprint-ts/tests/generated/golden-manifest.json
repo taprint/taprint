@@ -1,0 +1,77 @@
+{
+  "schema": "taprint/golden-manifest@1",
+  "goldens": [
+    {
+      "kind": "parse-result",
+      "fixture": "sales-note-v1.0.json",
+      "expectedFile": "sales-note-parse-result.json",
+      "expectedSha256": "f58e8ae3694ed67ebd594ad003a5336528df6e25b7ae0ee6b8a6a34baf79c214"
+    },
+    {
+      "kind": "parse-result",
+      "fixture": "inventory-report-v2.0.json",
+      "expectedFile": "inventory-report-parse-result.json",
+      "expectedSha256": "b3680118645c90b70725d472839a8dfe436ac4581792006fbe6b2368ae726e38"
+    },
+    {
+      "kind": "parse-result",
+      "fixture": "coupon-sheet-v2.0.json",
+      "expectedFile": "coupon-sheet-parse-result.json",
+      "expectedSha256": "111cfc466c8e796d61fc6442ee160ebfe607498f559201a1ef3cc47d78061dcc"
+    },
+    {
+      "kind": "parse-result",
+      "fixture": "static-rows-boundary-v2.0.json",
+      "expectedFile": "static-rows-boundary-parse-result.json",
+      "expectedSha256": "12797ca9238a04c91884837fec1c770fe6f5cd7bcecb6a2f4ceff5f6cb2d3677"
+    },
+    {
+      "kind": "parse-result",
+      "fixture": "nup-extremes-v2.0.json",
+      "expectedFile": "nup-extremes-parse-result.json",
+      "expectedSha256": "c22bb739beb5c15e7c21693484c932307f4c8cf55847ef7cc086001769afdafc"
+    },
+    {
+      "kind": "signer",
+      "fixture": "message-signer-v1.json",
+      "expectedFile": "message-signer-result.json",
+      "expectedSha256": "6b803f8568687efeb1350851aa6254013ef249d9a9c2e36454d961d47cedff84"
+    },
+    {
+      "kind": "signer",
+      "fixture": "message-signer-v2.json",
+      "expectedFile": "message-signer-result-v2.json",
+      "expectedSha256": "fa669f02a5799841693d7b37b3867c7ca28fffbceb528abc6e8d03fadbab912b"
+    },
+    {
+      "kind": "signer",
+      "fixture": "message-signer-v3.json",
+      "expectedFile": "message-signer-result-v3.json",
+      "expectedSha256": "a7fe9a6bf8550d4bf108e0e7013d257a735d64eeca896a3990ca77cc5e4bd087"
+    },
+    {
+      "kind": "signer",
+      "fixture": "message-signer-v4.json",
+      "expectedFile": "message-signer-result-v4.json",
+      "expectedSha256": "418fd7226d9019f30e80a909165b5465bd62a6c1745da7fd2c34f3549737dcbf"
+    },
+    {
+      "kind": "signer",
+      "fixture": "message-signer-v5.json",
+      "expectedFile": "message-signer-result-v5.json",
+      "expectedSha256": "78191cd79a36b17308a76c09072df0edfa1a5e12159d624941dceb0d26691c44"
+    },
+    {
+      "kind": "migration",
+      "fixture": "migration-legacy-v09.json",
+      "expectedFile": "migration-legacy-v09-result.json",
+      "expectedSha256": "2a386aa7b873c4f0766cfc8e0d3d773bc1b31336bcec5ea0a34cd73fadd0a2de"
+    },
+    {
+      "kind": "migration",
+      "fixture": "migration-v10.json",
+      "expectedFile": "migration-v10-result.json",
+      "expectedSha256": "10a78effb1d1bf5bd049608276b6c46bb476700b76a3a9a7b50235ea1efaebd0"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "1.1",
+  "id": "tpl_goods_label_4030",
+  "code": "GOODS_LABEL_4030",
+  "name": "商品价签 40x30（GOODS_LABEL 七键）",
+  "category": "价签",
+  "description": "GOODS_LABEL 价签种子（字段域七键：sku/name/price/spec/unit/origin/shelfNo；v1.1 特性全展示：line/box/fontRole/humanReadable/copies 整数字面量）",
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "sku": "string",
+        "name": "string",
+        "price": "number",
+        "spec": "string",
+        "unit": "string",
+        "origin": "string",
+        "shelfNo": "string"
+      }
+    }
+  ],
+  "presentations": {
+    "label": {
+      "size": {
+        "width": "40mm",
+        "height": "30mm"
+      },
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4,
+      "body": [
+        {
+          "type": "text",
+          "content": "{{name}}",
+          "x": "2mm",
+          "y": "1.5mm",
+          "fontRole": "auto",
+          "size": 2
+        },
+        {
+          "type": "text",
+          "content": "¥{{price}}/{{unit}}",
+          "x": "2mm",
+          "y": "9mm",
+          "fontRole": "auto",
+          "size": 3
+        },
+        {
+          "type": "text",
+          "content": "{{spec}}",
+          "x": "2mm",
+          "y": "17mm",
+          "fontRole": "auto",
+          "size": 1
+        },
+        {
+          "type": "barcode",
+          "content": "{{sku}}",
+          "symbology": "CODE128",
+          "humanReadable": false,
+          "x": "2mm",
+          "y": "21mm",
+          "height": "7mm"
+        },
+        {
+          "type": "line",
+          "x": "2mm",
+          "y": "8mm",
+          "width": "36mm",
+          "height": "0mm",
+          "thickness": 2
+        },
+        {
+          "type": "box",
+          "x": "1mm",
+          "y": "0.5mm",
+          "width": "38mm",
+          "height": "29mm",
+          "thickness": 2
+        }
+      ],
+      "copies": 1
+    }
+  }
+}

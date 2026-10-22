@@ -1,0 +1,12 @@
+{
+  "sessionToken": "designer-session-token-fixture",
+  "message": {
+    "type": "save",
+    "dsl": {
+      "name": "销售单-A4",
+      "note": "a<b&c>"
+    },
+    "timestamp": 1710000000000,
+    "nonce": "0123456789abcdef0123456789abcdef"
+  }
+}

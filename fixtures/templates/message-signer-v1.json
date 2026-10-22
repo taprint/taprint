@@ -1,0 +1,9 @@
+{
+  "sessionToken": "designer-session-token-fixture",
+  "message": {
+    "type": "saveResult",
+    "success": true,
+    "timestamp": 1710000000000,
+    "nonce": "0123456789abcdef0123456789abcdef"
+  }
+}

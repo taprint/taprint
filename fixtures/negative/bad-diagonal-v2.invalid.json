@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "2.0",
+  "id": "neg_v2_diagonal",
+  "code": "NEG_V2_DIAGONAL",
+  "name": "负例-斜线表头方向非法值",
+  "dataSources": [{ "name": "items", "type": "detail", "schema": { "sku": "string" } }],
+  "presentations": {
+    "doc": {
+      "page": { "size": "A4" },
+      "body": [
+        {
+          "type": "table",
+          "source": "items",
+          "headerRows": [[{ "text": "x", "diagonal": "diagonal" }]],
+          "columns": [{ "header": "编码", "field": "sku" }]
+        }
+      ]
+    }
+  }
+}

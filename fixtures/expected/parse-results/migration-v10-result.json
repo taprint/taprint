@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "2.0",
+  "id": "migration_v10_anchor",
+  "code": "MIGRATION_V10",
+  "name": "迁移锚点-1.0到2.0",
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "billNo": "string",
+        "billDate": "date",
+        "totalAmount": "number"
+      }
+    },
+    {
+      "name": "items",
+      "type": "detail",
+      "schema": {
+        "sku": "string",
+        "name": "string",
+        "qty": "number",
+        "amount": "number"
+      }
+    }
+  ],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "margin": { "top": "15mm", "right": "15mm", "bottom": "15mm", "left": "15mm" }
+      },
+      "header": [{ "type": "text", "content": "迁移锚点单据 {{billNo}}", "align": "center" }],
+      "body": [
+        {
+          "type": "kvtable",
+          "columns": 2,
+          "rows": [
+            [
+              ["单号", "{{billNo}}"],
+              ["日期", "{{billDate | date:'YYYY-MM-DD'}}"]
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "source": "items",
+          "columns": [
+            { "header": "编码", "field": "sku", "width": "25%" },
+            { "header": "名称", "field": "name", "width": "35%" },
+            { "header": "数量", "field": "qty", "width": "15%", "align": "right" },
+            {
+              "header": "金额",
+              "field": "amount",
+              "width": "25%",
+              "align": "right",
+              "format": "currency:CNY"
+            }
+          ],
+          "summary": [
+            {
+              "label": "合计",
+              "value": "{{items | sum:'amount' | currency:CNY}}",
+              "align": "right"
+            }
+          ]
+        }
+      ],
+      "footer": [
+        { "type": "text", "content": "合计：{{totalAmount | currency:CNY}}", "align": "right" }
+      ]
+    }
+  },
+  "parameters": [
+    {
+      "name": "copies",
+      "type": "integer",
+      "default": 1,
+      "min": 1,
+      "max": 5,
+      "description": "打印份数"
+    }
+  ]
+}

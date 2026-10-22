@@ -1,0 +1,13 @@
+{
+  "hash": "sha256:65b7af7a736c4427490f0bf9f2c8fc2b9425fd52e5d83a5d4e80f385e0da21f1",
+  "fieldPaths": [
+    "checker",
+    "items[*].name",
+    "items[*].qty",
+    "items[*].sku",
+    "storeLogo",
+    "storeName"
+  ],
+  "expressionCount": 8,
+  "valid": true
+}

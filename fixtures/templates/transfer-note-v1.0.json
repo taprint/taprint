@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "1.0",
+  "id": "tpl_transfer_note_a4_v1",
+  "code": "TRANSFER_NOTE",
+  "name": "调拨单-A4-标准",
+  "category": "inventory",
+  "description": "门店/仓库间调拨单模板（doc 呈现；库存域）",
+  "locales": ["zh-CN"],
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "billNo": "string",
+        "billDate": "date",
+        "fromWarehouse": { "name": "string" },
+        "toWarehouse": { "name": "string" },
+        "store": { "name": "string" },
+        "operator": "string",
+        "remark": "string"
+      }
+    },
+    {
+      "name": "items",
+      "type": "detail",
+      "schema": {
+        "sku": "string",
+        "name": "string",
+        "spec": "string",
+        "qty": "number",
+        "unit": "string",
+        "receivedQty": "number"
+      }
+    }
+  ],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "margin": { "top": "15mm", "right": "15mm", "bottom": "15mm", "left": "15mm" },
+        "orientation": "portrait"
+      },
+      "header": [
+        {
+          "type": "text",
+          "content": "{{store.name}} 调拨单",
+          "style": { "fontSize": 18, "bold": true },
+          "align": "center"
+        }
+      ],
+      "body": [
+        {
+          "type": "kvtable",
+          "columns": 3,
+          "rows": [
+            [
+              ["调拨单号", "{{billNo}}"],
+              ["日期", "{{billDate | date:'YYYY-MM-DD'}}"],
+              ["经办人", "{{operator}}"]
+            ],
+            [
+              ["调出方", "{{fromWarehouse.name}}"],
+              ["调入方", "{{toWarehouse.name}}"],
+              ["备注", "{{remark}}"]
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "source": "items",
+          "columns": [
+            { "header": "SKU", "field": "sku", "width": "20%" },
+            { "header": "商品名称", "field": "name", "width": "28%" },
+            { "header": "规格", "field": "spec", "width": "16%" },
+            { "header": "调拨数量", "field": "qty", "align": "right", "width": "12%" },
+            { "header": "实收数量", "field": "receivedQty", "align": "right", "width": "12%" },
+            { "header": "单位", "field": "unit", "align": "center", "width": "12%" }
+          ]
+        }
+      ],
+      "footer": [
+        {
+          "type": "text",
+          "content": "调出方签字：____________    调入方签字：____________",
+          "margin": { "top": "18mm" }
+        }
+      ]
+    }
+  },
+  "parameters": [
+    {
+      "name": "copies",
+      "type": "integer",
+      "default": 2,
+      "min": 1,
+      "max": 99,
+      "description": "打印份数（调出/调入各一联）"
+    }
+  ]
+}

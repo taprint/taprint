@@ -1,0 +1,26 @@
+{
+  "hash": "sha256:e07b2ddac7af5c1faed9eaa5e1fbb87c305b2d4a54a446a2246bb203f7c95822",
+  "fieldPaths": [
+    "billDate",
+    "billNo",
+    "customer.address",
+    "customer.name",
+    "customer.phone",
+    "discount",
+    "items[*].amount",
+    "items[*].name",
+    "items[*].price",
+    "items[*].qty",
+    "items[*].sku",
+    "items[*].spec",
+    "items[*].unit",
+    "paidAmount",
+    "salesperson",
+    "store.logo",
+    "store.name",
+    "store.phone",
+    "totalAmount"
+  ],
+  "expressionCount": 21,
+  "valid": true
+}

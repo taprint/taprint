@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "id": "tpl_negative_margin",
+  "code": "NEGATIVE_MARGIN",
+  "name": "负例：页边距无单位数字（marginEdges 仅接受 length，评审 S1）",
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "margin": {
+          "top": 999
+        }
+      },
+      "body": [
+        {
+          "type": "text",
+          "content": "x"
+        }
+      ]
+    }
+  }
+}

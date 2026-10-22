@@ -1,0 +1,5 @@
+{
+  "canonical": "{\"nonce\":\"float-normalization-lock-v4\",\"payload\":{\"batch\":100,\"price\":0.1,\"qty\":1,\"ratio\":2.5},\"timestamp\":1710000000000,\"type\":\"priceSync\"}",
+  "keyBase64": "vWlxxqfb5kbC7gNcKGMH0OuVrAgk5zAvY4VEWz7mQIU=",
+  "signature": "DcSZB0sIIH49/cQRAn7iIL3agLgPP72j25TcgsH3BK4="
+}

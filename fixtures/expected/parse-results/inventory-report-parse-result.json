@@ -1,0 +1,23 @@
+{
+  "hash": "sha256:129dfb6902f988f7e44918e18e10e651a2d730e1ce820f6848ef76154b31f445",
+  "fieldPaths": [
+    "batches[*].batchNo",
+    "batches[*].expireDate",
+    "batches[*].qty",
+    "billDate",
+    "billNo",
+    "checker",
+    "diffTotal",
+    "items[*].amount",
+    "items[*].bookQty",
+    "items[*].category",
+    "items[*].diffQty",
+    "items[*].name",
+    "items[*].realQty",
+    "items[*].sku",
+    "remark",
+    "warehouse"
+  ],
+  "expressionCount": 18,
+  "valid": true
+}

@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "1.0",
+  "id": "tpl_goods_barcode_label_v1",
+  "code": "GOODS_BARCODE_LABEL",
+  "name": "商品条码标签-60x40",
+  "category": "label",
+  "description": "商品条码标签（label + receipt 双呈现：同源数据打标签与小票，评审 N3）",
+  "locales": ["zh-CN"],
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "sku": "string",
+        "name": "string",
+        "spec": "string",
+        "price": "number"
+      }
+    }
+  ],
+  "presentations": {
+    "label": {
+      "size": {
+        "width": "60mm",
+        "height": "40mm"
+      },
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4,
+      "body": [
+        {
+          "type": "qrcode",
+          "content": "{{sku}}",
+          "x": "5mm",
+          "y": "5mm",
+          "size": 10
+        },
+        {
+          "type": "barcode",
+          "symbology": "CODE128",
+          "content": "{{sku}}",
+          "x": "5mm",
+          "y": "25mm",
+          "height": "10mm"
+        },
+        {
+          "type": "text",
+          "content": "{{name}}",
+          "x": "30mm",
+          "y": "5mm",
+          "font": "SIMPLIFIED CHINESE",
+          "size": 0
+        },
+        {
+          "type": "text",
+          "content": "¥{{price}}",
+          "x": "30mm",
+          "y": "15mm",
+          "font": "SIMPLIFIED CHINESE",
+          "size": 1
+        },
+        {
+          "type": "text",
+          "content": "{{spec}}",
+          "x": "30mm",
+          "y": "25mm",
+          "font": "SIMPLIFIED CHINESE",
+          "size": 0
+        }
+      ],
+      "copies": "{{copies | default:1}}",
+      "endCommand": "PRINT {{copies}}"
+    },
+    "receipt": {
+      "width": "58mm",
+      "encoding": "gbk",
+      "body": [
+        {
+          "type": "text",
+          "content": "{{name}}",
+          "align": "center",
+          "style": {
+            "fontSize": "double"
+          }
+        },
+        {
+          "type": "text",
+          "content": "规格：{{spec}}",
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "content": "¥{{price}}",
+          "align": "center",
+          "style": {
+            "bold": true
+          }
+        },
+        {
+          "type": "barcode",
+          "symbology": "CODE128",
+          "content": "{{sku}}"
+        },
+        {
+          "type": "line",
+          "lineStyle": "solid"
+        },
+        {
+          "type": "cut"
+        }
+      ]
+    }
+  },
+  "parameters": [
+    {
+      "name": "copies",
+      "type": "integer",
+      "default": 1,
+      "min": 1,
+      "max": 999,
+      "description": "打印份数"
+    }
+  ]
+}

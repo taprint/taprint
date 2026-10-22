@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "1.0",
+  "id": "tpl_payslip_a5_v1",
+  "code": "PAYSLIP",
+  "name": "工资条-A5-密薪",
+  "category": "payroll",
+  "description": "工资条模板（doc 呈现；薪资域，含脱敏示例 mask 过滤器）",
+  "locales": ["zh-CN"],
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "period": "string",
+        "employee": {
+          "name": "string",
+          "no": "string",
+          "department": "string",
+          "idCard": "string"
+        },
+        "store": { "name": "string" },
+        "baseSalary": "number",
+        "bonus": "number",
+        "overtime": "number",
+        "deductSocial": "number",
+        "deductTax": "number",
+        "deductOther": "number",
+        "netPay": "number"
+      }
+    }
+  ],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A5",
+        "margin": { "top": "10mm", "right": "10mm", "bottom": "10mm", "left": "10mm" },
+        "orientation": "landscape"
+      },
+      "header": [
+        {
+          "type": "text",
+          "content": "{{store.name}} 工资条（{{period}}）",
+          "style": { "fontSize": 14, "bold": true },
+          "align": "center"
+        }
+      ],
+      "body": [
+        {
+          "type": "kvtable",
+          "columns": 3,
+          "rows": [
+            [
+              ["姓名", "{{employee.name}}"],
+              ["工号", "{{employee.no}}"],
+              ["部门", "{{employee.department}}"]
+            ]
+          ]
+        },
+        {
+          "type": "kvtable",
+          "columns": 4,
+          "rows": [
+            [
+              ["基本工资", "{{baseSalary | currency:CNY}}"],
+              ["奖金", "{{bonus | currency:CNY}}"],
+              ["加班费", "{{overtime | currency:CNY}}"],
+              ["应发合计", "{{baseSalary + bonus + overtime | currency:CNY}}"]
+            ],
+            [
+              ["社保扣款", "{{deductSocial | currency:CNY}}"],
+              ["个税扣款", "{{deductTax | currency:CNY}}"],
+              ["其他扣款", "{{deductOther | currency:CNY}}"],
+              ["实发工资", "{{netPay | currency:CNY}}"]
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "证件号：{{employee.idCard | mask:'******'}}",
+          "style": { "fontSize": 8, "color": "#999" },
+          "margin": { "top": "4mm" }
+        }
+      ],
+      "footer": [
+        {
+          "type": "text",
+          "content": "本工资条为密薪文件，请妥善保管",
+          "align": "center",
+          "style": { "fontSize": 8, "color": "#999" }
+        }
+      ]
+    }
+  },
+  "parameters": [
+    {
+      "name": "copies",
+      "type": "integer",
+      "default": 1,
+      "min": 1,
+      "max": 1,
+      "description": "工资条限单份打印"
+    }
+  ]
+}

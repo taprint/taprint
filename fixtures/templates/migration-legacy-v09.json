@@ -1,0 +1,299 @@
+{
+  "id": "tpl_sales_note_a4_v1",
+  "code": "SALES_NOTE",
+  "name": "销售单-定稿前旧版",
+  "locales": ["zh-CN"],
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "billNo": "string",
+        "billDate": "date",
+        "customer": {
+          "name": "string",
+          "phone": "string",
+          "address": "string"
+        },
+        "store": {
+          "name": "string",
+          "phone": "string",
+          "logo": "string"
+        },
+        "salesperson": "string",
+        "totalAmount": "number",
+        "discount": "number",
+        "paidAmount": "number"
+      }
+    },
+    {
+      "name": "items",
+      "type": "detail",
+      "schema": {
+        "sku": "string",
+        "name": "string",
+        "spec": "string",
+        "qty": "number",
+        "unit": "string",
+        "price": "number",
+        "amount": "number"
+      }
+    }
+  ],
+  "presentations": {
+    "doc": {
+      "page": {
+        "size": "A4",
+        "width": "210mm",
+        "height": "297mm",
+        "margin": {
+          "top": "15mm",
+          "right": "15mm",
+          "bottom": "15mm",
+          "left": "15mm"
+        },
+        "orientation": "portrait"
+      },
+      "header": [
+        {
+          "type": "image",
+          "src": "{{store.logo}}",
+          "width": "30mm",
+          "align": "left"
+        },
+        {
+          "type": "text",
+          "content": "{{store.name}} 销售单",
+          "style": {
+            "fontSize": 18,
+            "bold": true
+          },
+          "align": "center"
+        }
+      ],
+      "body": [
+        {
+          "type": "kvtable",
+          "columns": 3,
+          "rows": [
+            [
+              ["客户", "{{customer.name}}"],
+              ["电话", "{{customer.phone}}"],
+              ["日期", "{{billDate | date:'YYYY-MM-DD'}}"]
+            ],
+            [
+              ["单号", "{{billNo}}"],
+              ["业务员", "{{salesperson}}"],
+              ["地址", "{{customer.address}}"]
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "source": "items",
+          "columns": [
+            {
+              "header": "SKU",
+              "field": "sku",
+              "width": "20%"
+            },
+            {
+              "header": "商品名称",
+              "field": "name",
+              "width": "30%"
+            },
+            {
+              "header": "规格",
+              "field": "spec",
+              "width": "15%"
+            },
+            {
+              "header": "数量",
+              "field": "qty",
+              "align": "right",
+              "width": "10%"
+            },
+            {
+              "header": "单价",
+              "field": "price",
+              "align": "right",
+              "format": "currency:CNY",
+              "width": "12%"
+            },
+            {
+              "header": "金额",
+              "field": "amount",
+              "align": "right",
+              "format": "currency:CNY",
+              "width": "13%"
+            }
+          ],
+          "summary": [
+            {
+              "label": "合计",
+              "value": "{{items | sum:'amount'}}",
+              "align": "right"
+            },
+            {
+              "label": "折扣",
+              "value": "{{discount | currency:CNY}}",
+              "align": "right"
+            },
+            {
+              "label": "应收",
+              "value": "{{totalAmount | currency:CNY}}",
+              "align": "right"
+            }
+          ]
+        }
+      ],
+      "footer": [
+        {
+          "type": "text",
+          "content": "客户签字：____________",
+          "margin": {
+            "top": "20mm"
+          }
+        },
+        {
+          "type": "text",
+          "content": "本单据自开具之日起 30 日内有效",
+          "align": "center",
+          "style": {
+            "fontSize": 9,
+            "color": "#999"
+          }
+        }
+      ]
+    },
+    "receipt": {
+      "width": "80mm",
+      "encoding": "gbk",
+      "initCommands": ["ESC @", "ESC ! 0"],
+      "body": [
+        {
+          "type": "text",
+          "content": "{{store.name}}",
+          "align": "center",
+          "style": {
+            "fontSize": "double",
+            "bold": true
+          }
+        },
+        {
+          "type": "text",
+          "content": "销售单",
+          "align": "center",
+          "style": {
+            "fontSize": "double"
+          }
+        },
+        {
+          "type": "line",
+          "lineStyle": "solid"
+        },
+        {
+          "type": "kvtable",
+          "columns": 1,
+          "compact": true,
+          "rows": [
+            [["单号", "{{billNo}}"]],
+            [["日期", "{{billDate | date:'YYYY-MM-DD HH:mm'}}"]],
+            [["客户", "{{customer.name}}"]],
+            [["业务员", "{{salesperson}}"]]
+          ]
+        },
+        {
+          "type": "line",
+          "lineStyle": "solid"
+        },
+        {
+          "type": "table",
+          "source": "items",
+          "columns": [
+            {
+              "header": "商品",
+              "field": "name",
+              "width": "40%"
+            },
+            {
+              "header": "数量",
+              "field": "qty",
+              "align": "right",
+              "width": "15%"
+            },
+            {
+              "header": "单价",
+              "field": "price",
+              "align": "right",
+              "width": "20%"
+            },
+            {
+              "header": "金额",
+              "field": "amount",
+              "align": "right",
+              "width": "25%"
+            }
+          ]
+        },
+        {
+          "type": "line",
+          "lineStyle": "solid"
+        },
+        {
+          "type": "kvtable",
+          "columns": 2,
+          "compact": true,
+          "rows": [
+            [
+              ["合计", "{{items | sum:'amount' | currency:CNY}}"],
+              ["折扣", "{{discount | currency:CNY}}"]
+            ],
+            [
+              ["应收", "{{totalAmount | currency:CNY}}"],
+              ["已收", "{{paidAmount | currency:CNY}}"]
+            ]
+          ]
+        },
+        {
+          "type": "qrcode",
+          "content": "{{billNo}}",
+          "size": 8,
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "content": "谢谢惠顾，欢迎再次光临！",
+          "align": "center"
+        },
+        {
+          "type": "cut",
+          "partial": true
+        }
+      ],
+      "tailCommands": ["GS V 1"]
+    }
+  },
+  "parameters": [
+    {
+      "name": "copies",
+      "type": "integer",
+      "default": 1,
+      "min": 1,
+      "max": 99,
+      "description": "打印份数"
+    },
+    {
+      "name": "printer",
+      "type": "string",
+      "default": null,
+      "description": "指定打印机名（null 用默认）"
+    },
+    {
+      "name": "silent",
+      "type": "boolean",
+      "default": true,
+      "description": "是否静默打印"
+    }
+  ]
+}
