@@ -1,68 +1,73 @@
 # taprint
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![CI](https://github.com/taprint/taprint/actions/workflows/ci.yml/badge.svg)](https://github.com/taprint/taprint/actions/workflows/ci.yml)
 
-A printer-neutral template DSL for thermal label and receipt printing:
-design a template once (JSON, plus a visual designer), compile it to
-**ESC/POS**, **TSPL** and **CPCL** command streams — with **ZPL** joining in
-v0.2 — and render it identically in **TypeScript, C#, Dart and Java**.
+A printer-neutral template DSL for label, receipt and A4-document
+printing: design a template once (JSON — a visual designer joins in a
+later release), compile it to **ESC/POS**, **TSPL** and **CPCL** command
+streams (**ZPL** lands in v0.2 in all four languages at once), and
+render it with the same kernel in **TypeScript, C#, Dart and Java**.
+Cross-language parity is pinned by shared golden fixtures, not by
+trust.
 
-## Status: pre-release scaffold
+## What is in the box today (v0.1 scope, pre-tag)
 
-This repository is being prepared for its first release. No packages are
-published yet; the directory layout below is the target shape, and the
-roadmap table says what lands when.
+| Piece | Where | State |
+|---|---|---|
+| Template DSL schemas (v1.0 / v1.1 / v2.0) | `schema/` | authoritative contract, versioned changelog |
+| Kernel: parse / validate / migrate / canonicalize | `packages/taprint-{ts,cs,dart,java}` | four languages, 600+ tests green |
+| Protocol encoders: ESC/POS + TSPL + CPCL | same packages | four languages (ZPL gated to v0.2 — ADR-0001) |
+| PDF rendering (A4 documents) | `packages/taprint-java` | Java only in v0.1 (OpenPDF, MPL-2.0 route) |
+| MCP server: `validate_template` / `compile` / `list_examples` | `apps/mcp` | zero hardware, zero native deps (ADR-0008) |
+| Windows print channels (spooler RAW / TCP / serial, queue setup, USB probe) | `channels/windows-spooler` | reference implementation |
+| Flutter transports (BLE / SPP / TCP-9100) | `channels/flutter-transport` | reference implementation |
+| GB18030 full mapping table + oracle | `packages/taprint-dart` | 23,940 code points, generator in `tools/` |
+| Device compatibility notes | `hardware-notes/` | ten spooler rules distilled from real POS hardware |
 
-## Why
+## Quick taste
 
-The open-source printing world is split into layers that never touch:
-visual template designers that only emit HTML/PDF, protocol libraries that
-are single-language and single-protocol with no template concept, and the
-label side of the industry (TSPL/CPCL — the native command sets of
-mainstream mobile label printers) with almost no maintained open-source
-tooling at all, as of October 2026. taprint fills the missing middle:
-one template contract, compiled to every target, with byte-level
-cross-language conformance gates.
+```bash
+# MCP server (Claude Desktop / any MCP client):
+npx taprint-mcp            # v0.1 publishes to npm; in-repo: apps/mcp
 
-## Roadmap
-
-| Version | Scope |
-|---|---|
-| v0.1 | DSL schemas + parsers/validators in four languages; ESC/POS + TSPL + CPCL encoders in all four languages; golden conformance harness (frame order + byte digests); `taprint-mcp` with `validate_template` / `compile` / `list_examples` |
-| v0.2 | ZPL in all four languages; local preview rendering; published conformance document |
-| v0.3 | Visual template designer (standalone + embeddable); bitmap preview engine; MCP `render_preview` tool |
-| v0.4 | Self-hosted render service (HTTP API: template + data → command streams / PDF / PNG) |
-
-## Repository layout (planned)
-
+# TypeScript kernel + encoders:
+npm install taprint
 ```
-schema/          authoritative template DSL JSON Schemas + versioned changelog
-fixtures/        shared golden fixtures (frame streams + byte digests)
-packages/        per-language implementations: taprint-ts / -cs / -dart / -java
-packages/taprint-preview   bitmap preview engine (v0.3)
-apps/designer    visual template designer (v0.3)
-apps/mcp         MCP server (v0.1, preview tool joins in v0.3)
-services/render  self-hosted render API (v0.4)
-channels/        reference printer-transport implementations (Windows spooler,
-                 Flutter BLE/SPP/TCP-9100) — APIs evolve independently
-hardware-notes/  device compatibility reports and protocol quirks
-docs/            conformance document, ADRs, coverage matrix
-tools/           compliance gates, golden-fixture tooling, release checks
-```
+
+Ask an MCP client: *"validate this label template"* or *"compile this
+receipt template to ESC/POS"* — you get byte streams plus a frame-order
+summary, printable by any host on any ESC/POS device.
+
+## Design decisions worth knowing
+
+All architecture decisions live in [`docs/adr/`](docs/adr/). The ones
+you will hit first:
+
+- **ZPL gate** (ADR-0001): ZPL ships only when all four languages have
+  it — the support matrix is always truthful.
+- **Numeric & encoding canon** (ADR-0009): mm→dot rounding is half-away
+  from zero and number formatting is pinned, so byte streams agree
+  across languages; GB18030 coverage is proven by a code-point oracle,
+  not claimed.
+- **Golden layering** (ADR-0010): frame-order equality for everything,
+  byte digests for a frozen coverage matrix, honest divergence ledger
+  in `docs/conformance.md`.
+- **Host functions SPI** (ADR-0007): business identity functions are
+  registered by the host, never baked into the kernel — multi-tenant
+  semantics stay out.
+- **Font licensing** (ADR-0002): fonts load through a provider SPI; the
+  bundled default is Noto Sans SC (OFL-1.1) with its license intact.
 
 ## Hardware compatibility
 
-Tested devices and community report process live in
-[`hardware-notes/`](hardware-notes/) (from v0.1). Verified so far on real
-hardware: an HPRT TP582 thermal label/receipt printer and an Epson LQ-630K
-impact printer. Anything not on the list is honest "untested" — we do not
-claim support for every printer.
-
-## Security
-
-See [`SECURITY.md`](SECURITY.md). The expression sandbox and the render
-service's resource limits are security features by design (ADR-0012).
+Verified on real hardware: an HPRT TP582 thermal label/receipt printer
+and an Epson LQ-630K impact printer. Everything else is honestly
+"untested" until a community report lands — reports require a printed
+nonce challenge (proof of hardware). See
+[`hardware-notes/`](hardware-notes/).
 
 ## License
 
-Apache-2.0 — see [`LICENSE`](LICENSE).
+Apache-2.0. Third-party notices are generated from the SBOM at release
+time (ADR-0005).
