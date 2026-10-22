@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taprint.dev/schema/render-api.json",
+  "title": "taprint render service HTTP contract v1",
+  "description": "taprint-render 自托管渲染服务 v1 契约（ADR-0004：与服务同仓；ADR-0012：表达式沙箱 + 硬资源上限）。meta 形状与 MCP compile 响应共用（byteCount + frameSummary[]），两表面不得漂移。v1 只接受内联模板：没有 templateUrl 参数，服务因此没有出站抓取面。响应二进制主体 + X-Render-Meta 响应头（ASCII 转义 JSON）。错误统一信封 {\"error\":{\"code\",\"message\",\"details\"?}}。",
+  "type": "object",
+  "required": ["template", "target"],
+  "properties": {
+    "template": {
+      "description": "内联模板 DSL 对象（taprint 模板 schema v1.x/v2.0 之一）。≤1 MiB（序列化后字节），超限 413 template-too-large。",
+      "$ref": "#/$defs/inlineTemplate"
+    },
+    "data": {
+      "description": "模板数据根作用域（表达式求值输入）。可选，缺省 {}。",
+      "type": "object",
+      "maxBytes": 8388608
+    },
+    "target": {
+      "description": "渲染目标方言。zpl 为契约合法值但 Java 内核尚未交付 ZPL 渲染器（ADR-0001），显式 422 target-unsupported，不静默替换方言。",
+      "enum": ["escpos", "tspl", "cpcl", "zpl"]
+    },
+    "options": { "$ref": "#/$defs/renderOptions" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "inlineTemplate": {
+      "type": "object",
+      "description": "无 templateUrl（ADR-0012）。签名 URL 变体如有真实需求，另立 ADR 再回归。"
+    },
+    "renderOptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dpi": {
+          "description": "目标 dpi。允许集合 {203, 300}；越界 422 option-out-of-range。当前内核密度由模板 DSL 决定（8 dot/mm 系），dpi 随 RenderContext.parameters 透传、并在 meta.frameSummary 里标注。",
+          "enum": [203, 300]
+        },
+        "widthMm": {
+          "description": "覆盖纸宽 mm。0 < widthMm ≤ 300；label 目标覆盖 DSL SIZE 宽，escpos 目标映射列档（≥72mm→48 列，否则 32 列）。越界 422。",
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 300
+        },
+        "copies": {
+          "description": "份数，1..200。仅 label 目标消费（TSPL PRINT n / CPCL qty）；escpos + copies 显式 422 option-not-supported（收据份数 = 宿主重发整帧，与 MCP compile 口径一致）。越界 422。",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200
+        }
+      }
+    },
+    "renderMeta": {
+      "description": "与 MCP compile 响应共用的 meta 形状。经 X-Render-Meta 响应头携带（非 ASCII 字符以 \\uXXXX 转义）。",
+      "type": "object",
+      "required": ["byteCount", "frameSummary"],
+      "additionalProperties": false,
+      "properties": {
+        "byteCount": { "type": "integer", "minimum": 0, "description": "响应二进制主体字节数。" },
+        "frameSummary": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "结构化帧序摘要（头部/逐元素/尾部）。字节级黄金样本在 fixtures/，不在此重复。"
+        }
+      }
+    },
+    "errorEnvelope": {
+      "description": "统一错误信封。HTTP 语义：400=语法性错误（坏 JSON/缺字段/类型错/未知 target 值）；413=尺寸上限（request-too-large / template-too-large / output-too-large）；422=成形但不可处理（option-out-of-range、option-not-supported、target-unsupported、sandbox-violation、template-invalid、missing-presentation、render-failed、wall-clock-exceeded、preview-unsupported）；401=鉴权失败（missing-api-key / invalid-api-key，鉴权关闭时不出现）；503=worker-saturated（渲染池满）。",
+      "type": "object",
+      "required": ["error"],
+      "properties": {
+        "error": {
+          "type": "object",
+          "required": ["code", "message"],
+          "properties": {
+            "code": { "type": "string" },
+            "message": { "type": "string" },
+            "details": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "hardLimits": {
+      "description": "ADR-0012 硬上限（默认值，服务可用配置收紧）：template ≤ 1 MiB（413）；请求信封 template+data ≤ 9 MiB（413）；输出 ≤ 50 MiB（413）；墙钟 ≤ 10 s（422，超时取消，内核渲染器逐帧检查中断）；widthMm ≤ 300（422）；copies ≤ 200（422）；dpi ∈ {203,300}（422）。渲染运行在受限 worker 池（默认 4 线程 + 32 队列，满载 503 worker-saturated）。",
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

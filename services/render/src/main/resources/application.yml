@@ -1,0 +1,34 @@
+# taprint-render defaults; every limit is the v1 contract value
+# (schema/render-api.json, ADR-0012).
+server:
+  port: 8080
+
+spring:
+  application:
+    name: taprint-render
+
+management:
+  endpoints:
+    enabled-by-default: false
+
+taprint:
+  render:
+    # Template DSL hard cap (bytes) — exceeding answers 413.
+    template-max-bytes: 1048576
+    # Untrusted data payload cap (bytes) on top of the template — 413.
+    data-max-bytes: 8388608
+    # Rendered output hard cap (bytes) — 413.
+    output-max-bytes: 52428800
+    # Wall-clock budget per render (ms) — 422 wall-clock-exceeded.
+    wall-clock-millis: 10000
+    # Bounded render worker pool (renders never run on request threads).
+    worker-pool-size: 4
+    worker-queue-capacity: 32
+    # Contract option ranges — 422 option-out-of-range.
+    allowed-dpis: [203, 300]
+    max-width-mm: 300
+    max-copies: 200
+    # X-API-Key auth. Empty = auth DISABLED. Set via env for anything that is
+    # not a loopback deployment:
+    #   TAPRINT_RENDER_API_KEYS=key1,key2
+    api-keys: ${TAPRINT_RENDER_API_KEYS:}
