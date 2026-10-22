@@ -8,7 +8,7 @@
   "bizFixtures": [
     {
       "file": "coupon-sheet-v2.0.json",
-      "relPath": "tests/fixtures/coupon-sheet-v2.0.json",
+      "relPath": "fixtures/templates/coupon-sheet-v2.0.json",
       "id": "coupon_sheet_v2",
       "code": "COUPON_SHEET",
       "name": "代金券联页-一页多单范例",
@@ -20,7 +20,7 @@
     },
     {
       "file": "delivery-note-v1.0.json",
-      "relPath": "tests/fixtures/delivery-note-v1.0.json",
+      "relPath": "fixtures/templates/delivery-note-v1.0.json",
       "id": "tpl_delivery_note_a4_v1",
       "code": "DELIVERY_NOTE",
       "name": "送货单-A4-标准",
@@ -32,7 +32,7 @@
     },
     {
       "file": "esc-pos-receipt-v1.0.json",
-      "relPath": "tests/fixtures/esc-pos-receipt-v1.0.json",
+      "relPath": "fixtures/templates/esc-pos-receipt-v1.0.json",
       "id": "tpl_esc_pos_receipt_80_v1",
       "code": "SALES_RECEIPT",
       "name": "POS 销售小票-80mm",
@@ -44,7 +44,7 @@
     },
     {
       "file": "goods-barcode-label-v1.0.json",
-      "relPath": "tests/fixtures/goods-barcode-label-v1.0.json",
+      "relPath": "fixtures/templates/goods-barcode-label-v1.0.json",
       "id": "tpl_goods_barcode_label_v1",
       "code": "GOODS_BARCODE_LABEL",
       "name": "商品条码标签-60x40",
@@ -57,7 +57,7 @@
     },
     {
       "file": "goods-label-v1.1.json",
-      "relPath": "tests/fixtures/goods-label-v1.1.json",
+      "relPath": "fixtures/templates/goods-label-v1.1.json",
       "id": "tpl_goods_label_4030",
       "code": "GOODS_LABEL_4030",
       "name": "商品价签 40x30（GOODS_LABEL 七键）",
@@ -69,7 +69,7 @@
     },
     {
       "file": "inventory-report-v2.0.json",
-      "relPath": "tests/fixtures/inventory-report-v2.0.json",
+      "relPath": "fixtures/templates/inventory-report-v2.0.json",
       "id": "inventory_report_v2",
       "code": "INVENTORY_REPORT",
       "name": "盘点汇总表-中国式报表范例",
@@ -81,7 +81,7 @@
     },
     {
       "file": "nup-extremes-v2.0.json",
-      "relPath": "tests/fixtures/nup-extremes-v2.0.json",
+      "relPath": "fixtures/templates/nup-extremes-v2.0.json",
       "id": "nup_extremes_v2",
       "code": "NUP_EXTREMES",
       "name": "一页多单极值-中国式报表范例",
@@ -93,7 +93,7 @@
     },
     {
       "file": "payment-receipt-v1.0.json",
-      "relPath": "tests/fixtures/payment-receipt-v1.0.json",
+      "relPath": "fixtures/templates/payment-receipt-v1.0.json",
       "id": "tpl_payment_receipt_a4_v1",
       "code": "RECEIPT_VOUCHER",
       "name": "收款单-A4-标准",
@@ -105,7 +105,7 @@
     },
     {
       "file": "payslip-v1.0.json",
-      "relPath": "tests/fixtures/payslip-v1.0.json",
+      "relPath": "fixtures/templates/payslip-v1.0.json",
       "id": "tpl_payslip_a5_v1",
       "code": "PAYSLIP",
       "name": "工资条-A5-密薪",
@@ -117,7 +117,7 @@
     },
     {
       "file": "purchase-order-v1.0.json",
-      "relPath": "tests/fixtures/purchase-order-v1.0.json",
+      "relPath": "fixtures/templates/purchase-order-v1.0.json",
       "id": "tpl_purchase_order_a4_v1",
       "code": "PURCHASE_ORDER",
       "name": "采购订单-A4-标准",
@@ -129,7 +129,7 @@
     },
     {
       "file": "sales-note-v1.0.json",
-      "relPath": "tests/fixtures/sales-note-v1.0.json",
+      "relPath": "fixtures/templates/sales-note-v1.0.json",
       "id": "tpl_sales_note_a4_v1",
       "code": "SALES_NOTE",
       "name": "销售单-A4-标准",
@@ -142,7 +142,7 @@
     },
     {
       "file": "sales-return-note-v1.0.json",
-      "relPath": "tests/fixtures/sales-return-note-v1.0.json",
+      "relPath": "fixtures/templates/sales-return-note-v1.0.json",
       "id": "tpl_sales_return_a4_v1",
       "code": "SALES_RETURN",
       "name": "销售退货单-A4-标准",
@@ -154,7 +154,7 @@
     },
     {
       "file": "shelf-label-v1.0.json",
-      "relPath": "tests/fixtures/shelf-label-v1.0.json",
+      "relPath": "fixtures/templates/shelf-label-v1.0.json",
       "id": "tpl_shelf_label_v1",
       "code": "SHELF_LABEL",
       "name": "货架标签-70x30",
@@ -166,7 +166,7 @@
     },
     {
       "file": "static-rows-boundary-v2.0.json",
-      "relPath": "tests/fixtures/static-rows-boundary-v2.0.json",
+      "relPath": "fixtures/templates/static-rows-boundary-v2.0.json",
       "id": "static_rows_boundary_v2",
       "code": "STATIC_ROWS_BOUNDARY",
       "name": "静态行边界-中国式报表范例",
@@ -178,7 +178,7 @@
     },
     {
       "file": "stock-in-note-v1.0.json",
-      "relPath": "tests/fixtures/stock-in-note-v1.0.json",
+      "relPath": "fixtures/templates/stock-in-note-v1.0.json",
       "id": "tpl_stock_in_a4_v1",
       "code": "STOCK_IN",
       "name": "入库单-A4-标准",
@@ -190,7 +190,7 @@
     },
     {
       "file": "stock-out-note-v1.0.json",
-      "relPath": "tests/fixtures/stock-out-note-v1.0.json",
+      "relPath": "fixtures/templates/stock-out-note-v1.0.json",
       "id": "tpl_stock_out_a4_v1",
       "code": "STOCK_OUT",
       "name": "出库单-A4-标准",
@@ -202,7 +202,7 @@
     },
     {
       "file": "transfer-note-v1.0.json",
-      "relPath": "tests/fixtures/transfer-note-v1.0.json",
+      "relPath": "fixtures/templates/transfer-note-v1.0.json",
       "id": "tpl_transfer_note_a4_v1",
       "code": "TRANSFER_NOTE",
       "name": "调拨单-A4-标准",
@@ -216,81 +216,81 @@
   "signerFixtures": [
     {
       "file": "message-signer-v1.json",
-      "relPath": "tests/fixtures/message-signer-v1.json",
+      "relPath": "fixtures/templates/message-signer-v1.json",
       "expectedFile": "message-signer-result.json",
-      "expectedRelPath": "tests/expected-output/message-signer-result.json"
+      "expectedRelPath": "fixtures/expected/parse-results/message-signer-result.json"
     },
     {
       "file": "message-signer-v2.json",
-      "relPath": "tests/fixtures/message-signer-v2.json",
+      "relPath": "fixtures/templates/message-signer-v2.json",
       "expectedFile": "message-signer-result-v2.json",
-      "expectedRelPath": "tests/expected-output/message-signer-result-v2.json"
+      "expectedRelPath": "fixtures/expected/parse-results/message-signer-result-v2.json"
     },
     {
       "file": "message-signer-v3.json",
-      "relPath": "tests/fixtures/message-signer-v3.json",
+      "relPath": "fixtures/templates/message-signer-v3.json",
       "expectedFile": "message-signer-result-v3.json",
-      "expectedRelPath": "tests/expected-output/message-signer-result-v3.json"
+      "expectedRelPath": "fixtures/expected/parse-results/message-signer-result-v3.json"
     },
     {
       "file": "message-signer-v4.json",
-      "relPath": "tests/fixtures/message-signer-v4.json",
+      "relPath": "fixtures/templates/message-signer-v4.json",
       "expectedFile": "message-signer-result-v4.json",
-      "expectedRelPath": "tests/expected-output/message-signer-result-v4.json"
+      "expectedRelPath": "fixtures/expected/parse-results/message-signer-result-v4.json"
     },
     {
       "file": "message-signer-v5.json",
-      "relPath": "tests/fixtures/message-signer-v5.json",
+      "relPath": "fixtures/templates/message-signer-v5.json",
       "expectedFile": "message-signer-result-v5.json",
-      "expectedRelPath": "tests/expected-output/message-signer-result-v5.json"
+      "expectedRelPath": "fixtures/expected/parse-results/message-signer-result-v5.json"
     }
   ],
   "parserFixtures": [
     {
       "file": "sales-note-v1.0.json",
-      "relPath": "tests/fixtures/sales-note-v1.0.json",
+      "relPath": "fixtures/templates/sales-note-v1.0.json",
       "expectedFile": "sales-note-parse-result.json",
-      "expectedRelPath": "tests/expected-output/sales-note-parse-result.json"
+      "expectedRelPath": "fixtures/expected/parse-results/sales-note-parse-result.json"
     },
     {
       "file": "inventory-report-v2.0.json",
-      "relPath": "tests/fixtures/inventory-report-v2.0.json",
+      "relPath": "fixtures/templates/inventory-report-v2.0.json",
       "expectedFile": "inventory-report-parse-result.json",
-      "expectedRelPath": "tests/expected-output/inventory-report-parse-result.json"
+      "expectedRelPath": "fixtures/expected/parse-results/inventory-report-parse-result.json"
     },
     {
       "file": "coupon-sheet-v2.0.json",
-      "relPath": "tests/fixtures/coupon-sheet-v2.0.json",
+      "relPath": "fixtures/templates/coupon-sheet-v2.0.json",
       "expectedFile": "coupon-sheet-parse-result.json",
-      "expectedRelPath": "tests/expected-output/coupon-sheet-parse-result.json"
+      "expectedRelPath": "fixtures/expected/parse-results/coupon-sheet-parse-result.json"
     },
     {
       "file": "static-rows-boundary-v2.0.json",
-      "relPath": "tests/fixtures/static-rows-boundary-v2.0.json",
+      "relPath": "fixtures/templates/static-rows-boundary-v2.0.json",
       "expectedFile": "static-rows-boundary-parse-result.json",
-      "expectedRelPath": "tests/expected-output/static-rows-boundary-parse-result.json"
+      "expectedRelPath": "fixtures/expected/parse-results/static-rows-boundary-parse-result.json"
     },
     {
       "file": "nup-extremes-v2.0.json",
-      "relPath": "tests/fixtures/nup-extremes-v2.0.json",
+      "relPath": "fixtures/templates/nup-extremes-v2.0.json",
       "expectedFile": "nup-extremes-parse-result.json",
-      "expectedRelPath": "tests/expected-output/nup-extremes-parse-result.json"
+      "expectedRelPath": "fixtures/expected/parse-results/nup-extremes-parse-result.json"
     }
   ],
   "migrationFixtures": [
     {
       "file": "migration-legacy-v09.json",
-      "relPath": "tests/fixtures/migration-legacy-v09.json",
+      "relPath": "fixtures/templates/migration-legacy-v09.json",
       "expectedFile": "migration-legacy-v09-result.json",
-      "expectedRelPath": "tests/expected-output/migration-legacy-v09-result.json",
+      "expectedRelPath": "fixtures/expected/parse-results/migration-legacy-v09-result.json",
       "fromVersion": "0.9",
       "toVersion": "1.0"
     },
     {
       "file": "migration-v10.json",
-      "relPath": "tests/fixtures/migration-v10.json",
+      "relPath": "fixtures/templates/migration-v10.json",
       "expectedFile": "migration-v10-result.json",
-      "expectedRelPath": "tests/expected-output/migration-v10-result.json",
+      "expectedRelPath": "fixtures/expected/parse-results/migration-v10-result.json",
       "fromVersion": "1.0",
       "toVersion": "2.0"
     }
