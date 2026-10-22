@@ -39,8 +39,11 @@ is free".
    through the GitHub org (create the public verification repo the portal
    shows, click Verify, delete the verification repo afterwards). A GPG
    signing key is only needed at first publish.
-4. **NuGet**: create the API key early (glob pattern `Taprint*`, push
-   scope) so v0.1.0 publishing is one command.
+4. **NuGet**: register a **Trusted Publishing** policy (OIDC, no
+   long-lived key) bound to GitHub Actions — owner `taprint`, repo
+   `taprint`, workflow `release.yml` (the single release workflow all
+   four registries publish from). A classic API key (glob `Taprint*`,
+   push scope) is only a fallback for manual local publishing.
 5. **pub.dev**: sign in once to confirm the Google account; the package
    name is claimed by first publish at v0.1.0 (verified publisher is
    deferred until a domain exists).
