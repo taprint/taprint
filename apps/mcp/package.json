@@ -1,6 +1,6 @@
 {
   "name": "taprint-mcp",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "MCP server for the taprint print-template DSL: validate templates, compile to ESC/POS / TSPL / CPCL byte streams, browse examples. Zero hardware access, zero native dependencies (ADR-0008).",
   "type": "module",
   "license": "Apache-2.0",

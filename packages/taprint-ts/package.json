@@ -1,6 +1,6 @@
 {
   "name": "taprint",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Printer-neutral print template DSL kernel (TypeScript) — parse, validate, migrate and canonicalize templates; one contract shared across the TypeScript/C#/Dart/Java implementations.",
   "type": "module",
   "license": "Apache-2.0",

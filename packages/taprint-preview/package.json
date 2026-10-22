@@ -1,6 +1,6 @@
 {
   "name": "taprint-preview",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Bitmap preview engine for the taprint print-template DSL: CJK text measurement and layout (opentype.js), Code128/EAN13/QR bitmaps (bwip-js), 203/300 dpi rasterization and monochrome conversion, PNG output (pngjs). Pure JavaScript — zero native dependencies, zero hardware access (ADR-0008).",
   "type": "module",
   "license": "Apache-2.0",

@@ -4,6 +4,27 @@ All notable changes to taprint are documented in this file.
 The format follows Keep a Changelog; versioning: 0.x releases may break
 between minors, strict semver applies from 1.0.
 
+## [1.0.0] — first complete release
+
+### Added
+
+- Template DSL v1.0/1.1/2.0 schemas with a versioned changelog and
+  golden fixtures across four languages (TypeScript, C#, Dart, Java).
+- Protocol encoders for ESC/POS, TSPL, CPCL **and ZPL** in all four
+  languages (ADR-0001 gate opened at M2), with the frozen L2 coverage
+  matrix, frame-order goldens and the conformance divergence ledger.
+- `taprint-mcp`: validate_template / compile / list_examples /
+  render_preview (zero hardware, zero native dependencies).
+- `taprint-preview`: pure-JS bitmap engine (CJK measurement & layout,
+  203/300 dpi, code128/EAN13/QR bitmaps).
+- Designer: visual template designer, standalone and embeddable
+  (embed protocol v2, neutral names).
+- `taprint-render`: self-hosted render service — sandboxed expressions
+  (AST allowlist, fuzz-tested), hard resource limits, worker isolation,
+  API-key auth, Dockerfile.
+- GB18030 full mapping table (23,940 code points) with a generated
+  oracle; reference print channels for Windows spooler and Flutter.
+
 ## [Unreleased]
 
 ### Added

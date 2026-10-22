@@ -4,20 +4,24 @@
 [![CI](https://github.com/taprint/taprint/actions/workflows/ci.yml/badge.svg)](https://github.com/taprint/taprint/actions/workflows/ci.yml)
 
 A printer-neutral template DSL for label, receipt and A4-document
-printing: design a template once (JSON — a visual designer joins in a
-later release), compile it to **ESC/POS**, **TSPL** and **CPCL** command
-streams (**ZPL** lands in v0.2 in all four languages at once), and
-render it with the same kernel in **TypeScript, C#, Dart and Java**.
+printing: design a template once — in JSON or in the bundled visual
+designer — and compile it to **ESC/POS**, **TSPL**, **CPCL** and **ZPL**
+command streams, rendered with the same kernel in **TypeScript, C#,
+Dart and Java**, previewed as PNG, printed through reference channels,
+or served over HTTP by a self-hosted render service.
 Cross-language parity is pinned by shared golden fixtures, not by
 trust.
 
-## What is in the box today (v0.1 scope, pre-tag)
+## What is in the box (v1.0.0)
+
+Everything below ships in this release; the roadmap tables from earlier
+prereleases are history.
 
 | Piece | Where | State |
 |---|---|---|
 | Template DSL schemas (v1.0 / v1.1 / v2.0) | `schema/` | authoritative contract, versioned changelog |
 | Kernel: parse / validate / migrate / canonicalize | `packages/taprint-{ts,cs,dart,java}` | four languages, 600+ tests green |
-| Protocol encoders: ESC/POS + TSPL + CPCL | same packages | four languages (ZPL gated to v0.2 — ADR-0001) |
+| Protocol encoders: ESC/POS + TSPL + CPCL + ZPL | same packages | four languages (ADR-0001 gate opened at v0.2) |
 | PDF rendering (A4 documents) | `packages/taprint-java` | Java only in v0.1 (OpenPDF, MPL-2.0 route) |
 | MCP server: `validate_template` / `compile` / `list_examples` / `render_preview` | `apps/mcp` | zero hardware, zero native deps (ADR-0008) |
 | Bitmap preview engine (label/receipt → monochrome PNG, 203/300 dpi) | `packages/taprint-preview` | pure JS (opentype.js / bwip-js / pngjs), M3a |

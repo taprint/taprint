@@ -1,6 +1,6 @@
 {
   "name": "taprint-designer",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Taprint visual print-template designer: full SPA and embeddable double mode (postMessage host contract, protocol v2).",
   "license": "Apache-2.0",
   "type": "module",

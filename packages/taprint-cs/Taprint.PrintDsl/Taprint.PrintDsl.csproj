@@ -12,7 +12,7 @@
 
     <!-- NuGet metadata: version tracks the taprint kernel release train. -->
     <PackageId>Taprint.PrintDsl</PackageId>
-    <Version>0.1.0</Version>
+    <Version>1.0.0</Version>
     <Authors>taprint maintainers</Authors>
     <Description>Printer-neutral print template DSL kernel (C#): DSL parse/validate/migrate, expression compiler, HMAC message signer. Cross-language parity is pinned by the shared golden fixtures in the taprint repository.</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
