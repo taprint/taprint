@@ -20,3 +20,29 @@ export { DslValidator, FieldRegistry } from './validator.ts';
 export { DslMigrator, CURRENT_VERSION, LEGACY_VERSION } from './migrator.ts';
 export { ExpressionCompiler, ExpressionSyntaxError } from './expression-compiler.ts';
 export { MessageSigner } from './message-signer.ts';
+// 三协议命令流编码器（ESC/POS / TSPL / CPCL，M1b 交付）与 ADR-0009 数值规范公共件。
+export { roundHalfAwayFromZero, dotFromMm, formatFixed, formatMm, clampInt, requireInt } from './protocols/numeric.ts';
+export { concatBytes, asciiBytes, indexOfBytes, containsBytes } from './protocols/bytes.ts';
+export {
+  LABEL_DOTS_PER_MM,
+  LABEL_DEFAULTS,
+  QRCODE_CELL_DEFAULT,
+  resolveCopies,
+  type LabelSpec,
+  type LabelElement,
+  type LabelBuildOptions,
+} from './protocols/label.ts';
+export { EscPosBuilder, type EscPosAlign, type EscPosFontSize, type EscPosTextOptions } from './protocols/escpos.ts';
+export {
+  TsplBuilder,
+  type TsplTextOptions,
+  type TsplBarcodeOptions,
+  type TsplQrOptions,
+} from './protocols/tspl.ts';
+export {
+  CpclBuilder,
+  type CpclHeaderOptions,
+  type CpclTextOptions,
+  type CpclBarcodeOptions,
+  type CpclQrOptions,
+} from './protocols/cpcl.ts';
