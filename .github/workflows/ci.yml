@@ -88,3 +88,18 @@ jobs:
           java-version: 17
           cache: maven
       - run: mvn -B -f packages/taprint-java/pom.xml test
+
+  flutter-transport:
+    name: Flutter transport channels
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: channels/flutter-transport
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
