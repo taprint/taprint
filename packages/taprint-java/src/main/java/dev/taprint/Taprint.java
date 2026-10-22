@@ -21,6 +21,7 @@ import dev.taprint.renderer.PrintImageLoader;
 import dev.taprint.renderer.Renderer;
 import dev.taprint.renderer.RendererRegistry;
 import dev.taprint.renderer.TsplRenderer;
+import dev.taprint.renderer.ZplRenderer;
 
 import java.util.List;
 
@@ -78,7 +79,7 @@ public final class Taprint {
         return new Taprint(evaluator, new RendererRegistry(standardRenderers(fontProvider)));
     }
 
-    /** The default renderer set: ESC/POS, TSPL, CPCL and PDF. */
+    /** The default renderer set: ESC/POS, TSPL, CPCL, ZPL and PDF. */
     public static List<Renderer> standardRenderers(FontProvider fontProvider) {
         FontProvider provider = fontProvider == null ? new ClasspathFontProvider() : fontProvider;
         BarcodeRenderer barcodeRenderer = new BarcodeRenderer();
@@ -89,6 +90,7 @@ public final class Taprint {
                 new EscPosRenderer(qrcodeRenderer, imageLoader, cjkRasterizer),
                 new TsplRenderer(imageLoader, cjkRasterizer),
                 new CpclRenderer(cjkRasterizer, imageLoader),
+                new ZplRenderer(),
                 new PdfRenderer(barcodeRenderer, imageLoader, provider));
     }
 

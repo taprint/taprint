@@ -1,0 +1,35 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "zpl-copies",
+  "title": "ZPL 份数（^PQ 单帧承载，=1 不发）",
+  "profile": "label",
+  "protocols": [
+    "zpl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "copies",
+      "protocol": "zpl"
+    }
+  ],
+  "input": {
+    "copies": 2,
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "QTY-2",
+        "x": "4mm",
+        "y": "18mm"
+      }
+    ]
+  }
+}

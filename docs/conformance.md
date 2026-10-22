@@ -10,15 +10,16 @@ Layers: **L1** = frame order + params (`frames.txt`, every case);
 **L2** = byte digest (`bytes.sha256`, matrix cases only, green cells
 asserted; identity-function cases are L1-only per ADR-0007).
 
-Current sweep: 47 cases / 48 case×protocol runs / 37 coverage-matrix
-cells covered / 46 L2-eligible runs.
+Current sweep: 63 cases / 64 case×protocol runs / 46 coverage-matrix
+cells covered / 62 L2-eligible runs (ZPL column activated at v0.2,
+ADR-0001 gate opened).
 
 ## Runner status
 
 | language | L1 | L2 (asserted green) |
 |----------|----|---------------------|
-| Java (reference) | all cases asserted | 46/46 |
-| TypeScript | all cases compared; 18 equal / 26 diverge / 4 skip | 4/46 (`escpos-text-unmapped`, `escpos-qrcode`, `escpos-copies-cut-feed`, `tspl-unmapped-char`) |
+| Java (reference) | all cases asserted | 62/62 |
+| TypeScript | all cases compared; 33 equal / 27 diverge / 4 skip | 19/62 (ESC/POS `escpos-text-unmapped`, `escpos-qrcode`, `escpos-copies-cut-feed`; TSPL `tspl-unmapped-char`; ZPL 15 格 — 见 §ZPL) |
 | C# | runner scaffold ready, not enabled (`GoldenCommandConformance.cs`) | 0 (not enabled) |
 | Dart | runner scaffold ready, not enabled (`test/golden_commands_test.dart`) | 0 (not enabled) |
 
@@ -62,6 +63,41 @@ against the Java reference stream.
 | C4 | LINE 厚度：Java 固定 2；TS 用元素高度 dot | `cpcl-line-box` |
 | C5 | L1 相等面（11 用例，字节因 C1 不等）：对齐/条码/QR/份数/收尾/间隙/dpi/纸型帧序/身份函数 | `cpcl-text-align-*`、`cpcl-barcode-*`、`cpcl-qrcode`、`cpcl-copies`、`cpcl-feed-tear`、`cpcl-gap-*`、`cpcl-dpi-200`、`cpcl-size-frame-*`、`label-identity-fn/cpcl` |
 
+## ZPL — TS vs Java (v0.2, ADR-0001 gate opened)
+
+ZPL landed in all four languages simultaneously (v0.2, builder face:
+Java `renderer/ZplRenderer` · TS `src/protocols/zpl.ts` · C#
+`Taprint.PrintDsl/ZplBuilder.cs` · Dart `lib/src/printers/zpl_encoder.dart`).
+16 golden cases, matrix v1 ZPL column fully covered; **15/16 TS cells are
+byte-identical (L1+L2 green)** — the only divergence:
+
+| # | Divergence | Evidence |
+|---|------------|----------|
+| Z1 | GBK 表覆盖：TS 子集表缺「架」字 → U+FFFD；Java 走 JDK 全表 2 字节原样（与 T2 同根因） | `zpl-text-cjk` |
+| Z2 | dot 折算常数：Java 203/25.4 ≈ 7.9921 dot/mm vs TS/C#/Dart 8 dot/mm——本批用例坐标全部同敛（含 `zpl-dpi-203` 的 12.7mm：两端同落 102 dot），潜在分叉面为非整点中点坐标（同 T7 口径，未由本批用例钉死） | 常数级登记，无帧差用例 |
+| Z3 | 内容通道：Java 参照原 `^CI28`（UTF-8）被内核 GBK + U+FFFD 口径替换（ADR-0009 §3，四语言字节对拍前提） | 全部 zpl 用例（行为对齐，非分叉） |
+
+Latent API-surface differences (no fixture pins them; register-only):
+
+- **style.fontSize 档**：Java 参照不读 style（恒 size/缺省 1）；TS/C#/Dart
+  读兼容档（double→2/triple→3/quadruple→4）。
+- **未知码制**：四语言同折 CODE128（Java 参照 `Symbology.of` 缺省口径）——
+  与 TSPL/CPCL 构建器的「拒绝不印」纪律不同，为 ZPL 有意选择。
+- **barcode 高度缺省**：Java 参照 fallback 10mm；TS/C# label 面 6mm 缺省、
+  Dart `label_layout` 6mm——模板显式写 height 时无差异（本批用例均显式）。
+- **QR size 缺省**：Java/TS 6；Dart `label_layout` cellSize 缺省 4。
+- **image 元素**：v0.2 不支持（Java 抛 UNSUPPORTED_ELEMENT，TS/Dart 跳过、
+  C# 未入元素面）——与 CJK 位图路由（^GFA）同批延后 v0.2.x（ADR-0001）。
+
+### ZPL 本地预览器（Java）
+
+参照 `LabelaryClient`（外部 Labelary HTTP 渲染服务）改造为
+`renderer/ZplPreviewer`：ZPL→PNG 纯 Java 光栅（AWT 文本 + ZXing 码图 +
+JDK ImageIO），零新增依赖、零网络外呼——原「免费档 60 天留存 / PII 白名单」
+红线随数据不出本机消解。预览产物为像素近似（一维码宽度按内容估算、文本
+光栅与打印机内置字库不同源），**不入 golden 断言面**；真实打印机像素级
+校验归真机窗口。
+
 ## Java-side compliance fixes made with this ledger (ADR-0009)
 
 - GBK-unmappable characters: TSPL previously **threw** `RENDER_FAILED`,
@@ -73,10 +109,21 @@ against the Java reference stream.
 ## C# / Dart status
 
 Scaffolds compile and enumerate the manifest (C# verified:
-`dotnet test` → 274 passed / 4 golden facts skipped, TZ=UTC). Enabling
-requires mapping the canonical cases onto the C# builders and Dart
-encoders and repeating the sweep; expected known deltas to check first:
+`dotnet test` → 290 passed / 4 golden facts skipped, TZ=UTC — 含本批
+16 个 ZPL 构造器测试；Dart 无本地环境，`zpl_encoder_test.dart` 静态自查
+通过，待 CI dart 通道首跑). ZPL enabling follows the same path as
+TSPL/CPCL: map the canonical cases onto the C# `ZplBuilder` and Dart
+`ZplEncoder` and repeat the sweep; expected known deltas to check first:
 CPCL CRLF (C# builder emits CRLF like Java), TSPL barcode symbology
 token, Dart line-endings LF, Dart unmapped `'question'` compatibility
 tier, and the Dart GB18030 full-table channel (four-byte area vs Java
 GBK two-byte area for characters beyond GBK).
+
+### Pre-existing flake (register-only, out of this batch's scope)
+
+`FixtureManifestTests.v1_bizFixture迁移至v2后过v2_schema_超集承诺锁定`
+intermittently fails (~50% of full-suite runs, identical on untouched
+main) with a delivery-note fixture migrating `/name` to integer —
+suspected shared fixture state under parallel test execution. Not
+caused by or related to the ZPL batch; filed here so the ledger stays
+honest about C# run results.

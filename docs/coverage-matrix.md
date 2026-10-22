@@ -6,7 +6,8 @@ cases; CI emits a gap report and fails when a cell is empty. Cells marked
 "—" are protocol-unsupported and need no L2 case.
 
 Frozen at repository scaffold; expanded at the v0.1 conformance review.
-ZPL columns activate with v0.2 (ADR-0001).
+ZPL column **activated at v0.2** (2026-10-22, ADR-0001 gate opened — all
+four languages landed together as required).
 
 | # | Feature × protocol                | ESC/POS | TSPL | CPCL | ZPL (v0.2) |
 |---|-----------------------------------|---------|------|------|------------|

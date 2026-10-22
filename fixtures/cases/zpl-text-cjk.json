@@ -1,0 +1,35 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "zpl-text-cjk",
+  "title": "ZPL 中文 GBK 内容通道（^FD 域逐字节）",
+  "profile": "label",
+  "protocols": [
+    "zpl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "codepage-gb",
+      "protocol": "zpl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "货架标签",
+        "x": "4mm",
+        "y": "6mm",
+        "size": 2
+      }
+    ]
+  }
+}

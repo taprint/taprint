@@ -1,0 +1,35 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "zpl-qrcode",
+  "title": "ZPL QR（^BQN,2,<size> + ^FDMA, 三段一域）",
+  "profile": "label",
+  "protocols": [
+    "zpl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "qrcode-ecc",
+      "protocol": "zpl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "qrcode",
+        "text": "TAPRINT-GOLDEN-ZPL",
+        "x": "20mm",
+        "y": "10mm",
+        "size": 6
+      }
+    ]
+  }
+}

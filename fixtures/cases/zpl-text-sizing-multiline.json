@@ -1,0 +1,35 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "zpl-text-sizing-multiline",
+  "title": "ZPL 多行文本逐行 ^FD（行距 = 字高）",
+  "profile": "label",
+  "protocols": [
+    "zpl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "text-font-sizing",
+      "protocol": "zpl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "LINE-A\nLINE-B",
+        "x": "4mm",
+        "y": "4mm",
+        "size": 3
+      }
+    ]
+  }
+}

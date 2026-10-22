@@ -1,0 +1,42 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "zpl-text-sizing-basic",
+  "title": "ZPL 字号倍率（^A0N,28×mul）",
+  "profile": "label",
+  "protocols": [
+    "zpl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "text-font-sizing",
+      "protocol": "zpl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "SHELF A-01",
+        "x": "4mm",
+        "y": "4mm",
+        "size": 2
+      },
+      {
+        "type": "text",
+        "text": "2026-10-22",
+        "x": "4mm",
+        "y": "30mm",
+        "size": 1
+      }
+    ]
+  }
+}

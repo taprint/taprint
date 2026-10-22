@@ -23,3 +23,4 @@ export 'src/printers/gbk_full.dart' show gbkFullTable, gbkFullTableSize;
 export 'src/printers/label_layout.dart';
 export 'src/printers/printer_log.dart';
 export 'src/printers/tspl_encoder.dart';
+export 'src/printers/zpl_encoder.dart';

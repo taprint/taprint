@@ -1,0 +1,36 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "zpl-barcode-ean13",
+  "title": "ZPL EAN13（^BEN）",
+  "profile": "label",
+  "protocols": [
+    "zpl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "barcode-ean13",
+      "protocol": "zpl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "barcode",
+        "text": "6901234567892",
+        "symbology": "EAN13",
+        "x": "4mm",
+        "y": "22mm",
+        "height": "10mm"
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "taprint/golden-case@1",
+  "id": "zpl-dpi-203",
+  "title": "ZPL 203dpi 折算（25.4mm=1in 网格）",
+  "profile": "label",
+  "protocols": [
+    "zpl"
+  ],
+  "containsIdentityFn": false,
+  "special": null,
+  "matrixCells": [
+    {
+      "feature": "dpi-dimensioning",
+      "protocol": "zpl"
+    }
+  ],
+  "input": {
+    "label": {
+      "width": "60mm",
+      "height": "40mm",
+      "gap": "2mm",
+      "density": 8,
+      "speed": 4
+    },
+    "body": [
+      {
+        "type": "text",
+        "text": "IN-GRID",
+        "x": "25.4mm",
+        "y": "12.7mm"
+      }
+    ]
+  }
+}

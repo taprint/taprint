@@ -68,6 +68,13 @@ function latin1(bytes: Uint8Array): string {
   return out;
 }
 
+/** latin1 逆变换（帧参数原文 → 原始字节；ZPL ^FD 内容字节保真用）。 */
+function latin1Bytes(text: string): Uint8Array {
+  const out = new Uint8Array(text.length);
+  for (let i = 0; i < text.length; i++) out[i] = text.charCodeAt(i) & 0xff;
+  return out;
+}
+
 function csv(line: Uint8Array, from: number): Uint8Array[] {
   const parts: Uint8Array[] = [];
   let start = from;
@@ -252,6 +259,85 @@ export function cpclFrames(payload: Uint8Array): Frame[] {
       frames.push(frame('PRINT'));
     } else {
       frames.push(p(frame('UNKNOWN'), 'raw', escapeContent(line)));
+    }
+  }
+  return frames;
+}
+
+// ---- ZPL ----
+
+// ZPL 帧提取：按 ^ 指令边界切分（ZPL 非行式协议，指令 = ^ + 两字符码 +
+// 参数段，参数段止于下一个 ^）——与 Java 参照 GoldenFrames.zpl 逐规则对齐。
+export function zplFrames(payload: Uint8Array): Frame[] {
+  const frames: Frame[] = [];
+  const text = latin1(payload);
+  const at = (args: string[], i: number): string => (i < args.length ? args[i] : '-');
+  let i = 0;
+  while (i < text.length) {
+    if (text[i] !== '^' || i + 3 > text.length ||
+        !/[A-Z]/.test(text[i + 1]) || !/[A-Z0-9]/.test(text[i + 2])) {
+      i += 1;
+      continue;
+    }
+    const code = text.slice(i + 1, i + 3);
+    let end = text.indexOf('^', i + 3);
+    if (end < 0) end = text.length;
+    const params = text.slice(i + 3, end);
+    i = end;
+    const args = params.split(',');
+    switch (code) {
+      case 'XA':
+        frames.push(frame('FRAME_START'));
+        break;
+      case 'LH':
+        frames.push(p(p(frame('LABEL_HOME'), 'x', at(args, 0)), 'y', at(args, 1)));
+        break;
+      case 'PW':
+        frames.push(p(frame('PRINT_WIDTH'), 'dots', params));
+        break;
+      case 'LL':
+        frames.push(p(frame('LABEL_LENGTH'), 'dots', params));
+        break;
+      case 'FO':
+        frames.push(p(p(frame('FIELD_ORIGIN'), 'x', at(args, 0)), 'y', at(args, 1)));
+        break;
+      case 'A0':
+        frames.push(p(p(p(frame('FONT'), 'rotation', at(args, 0)), 'h', at(args, 1)), 'w', at(args, 2)));
+        break;
+      case 'BY':
+        frames.push(p(p(p(frame('BARCODE_DEFAULT'), 'narrow', at(args, 0)), 'ratio', at(args, 1)), 'height', at(args, 2)));
+        break;
+      case 'BC':
+      case 'BE':
+      case 'B3':
+      case 'B2':
+      case 'BU': {
+        const f = frame('BARCODE_SYM');
+        p(p(f, 'head', code), 'args', params);
+        frames.push(f);
+        break;
+      }
+      case 'BQ':
+        frames.push(p(p(p(frame('QR_BEGIN'), 'rotation', at(args, 0)), 'model', at(args, 1)), 'size', at(args, 2)));
+        break;
+      case 'FD':
+        frames.push(p(frame('FIELD_DATA'), 'content', escapeContent(latin1Bytes(params))));
+        break;
+      case 'FS':
+        frames.push(frame('FIELD_SEP'));
+        break;
+      case 'GB':
+        frames.push(p(p(p(frame('GRAPHIC_BOX'), 'w', at(args, 0)), 'h', at(args, 1)), 't', at(args, 2)));
+        break;
+      case 'PQ':
+        frames.push(p(frame('PRINT_QTY'), 'n', params));
+        break;
+      case 'XZ':
+        frames.push(frame('FRAME_END'));
+        break;
+      default:
+        frames.push(p(frame('UNKNOWN'), 'raw', escapeContent(latin1Bytes(`^${code}${params}`))));
+        break;
     }
   }
   return frames;

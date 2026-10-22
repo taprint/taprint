@@ -23,6 +23,7 @@ import dev.taprint.renderer.PrintImageLoader;
 import dev.taprint.renderer.RenderContext;
 import dev.taprint.renderer.RenderResult;
 import dev.taprint.renderer.TsplRenderer;
+import dev.taprint.renderer.ZplRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +73,8 @@ public final class GoldenDriver {
             frames = GoldenFrames.tspl(result.getPayload());
         } else if ("cpcl".equals(protocol)) {
             frames = GoldenFrames.cpcl(result.getPayload());
+        } else if ("zpl".equals(protocol)) {
+            frames = GoldenFrames.zpl(result.getPayload());
         } else {
             frames = GoldenFrames.escpos(result.getPayload());
         }
@@ -91,6 +94,8 @@ public final class GoldenDriver {
                 return new TsplRenderer(imageLoader, rasterizer);
             case "cpcl":
                 return new CpclRenderer(rasterizer, imageLoader);
+            case "zpl":
+                return new ZplRenderer();
             case "escpos":
                 return new EscPosRenderer(new QrcodeRenderer(new BarcodeRenderer()), imageLoader, rasterizer);
             default:
@@ -234,6 +239,8 @@ public final class GoldenDriver {
                 return CommandSet.TSPL;
             case "cpcl":
                 return CommandSet.CPCL;
+            case "zpl":
+                return CommandSet.ZPL;
             default:
                 return CommandSet.ESC_POS;
         }

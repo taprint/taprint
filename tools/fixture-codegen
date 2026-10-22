@@ -705,6 +705,222 @@ CASES: list[dict] = [
             ],
         },
     },
+    # ---- ZPL (label, v0.2 内置字库路由 ADR-0001) ----
+    {
+        "id": "zpl-text-sizing-basic",
+        "title": "ZPL 字号倍率（^A0N,28×mul）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["text-font-sizing"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "SHELF A-01", "x": "4mm", "y": "4mm", "size": 2},
+                {"type": "text", "text": "2026-10-22", "x": "4mm", "y": "30mm", "size": 1},
+            ],
+        },
+    },
+    {
+        "id": "zpl-text-sizing-multiline",
+        "title": "ZPL 多行文本逐行 ^FD（行距 = 字高）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["text-font-sizing"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "LINE-A\nLINE-B", "x": "4mm", "y": "4mm", "size": 3},
+            ],
+        },
+    },
+    {
+        "id": "zpl-text-align-basic",
+        "title": "ZPL 对齐（绝对坐标承载）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["text-alignment"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "LEFT-EDGE", "x": "2mm", "y": "4mm", "align": "left"},
+                {"type": "text", "text": "RIGHT-ANCHOR", "x": "30mm", "y": "20mm", "align": "right"},
+            ],
+        },
+    },
+    {
+        "id": "zpl-text-align-alt",
+        "title": "ZPL 对齐二联（center 位）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["text-alignment"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "CENTER-MARK", "x": "20mm", "y": "10mm", "align": "center"},
+            ],
+        },
+    },
+    {
+        "id": "zpl-text-cjk",
+        "title": "ZPL 中文 GBK 内容通道（^FD 域逐字节）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["codepage-gb"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "货架标签", "x": "4mm", "y": "6mm", "size": 2},
+            ],
+        },
+    },
+    {
+        "id": "zpl-barcode-code128",
+        "title": "ZPL CODE128（^BCN + ^BY2,3）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["barcode-code128"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "barcode", "text": "SKU-100086", "symbology": "CODE128",
+                 "x": "4mm", "y": "22mm", "height": "10mm"},
+            ],
+        },
+    },
+    {
+        "id": "zpl-barcode-ean13",
+        "title": "ZPL EAN13（^BEN）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["barcode-ean13"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "barcode", "text": "6901234567892", "symbology": "EAN13",
+                 "x": "4mm", "y": "22mm", "height": "10mm"},
+            ],
+        },
+    },
+    {
+        "id": "zpl-qrcode",
+        "title": "ZPL QR（^BQN,2,<size> + ^FDMA, 三段一域）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["qrcode-ecc"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "qrcode", "text": "TAPRINT-GOLDEN-ZPL", "x": "20mm", "y": "10mm", "size": 6},
+            ],
+        },
+    },
+    {
+        "id": "zpl-line-box",
+        "title": "ZPL 线/框（^GB 细框同源）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["rule-line", "box-rect"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "line", "x": "2mm", "y": "34mm", "width": "56mm", "height": "0.5mm"},
+                {"type": "rect", "x": "2mm", "y": "2mm", "width": "56mm", "height": "36mm"},
+            ],
+        },
+    },
+    {
+        "id": "zpl-copies",
+        "title": "ZPL 份数（^PQ 单帧承载，=1 不发）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["copies"]),
+        "input": {
+            "copies": 2,
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "QTY-2", "x": "4mm", "y": "18mm"},
+            ],
+        },
+    },
+    {
+        "id": "zpl-feed-tear",
+        "title": "ZPL 收尾帧（^XZ；无显式走纸/撕纸指令——conformance 登记）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["feed-cut-tear"]),
+        "input": {
+            "label": LABEL40,
+            "body": [
+                {"type": "text", "text": "TEAR-OFF", "x": "2mm", "y": "12mm"},
+            ],
+        },
+    },
+    {
+        "id": "zpl-gap-blackmark",
+        "title": "ZPL 间隙纸（v0.2 帧头无 GAP 位——conformance 登记）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["gap-blackmark"]),
+        "input": {
+            "label": {"width": "60mm", "height": "40mm", "gap": "2mm", "density": 8, "speed": 4},
+            "body": [
+                {"type": "text", "text": "GAP-2MM", "x": "4mm", "y": "18mm"},
+            ],
+        },
+    },
+    {
+        "id": "zpl-dpi-203",
+        "title": "ZPL 203dpi 折算（25.4mm=1in 网格）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["dpi-dimensioning"]),
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "IN-GRID", "x": "25.4mm", "y": "12.7mm"},
+            ],
+        },
+    },
+    {
+        "id": "zpl-size-frame-a",
+        "title": "ZPL 帧序钉死：^XA→^LH→^PW→^LL→body→[^PQ]→^XZ",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["label-size-frame"]),
+        "input": {
+            "label": {"width": "60mm", "height": "40mm", "gap": "2mm", "density": 8, "speed": 4},
+            "body": [
+                {"type": "text", "text": "FRAME-A", "x": "4mm", "y": "18mm"},
+            ],
+        },
+    },
+    {
+        "id": "zpl-size-frame-b",
+        "title": "ZPL 第二纸型帧序（40x30）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "matrixCells": cells("zpl", ["label-size-frame"]),
+        "input": {
+            "label": {"width": "40mm", "height": "30mm", "gap": "2mm", "density": 8, "speed": 4},
+            "body": [
+                {"type": "text", "text": "FRAME-B", "x": "4mm", "y": "12mm"},
+            ],
+        },
+    },
+    {
+        "id": "zpl-unmapped-char",
+        "title": "ZPL 表外字符（GBK 通道 U+FFFD 占位——ADR-0009）",
+        "profile": "label",
+        "protocols": ["zpl"],
+        "special": "unmapped-char",
+        "matrixCells": [],
+        "input": {
+            "label": LABEL60,
+            "body": [
+                {"type": "text", "text": "货位😀07", "x": "4mm", "y": "18mm"},
+            ],
+        },
+    },
     # ---- 强制特例：身份函数（L1-only）----
     {
         "id": "label-identity-fn",
@@ -743,8 +959,6 @@ def parse_matrix() -> dict[tuple[str, str], int]:
             continue
         for name, index in columns.items():
             protocol = protocols[name]
-            if protocol == "zpl":
-                continue
             cell = parts[index - 1]
             if cell in ("—", "-", ""):
                 continue
