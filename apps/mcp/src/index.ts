@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: Apache-2.0
-// taprint-mcp 入口（ADR-0008 v0.1）：stdio transport，三工具
+// taprint-mcp 入口（ADR-0008 v0.1）：stdio transport，四工具（v0.1 三工具 + M3a render_preview）
 // validate_template / compile / list_examples；预览与硬件打印不在 v0.1。
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { SERVER_INFO, createServer } from './server.ts';

@@ -1,11 +1,11 @@
 # taprint-mcp
 
 MCP server for the [taprint](https://github.com/taprint/taprint) print-template DSL:
-`validate_template`, `compile`, `list_examples` (v0.1, ADR-0008). Zero printer /
+`validate_template`, `compile`, `list_examples` (v0.1) and `render_preview`
+(M3a, bitmap preview via the pure-JS `taprint-preview` engine). Zero printer /
 hardware access, zero native dependencies — an `npx` one-liner works everywhere
-Node runs. Preview rasterization (`render_preview`) arrives in v0.3; **physical
-printing is permanently out of scope** — hosts print the compiled byte streams
-themselves.
+Node runs. **Physical printing is permanently out of scope** — hosts print the
+compiled byte streams themselves.
 
 ## Install & run
 
@@ -87,6 +87,35 @@ price/shelf labels, 2 A4 documents): `{count, examples:[{name, code,
 schemaVersion, category, file, template}]}`. Feed any of them straight back
 into `validate_template` / `compile`.
 
+### `render_preview`
+
+Render a template (plus binding data) into a monochrome bitmap preview
+(M3a, pure-JS engine `taprint-preview` — ADR-0008: no native canvas).
+
+Input:
+
+```jsonc
+{
+  "template": { /* taprint template */ },
+  "data": { /* fields per the template's dataSources/parameters */ },
+  "presentation": "auto" | "label" | "receipt",       // optional, auto = label first
+  "options": { "dpi": 203 | 300, "threshold": 128 }   // optional
+}
+```
+
+Output: `{path, byteCount, presentation, widthDots, heightDots, warnings}` —
+the PNG is written to a temp file (read it back from `path`; the host may
+delete it after display). Geometry is ADR-0009 half-up at true dpi
+(203/25.4 dot/mm); label = absolute layout, receipt = flow layout on the
+24-dot line grid (C# `IrWpfPreviewRenderer`-aligned). `warnings` carries
+honest degradations: `image-skipped`, `cashDrawer-skipped`,
+`unsupported-symbology` (preview v1 supports CODE128/EAN13),
+`box-radius-degraded`, `missing-glyph`.
+
+Errors: `missing-presentation` (no label/receipt presentation),
+`unsupported-dpi` (only 203/300), `barcode-encode-failed` (bwip-js rejects the
+content, e.g. EAN13 must be 12/13 digits), `bad-option`.
+
 ## Assets & drift protection
 
 `schemas/*.json` and `examples/*.json` are copied from the repository's
@@ -102,14 +131,15 @@ The published dependency on the kernel is `"taprint": "workspace:*"` (pnpm
 workspace, resolved at publish time). npm does not understand `workspace:*`,
 so local development resolves the kernel two ways:
 
-- **tests / typecheck** resolve `taprint` to the kernel *source* via the
-  `vitest.config.ts` alias and `tsconfig` `paths` — no kernel build needed;
-- **build / smoke** need the kernel `dist/`: build it first
-  (`cd packages/taprint-ts && npx -y -p typescript tsc -p tsconfig.build.json`
-  with TypeScript ≥ 5.7 — the kernel needs `rewriteRelativeImportExtensions`),
-  then `pnpm install && pnpm run build` in `apps/mcp` (pnpm links the workspace
-  dep; `npm install ../packages/taprint-ts --no-save` is the npm-flavored
-  equivalent).
+- **tests** resolve `taprint` / `taprint-preview` to package *sources* via the
+  `vitest.config.ts` aliases — no builds needed;
+- **typecheck / build / smoke** need sibling `dist/` outputs: build them first
+  (`cd packages/taprint-ts && npx tsc -p tsconfig.build.json`,
+  `cd packages/taprint-preview && npx tsc -p tsconfig.build.json`, both with
+  TypeScript ≥ 5.7 — they need `rewriteRelativeImportExtensions`), then
+  `pnpm install && pnpm run build` in `apps/mcp` (pnpm links the workspace
+  deps; `npm install ../packages/taprint-ts ../packages/taprint-preview
+  --no-save` is the npm-flavored equivalent).
 
 Note: the root `pnpm-lock.yaml` is intentionally not committed — pnpm lockfiles
 write dependency specifiers as `name@version`, which trips the repository's
@@ -118,7 +148,7 @@ forbidden-content scanner (ADR-0006) as false-positive email addresses. Re-run
 
 ```bash
 pnpm install        # from apps/mcp (or the workspace root)
-pnpm test           # vitest, 32 cases
+pnpm test           # vitest, 36 cases
 pnpm typecheck
 pnpm run build      # assets drift check + tsc + shebang fix
 node dist/index.js --help
@@ -126,8 +156,9 @@ node dist/index.js --help
 
 ## Scope notes (ADR-0008)
 
-- No preview / rasterization in v0.1 (`render_preview` is v0.3).
 - No hardware access, ever: no USB/Bluetooth/spooler, hosts do the printing.
+- Preview rasterization is pure JS (`taprint-preview`, M3a): temp-file PNG,
+  monochrome threshold (dithering is a follow-up), 203/300 dpi only.
 - `smithery.yaml` is a draft for a future registry submission — the server is
   not registered anywhere yet.
 

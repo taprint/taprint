@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # smithery.yaml 草稿（ADR-0008）：仅留档，未提交注册任何 registry。
-# 通道=stdio（npx 拉起），零配置项（三工具均无服务器侧配置）。
+# 通道=stdio（npx 拉起），零配置项（四工具均无服务器侧配置；
+# render_preview 产出临时 PNG 文件路径，宿主自行读取展示）。
 startCommand:
   type: stdio
   configSchema:
