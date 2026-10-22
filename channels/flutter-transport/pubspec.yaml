@@ -1,0 +1,23 @@
+name: taprint_channel_flutter
+description: >-
+  Reference Flutter printer transport channels for taprint: BLE
+  (flutter_reactive_ble), Android Bluetooth SPP (MethodChannel + Kotlin
+  BluetoothSocket) and TCP-9100 raw-socket executors, plus a six-state
+  connection manager with 1/2/4/8/16 s exponential-backoff reconnect and
+  unlimited slow reconnect. Reference implementation — APIs evolve
+  independently from the kernel packages.
+version: 0.1.0
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+  flutter: ">=3.22.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  # BLE GATT 通道（BSD-3）：扫描/连接/MTU/特征值写。
+  flutter_reactive_ble: ^5.5.0
+  # BehaviorSubject 状态流（连接状态条即取即用）。
+  rxdart: ^0.28.0
+dev_dependencies:
+  flutter_lints: ^4.0.0
+  flutter_test:
+    sdk: flutter
