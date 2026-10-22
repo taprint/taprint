@@ -1,0 +1,50 @@
+{
+  "generatedBy": "scripts/sync-assets.mjs",
+  "assets": [
+    {
+      "file": "schemas/v1.0.json",
+      "sha256": "c5d81709eba063efb8b09872b87b98491ba42aa058f4703a49a0f3fd373dd237",
+      "bytes": 24003
+    },
+    {
+      "file": "schemas/v1.1.json",
+      "sha256": "5c6d5d35327b6701d92171b9ae3d8e1f96c1544aa57da192c4dd5265b146c8d6",
+      "bytes": 28249
+    },
+    {
+      "file": "schemas/v2.0.json",
+      "sha256": "3d8ec5bb524a8bd562d159223da81a3a1bc85220a1d31789d878faa74d4b658c",
+      "bytes": 39060
+    },
+    {
+      "file": "examples/esc-pos-receipt-v1.0.json",
+      "sha256": "d65ad515802b5ad7f72344e28a0959d701b7daa8c99797f68baf3cc7217ff0bb",
+      "bytes": 3716
+    },
+    {
+      "file": "examples/goods-barcode-label-v1.0.json",
+      "sha256": "ad8b3f337bec8d027f6ff3d695f31521527949897da44e585be960f800e20eae",
+      "bytes": 2660
+    },
+    {
+      "file": "examples/shelf-label-v1.0.json",
+      "sha256": "987693d1d3696bb6797475f483db20b19e22c98790542251a1364f3b1de5d417",
+      "bytes": 1905
+    },
+    {
+      "file": "examples/goods-label-v1.1.json",
+      "sha256": "7a3292c9d1aa14a80363afeba3404fcc4c98fba2624bcb497b76d91e53b982f8",
+      "bytes": 1976
+    },
+    {
+      "file": "examples/sales-note-v1.0.json",
+      "sha256": "57b1f9be93fee3ef163675a7cc6391da4a70bc6dc104f9f5d313d2a14fcaa568",
+      "bytes": 7172
+    },
+    {
+      "file": "examples/payment-receipt-v1.0.json",
+      "sha256": "5f43f9dc5ee2331e63392daeb6f793145bf538cda2c9532b67cfc880b5ca3161",
+      "bytes": 2828
+    }
+  ]
+}

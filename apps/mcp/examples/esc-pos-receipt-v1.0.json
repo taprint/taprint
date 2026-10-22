@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "1.0",
+  "id": "tpl_esc_pos_receipt_80_v1",
+  "code": "SALES_RECEIPT",
+  "name": "POS 销售小票-80mm",
+  "category": "sales",
+  "description": "收银台 80mm 热敏小票（仅 receipt 呈现，§21.2 跨端渲染用例）",
+  "locales": ["zh-CN"],
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "billNo": "string",
+        "billDate": "datetime",
+        "store": {
+          "name": "string",
+          "phone": "string"
+        },
+        "cashier": "string",
+        "totalAmount": "number",
+        "discount": "number",
+        "paidAmount": "number",
+        "changeAmount": "number",
+        "payMethod": "string"
+      }
+    },
+    {
+      "name": "items",
+      "type": "detail",
+      "schema": {
+        "name": "string",
+        "qty": "number",
+        "price": "number",
+        "amount": "number"
+      }
+    }
+  ],
+  "presentations": {
+    "receipt": {
+      "width": "80mm",
+      "encoding": "gbk",
+      "initCommands": ["ESC @"],
+      "body": [
+        {
+          "type": "text",
+          "content": "{{store.name}}",
+          "align": "center",
+          "style": {
+            "fontSize": "double",
+            "bold": true
+          }
+        },
+        {
+          "type": "text",
+          "content": "收银小票",
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "content": "{{billDate | date:'YYYY-MM-DD HH:mm'}}",
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "content": "--------------------------------",
+          "align": "center"
+        },
+        {
+          "type": "kvtable",
+          "columns": 1,
+          "compact": true,
+          "rows": [[["单号", "{{billNo}}"]], [["收银员", "{{cashier}}"]]]
+        },
+        {
+          "type": "table",
+          "source": "items",
+          "columns": [
+            {
+              "header": "商品",
+              "field": "name",
+              "width": "45%"
+            },
+            {
+              "header": "数量",
+              "field": "qty",
+              "align": "right",
+              "width": "15%"
+            },
+            {
+              "header": "金额",
+              "field": "amount",
+              "align": "right",
+              "width": "40%"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "--------------------------------",
+          "align": "center"
+        },
+        {
+          "type": "kvtable",
+          "columns": 1,
+          "compact": true,
+          "rows": [
+            [["合计", "{{totalAmount | currency:CNY}}"]],
+            [["优惠", "{{discount | currency:CNY}}"]],
+            [["实收", "{{paidAmount | currency:CNY}}"]],
+            [["找零", "{{changeAmount | currency:CNY}}"]],
+            [["支付方式", "{{payMethod}}"]]
+          ]
+        },
+        {
+          "type": "barcode",
+          "content": "{{billNo}}",
+          "symbology": "CODE128",
+          "height": "10mm",
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "content": "谢谢惠顾，欢迎再次光临！",
+          "align": "center"
+        },
+        {
+          "type": "cashDrawer",
+          "pulse": 1
+        },
+        {
+          "type": "cut",
+          "partial": true
+        }
+      ],
+      "tailCommands": ["GS V 1"]
+    }
+  },
+  "parameters": [
+    {
+      "name": "copies",
+      "type": "integer",
+      "default": 1,
+      "min": 1,
+      "max": 3,
+      "description": "打印份数"
+    },
+    {
+      "name": "silent",
+      "type": "boolean",
+      "default": true,
+      "description": "是否静默打印"
+    }
+  ]
+}

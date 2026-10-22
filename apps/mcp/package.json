@@ -1,0 +1,57 @@
+{
+  "name": "taprint-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for the taprint print-template DSL: validate templates, compile to ESC/POS / TSPL / CPCL byte streams, browse examples. Zero hardware access, zero native dependencies (ADR-0008).",
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taprint/taprint.git",
+    "directory": "apps/mcp"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "print",
+    "printer",
+    "label",
+    "receipt",
+    "escpos",
+    "tspl",
+    "cpcl"
+  ],
+  "bin": {
+    "taprint-mcp": "dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "schemas",
+    "examples",
+    "assets-manifest.json"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "sync:assets": "node scripts/sync-assets.mjs",
+    "build": "node scripts/sync-assets.mjs --check && tsc -p tsconfig.build.json && node scripts/fix-shebang.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "taprint": "workspace:*",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=18.19"
+  }
+}

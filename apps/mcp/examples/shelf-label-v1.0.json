@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "1.0",
+  "id": "tpl_shelf_label_v1",
+  "code": "SHELF_LABEL",
+  "name": "货架标签-70x30",
+  "category": "label",
+  "description": "货架价签标签（label 呈现；TSPL 绝对坐标）",
+  "locales": ["zh-CN"],
+  "dataSources": [
+    {
+      "name": "main",
+      "type": "primary",
+      "schema": {
+        "sku": "string",
+        "name": "string",
+        "price": "number",
+        "unit": "string",
+        "origin": "string",
+        "shelfNo": "string"
+      }
+    }
+  ],
+  "presentations": {
+    "label": {
+      "size": { "width": "70mm", "height": "30mm" },
+      "gap": "3mm",
+      "density": 8,
+      "speed": 4,
+      "body": [
+        {
+          "type": "text",
+          "content": "{{name}}",
+          "x": "2mm",
+          "y": "2mm",
+          "font": "SIMPLIFIED CHINESE",
+          "size": 2
+        },
+        {
+          "type": "text",
+          "content": "¥{{price}}/{{unit}}",
+          "x": "2mm",
+          "y": "12mm",
+          "font": "SIMPLIFIED CHINESE",
+          "size": 3
+        },
+        {
+          "type": "text",
+          "content": "产地：{{origin}}",
+          "x": "36mm",
+          "y": "2mm",
+          "font": "SIMPLIFIED CHINESE",
+          "size": 0
+        },
+        {
+          "type": "text",
+          "content": "货位：{{shelfNo}}",
+          "x": "36mm",
+          "y": "8mm",
+          "font": "SIMPLIFIED CHINESE",
+          "size": 0
+        },
+        {
+          "type": "barcode",
+          "symbology": "EAN13",
+          "content": "{{sku}}",
+          "x": "2mm",
+          "y": "20mm",
+          "height": "8mm"
+        }
+      ],
+      "copies": "{{copies | default:1}}",
+      "endCommand": "PRINT {{copies}}"
+    }
+  },
+  "parameters": [
+    {
+      "name": "copies",
+      "type": "integer",
+      "default": 1,
+      "min": 1,
+      "max": 999,
+      "description": "打印份数"
+    }
+  ]
+}

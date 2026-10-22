@@ -3,3 +3,6 @@ packages:
   - packages/taprint-preview
   - apps/mcp
   - apps/designer
+# esbuild 安装脚本（vitest 依赖）：允许执行（pnpm 11 构建脚本门）
+allowBuilds:
+  esbuild: true
